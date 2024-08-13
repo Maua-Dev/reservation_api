@@ -16,7 +16,7 @@ class Court(abc.ABC):
     photo: Optional[str] = None
     MIN_PHOTO_LENGTH = 3
 
-    def __init__(self, number: int, status: STATUS, is_field: bool, photo: str):
+    def __init__(self, number: int, status: STATUS, is_field: bool, photo: Optional[str] = None):
         #validações da entidade
         if not self.validate_number(number):
             raise EntityError('number')
