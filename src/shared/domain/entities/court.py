@@ -37,7 +37,7 @@ class Court(abc.ABC):
     
     @staticmethod
     def validate_number(number: int):
-        if type(number) != int or number < 1 or number > 4:
+        if type(number) != int or number < 1 or number > 10:
             return False
         return True
     

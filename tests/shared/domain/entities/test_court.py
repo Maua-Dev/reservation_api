@@ -22,7 +22,7 @@ class TestCourt:
     def test_invalid_number(self):
         with pytest.raises(EntityError):
             Court(
-            number= 5,
+            number= 11,
             status= STATUS.AVAILABLE,
             is_field= False, 
             photo = 'https://www.linkedin.com/in/rafael-rubio-carnes-b2561b212/'
