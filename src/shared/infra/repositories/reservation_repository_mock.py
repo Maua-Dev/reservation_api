@@ -41,3 +41,9 @@ class ReservationRepositoryMock(IReservationRepository):
     def create_court(self, court: Court):
         self.courts.append(court)
         return court
+    
+    def get_court(self, number: int):
+        for court in self.courts:
+            if court.number == number:
+                return court
+        return None

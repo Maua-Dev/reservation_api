@@ -10,3 +10,10 @@ class IReservationRepository(ABC):
         If court does not exist, creates it and returns it
         '''
         pass
+
+    @abstractmethod
+    def get_court(self, number: int):
+        '''
+        If the court exists, returns it, else returns None
+        '''
+        pass
