@@ -17,7 +17,7 @@ class CourtViewmodel:
     def to_dict(self):
         return {
             'number': self.number,
-            'status': self.status,
+            'status': self.status.value,
             'is_field': self.is_field,
             'photo': self.photo
         }

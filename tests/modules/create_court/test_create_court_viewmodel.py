@@ -34,7 +34,7 @@ class Test_CreateCourtViewModel:
         expected = {
             'court':{
                 'number' : 8,
-                'status' : STATUS.AVAILABLE,
+                'status' : 'AVAILABLE',
                 'is_field' : False,
                 'photo' : None
             },
