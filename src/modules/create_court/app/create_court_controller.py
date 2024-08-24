@@ -30,6 +30,8 @@ class CreateCourtController:
                 raise WrongTypeParameter(fieldName = 'number', fieldTypeExpected = int, fieldTypeReceived = type(request.data.get('number')))
 
             status_str = request.data.get('status')
+            if type(status_str) is not str:
+                raise WrongTypeParameter(fieldName='status', fieldTypeExpected= str, fieldTypeReceived=type(status_str))
             if status_str not in [status_type.value for status_type in STATUS]:
                 raise EntityError('status')
             status = STATUS[status_str]
