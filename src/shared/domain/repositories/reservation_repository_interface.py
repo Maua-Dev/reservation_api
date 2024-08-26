@@ -19,7 +19,7 @@ class IReservationRepository(ABC):
         pass
       
     @abstractmethod
-    def delete_court(self):
+    def delete_court(self, number: int):
         '''
         If courts exists, deletes it and returns it
         else returns None
