@@ -63,12 +63,21 @@ class Environments:
             self.cloud_front_distribution_domain = os.environ.get("CLOUD_FRONT_DISTRIBUTION_DOMAIN")
 
     # @staticmethod
+<<<<<<< Updated upstream
     # def get_user_repo() -> IUserRepository:
     #     if Environments.get_envs().stage == STAGE.TEST:
     #         from src.shared.infra.repositories.user_repository_mock import UserRepositoryMock
     #         return UserRepositoryMock
     #     elif Environments.get_envs().stage in [STAGE.DEV, STAGE.HOMOLOG, STAGE.PROD]:
     #         from src.shared.infra.repositories.user_repository_dynamo import UserRepositoryDynamo
+=======
+    # def get_user_repo() -> IReservationRepository:
+    #     if Environments.get_envs().stage == STAGE.TEST:
+    #         from src.shared.infra.repositories.reservation_repository_mock import UserRepositoryMock
+    #         return UserRepositoryMock
+    #     elif Environments.get_envs().stage in [STAGE.DEV, STAGE.HOMOLOG, STAGE.PROD]:
+    #         from src.shared.infra.repositories.reservation_repository_dynamo import UserRepositoryDynamo
+>>>>>>> Stashed changes
     #         return UserRepositoryDynamo
     #     else:
     #         raise Exception("No repository found for this stage")

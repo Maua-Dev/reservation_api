@@ -41,6 +41,27 @@ class ReservationRepositoryMock(IReservationRepository):
     def create_court(self, court: Court):
         self.courts.append(court)
         return court
+
+    def update_court(self,
+                     number: int,
+                     status: STATUS = None,
+                     is_field: bool = None,
+                     photo: str = None):
+
+        court = self.get_court(number)
+
+        if court is None:
+            return None
+
+        if status is not None:
+            court.status = status
+        if is_field is not None:
+            court.is_field = is_field
+        if photo is not None:
+            court.photo = photo
+
+        return court
+
     
     def get_court(self, number: int):
         for court in self.courts:
