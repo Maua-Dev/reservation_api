@@ -3,12 +3,6 @@ from src.shared.domain.enums.status_enum import STATUS
 from typing import Optional
 from src.shared.helpers.errors.domain_errors import EntityError
 
-# COURT (quadras + campo terao um ENUM status, AVAILABLE  MAINTENANCE)
-# number -> int (no minimo 1 no maximo 4)
-# status -> enum
-# photo -> optional[String]
-# is_field -> bool (false pra number de court 1 a 3 e true pra number 4, verificar na entidade)
-
 class Court(abc.ABC):
     number: int
     status: STATUS
