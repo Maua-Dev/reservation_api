@@ -12,7 +12,7 @@ class UpdateCourtUsecase:
                  number: int,
                  status: STATUS = None,
                  is_field: bool = None,
-                 photo: Optional[str] = None):
+                 photo: str = None):
 
         if self.repo.get_court(number) is None:
             raise NoItemsFound(f'court number: {number} was not found')

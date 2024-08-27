@@ -10,32 +10,32 @@ class ReservationRepositoryMock(IReservationRepository):
     def __init__(self):
         self.courts = [
             Court(
-                number = 1,
-                status = STATUS.AVAILABLE,
-                is_field = False,
-                photo = 'https://www.linkedin.com/in/giovanna-albuquerque-16917a245/'
-            ),
-           
-            Court(
-                number = 2,
-                status = STATUS.AVAILABLE,
-                is_field = False,
-                photo = 'https://www.linkedin.com/in/giovanna-albuquerque-16917a245/'
+                number=1,
+                status=STATUS.AVAILABLE,
+                is_field=False,
+                photo='https://www.linkedin.com/in/giovanna-albuquerque-16917a245/'
             ),
 
             Court(
-                number = 3,
-                status = STATUS.UNAVAILABLE,
-                is_field = False,
-                photo = 'https://super.abril.com.br/mundo-estranho/os-poneis-sao-cavalos-anoes'
-            )  ,
+                number=2,
+                status=STATUS.AVAILABLE,
+                is_field=False,
+                photo='https://www.linkedin.com/in/giovanna-albuquerque-16917a245/'
+            ),
 
             Court(
-                number = 4,
-                status = STATUS.MAINTENANCE,
-                is_field = True,
-                photo = None
-            )                                                                                                             
+                number=3,
+                status=STATUS.UNAVAILABLE,
+                is_field=False,
+                photo='https://super.abril.com.br/mundo-estranho/os-poneis-sao-cavalos-anoes'
+            ),
+
+            Court(
+                number=4,
+                status=STATUS.MAINTENANCE,
+                is_field=True,
+                photo=None
+            )
         ]
 
     def create_court(self, court: Court):
@@ -62,7 +62,6 @@ class ReservationRepositoryMock(IReservationRepository):
 
         return court
 
-    
     def get_court(self, number: int):
         for court in self.courts:
             if court.number == number:
