@@ -47,3 +47,6 @@ class ReservationRepositoryMock(IReservationRepository):
             if court.number == number:
                 return court
         return None
+    
+    def delete_court(self):
+        pass
