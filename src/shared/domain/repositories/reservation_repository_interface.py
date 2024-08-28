@@ -15,7 +15,6 @@ class IReservationRepository(ABC):
     def update_court(self,
                      number: int,
                      status: STATUS = None,
-                     is_field: bool = None,
                      photo: str = None) -> Court:
         '''
         If court exists, updates it and returns it

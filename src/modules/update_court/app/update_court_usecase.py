@@ -11,7 +11,6 @@ class UpdateCourtUsecase:
     def __call__(self,
                  number: int,
                  status: STATUS = None,
-                 is_field: bool = None,
                  photo: str = None):
 
         if self.repo.get_court(number) is None:
@@ -19,7 +18,6 @@ class UpdateCourtUsecase:
 
         court = self.repo.update_court(number=number,
                                        status=status,
-                                       is_field=is_field,
                                        photo=photo)
 
         return court

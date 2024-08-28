@@ -28,10 +28,6 @@ class UpdateCourtController:
                 raise EntityError('status')
             status = STATUS[status_str]
 
-            if type(request.data.get('is_field')) is not bool:
-                raise WrongTypeParameter(fieldName='is_field', fieldTypeExpected=bool,
-                                         fieldTypeReceived=type(request.data.get('is_field')))
-
             if type(request.data.get('photo')) is not str:
                 raise WrongTypeParameter(fieldName='photo', fieldTypeExpected=str,
                                          fieldTypeReceived=type(request.data.get('photo')))
@@ -39,7 +35,6 @@ class UpdateCourtController:
             court = self.usecase(
                 number=request.data.get('number'),
                 status=status,
-                is_field=request.data.get('is_field'),
                 photo=request.data.get('photo')
             )
 

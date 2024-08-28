@@ -21,7 +21,6 @@ class TestUpdateCourtController:
         request = HttpRequest(body={
             "number": court_number,
             "status": "MAINTENANCE",
-            "is_field": True,
             "photo": "https://www.linkedin.com/in/leonardo-iorio-b83360279/"
         })
 
@@ -34,8 +33,7 @@ class TestUpdateCourtController:
         assert response.body['updated_court']['status'] != prev_court.status.value
         assert response.body['updated_court']['status'] == "MAINTENANCE"
 
-        assert response.body['updated_court']['is_field'] != prev_court.is_field
-        assert response.body['updated_court']['is_field'] == True
+        assert response.body['updated_court']['is_field'] == prev_court.is_field
 
         assert response.body['updated_court']['photo'] != prev_court.photo
         assert response.body['updated_court']['photo'] == "https://www.linkedin.com/in/leonardo-iorio-b83360279/"
@@ -102,38 +100,6 @@ class TestUpdateCourtController:
 
         assert response.status_code == 400
         assert response.body == "Field status is not valid"
-
-    def test_update_court_controller_is_field_type_error_int(self):
-        repo = ReservationRepositoryMock()
-        usecase = UpdateCourtUsecase(repo=repo)
-        controller = UpdateCourtController(usecase=usecase)
-        request = HttpRequest(body={
-            "number": 7,
-            "status": "AVAILABLE",
-            "is_field": 1,
-            "photo": "https://www.linkedin.com/in/vinicius-berti-a80354209/"
-        })
-
-        response = controller(request)
-
-        assert response.status_code == 400
-        assert response.body == "Field is_field isn\'t in the right type.\n Received: <class 'int'>.\n Expected: <class 'bool'>"
-
-    def test_update_court_controller_is_field_type_error_string(self):
-        repo = ReservationRepositoryMock()
-        usecase = UpdateCourtUsecase(repo=repo)
-        controller = UpdateCourtController(usecase=usecase)
-        request = HttpRequest(body={
-            "number": 7,
-            "status": "AVAILABLE",
-            "is_field": 'False',
-            "photo": "https://www.linkedin.com/in/vinicius-berti-a80354209/"
-        })
-
-        response = controller(request)
-
-        assert response.status_code == 400
-        assert response.body == "Field is_field isn\'t in the right type.\n Received: <class 'str'>.\n Expected: <class 'bool'>"
 
     def test_update_court_controller_photo_type_error(self):
         repo = ReservationRepositoryMock()

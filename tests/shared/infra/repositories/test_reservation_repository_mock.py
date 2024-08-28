@@ -20,7 +20,7 @@ class TestReservationRepositoryMock:
 
         courtA = repo_mock.update_court(number=courtAnumber,
                                         status=STATUS.UNAVAILABLE,
-                                        is_field=True)
+                                        photo='test string1')
 
         assert repo_mock.get_court(courtAnumber).number == courtA.number
         assert repo_mock.get_court(courtAnumber).status == courtA.status

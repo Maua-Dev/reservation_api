@@ -45,7 +45,6 @@ class ReservationRepositoryMock(IReservationRepository):
     def update_court(self,
                      number: int,
                      status: STATUS = None,
-                     is_field: bool = None,
                      photo: str = None):
 
         court = self.get_court(number)
@@ -55,8 +54,6 @@ class ReservationRepositoryMock(IReservationRepository):
 
         if status is not None:
             court.status = status
-        if is_field is not None:
-            court.is_field = is_field
         if photo is not None:
             court.photo = photo
 
