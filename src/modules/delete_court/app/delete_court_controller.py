@@ -18,9 +18,6 @@ class DeleteCourtController:
         try:
             if request.data.get('number') is None:
                 raise MissingParameters('number')
-
-            if not Court.validate_number(request.data.get('number')):
-                raise EntityError('number')
             
             court = self.usecase(number=request.data.get('number'))
             viewmodel = DeleteCourtViewModel(court)
