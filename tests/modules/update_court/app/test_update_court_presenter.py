@@ -403,7 +403,7 @@ class TestUpdateCourtPresenter:
         assert response['statusCode'] == 404
         assert json.loads(response['body']) == "No items found for number: 9"
 
-    def test_update_court_presenter_number_not_found(self):
+    def test_update_court_presenter_invalid_number(self):
         event = {
             "version": "2.0",
             "routeKey": "$default",
