@@ -55,9 +55,9 @@ class ReservationRepositoryMock(IReservationRepository):
                 return court
         return None
     
-    def delete_court(self, code: str) -> Court:
+    def delete_court(self, number: str) -> Court:
         for i in range(len(self.courts)):
-            if self.courts[i].code == code:
+            if self.courts[i].number == number:
                 return self.courts.pop(i)
         return None
 
