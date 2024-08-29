@@ -80,7 +80,6 @@ class TestCreateCourtController:
         })
 
         response = controller(request)
-        print(response.body)
         assert response.status_code == 400
         assert response.body == "Field status is not valid"
 
