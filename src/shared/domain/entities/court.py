@@ -3,12 +3,6 @@ from src.shared.domain.enums.status_enum import STATUS
 from typing import Optional
 from src.shared.helpers.errors.domain_errors import EntityError
 
-# COURT (quadras + campo terao um ENUM status, AVAILABLE  MAINTENANCE)
-# number -> int (no minimo 1 no maximo 4)
-# status -> enum
-# photo -> optional[String]
-# is_field -> bool (false pra number de court 1 a 3 e true pra number 4, verificar na entidade)
-
 class Court(abc.ABC):
     number: int
     status: STATUS
@@ -17,7 +11,6 @@ class Court(abc.ABC):
     MIN_PHOTO_LENGTH = 3
 
     def __init__(self, number: int, status: STATUS, is_field: bool, photo: Optional[str] = None):
-        #validações da entidade
         if not self.validate_number(number):
             raise EntityError('number')
         self.number = number
@@ -26,7 +19,7 @@ class Court(abc.ABC):
             raise EntityError('status')
         self.status = status
         
-        if type(is_field) != bool:
+        if type(is_field) != bool or not self.determin_is_field(is_field, number):
             raise EntityError('is_field')
         self.is_field = is_field
 
@@ -49,10 +42,10 @@ class Court(abc.ABC):
         return True
     
     @staticmethod
-    def determin_is_field(is_field, number) -> bool:
-       if is_field and number == 4:
-           return True
-       return False
+    def determin_is_field(is_field: bool, number: int) -> bool:
+        if number == 4:
+            return is_field == True
+        return is_field == False
 
     @staticmethod
     def validate_photo(photo: str)->bool:
