@@ -52,3 +52,15 @@ class TestDeleteCourtController:
         response = controller(request)
         assert response.status_code == 400
         assert response.body == "Field number is not valid"
+
+    def test_delete_court_controller_not_found(self):
+        repo = ReservationRepositoryMock()
+        usecase = DeleteCourtUsecase(repo=repo)
+        controller = DeleteCourtController(usecase=usecase)
+        request = HttpRequest(body={
+            "number": 10
+        })
+
+        response = controller(request)
+        assert response.status_code == 404
+        assert response.body == "No items found for court"
