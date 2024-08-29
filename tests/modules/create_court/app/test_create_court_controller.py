@@ -82,7 +82,7 @@ class TestCreateCourtController:
         response = controller(request)
         print(response.body)
         assert response.status_code == 400
-        assert response.body == "Field status isn\'t in the right type.\n Received: <class 'int'>.\n Expected: <class 'str'>"
+        assert response.body == "Field status is not valid"
 
 
     def test_create_court_controllerwith_duplicated_item(self):
