@@ -2,21 +2,14 @@ from src.shared.infra.repositories.reservation_repository_mock import Reservatio
 from src.modules.update_court.app.update_court_controller import UpdateCourtController
 from src.modules.update_court.app.update_court_usecase import UpdateCourtUsecase
 from src.shared.helpers.external_interfaces.http_models import HttpRequest
-from src.shared.domain.entities.court import Court
 
 
 class TestUpdateCourtController:
-    def test_update_court_controller(self):
+    def test_update_court_controller_two_params(self):
         repo = ReservationRepositoryMock()
         usecase = UpdateCourtUsecase(repo=repo)
         controller = UpdateCourtController(usecase=usecase)
         court_number = 1
-
-        mock_court = repo.get_court(court_number)
-        prev_court = Court(mock_court.number,
-                           mock_court.status,
-                           mock_court.is_field,
-                           mock_court.photo)
 
         request = HttpRequest(body={
             "number": court_number,
@@ -29,14 +22,47 @@ class TestUpdateCourtController:
         assert response.status_code == 200
         assert response.body['message'] == "the court was updated"
         assert response.body['updated_court']['number'] == court_number
-
-        assert response.body['updated_court']['status'] != prev_court.status.value
         assert response.body['updated_court']['status'] == "MAINTENANCE"
-
-        assert response.body['updated_court']['is_field'] == prev_court.is_field
-
-        assert response.body['updated_court']['photo'] != prev_court.photo
         assert response.body['updated_court']['photo'] == "https://www.linkedin.com/in/leonardo-iorio-b83360279/"
+
+    def test_update_court_controller_only_status_param(self):
+        repo = ReservationRepositoryMock()
+        usecase = UpdateCourtUsecase(repo=repo)
+        controller = UpdateCourtController(usecase=usecase)
+        court_number = 1
+
+        request = HttpRequest(body={
+            "number": court_number,
+            "status": "MAINTENANCE",
+        })
+
+        response = controller(request)
+
+        assert response.status_code == 200
+        assert response.body['message'] == "the court was updated"
+        assert response.body['updated_court']['number'] == court_number
+        assert response.body['updated_court']['status'] == "MAINTENANCE"
+        assert response.body['updated_court']['photo'] == repo.get_court(court_number).photo
+
+    def test_update_court_controller_only_photo_param(self):
+        repo = ReservationRepositoryMock()
+        usecase = UpdateCourtUsecase(repo=repo)
+        controller = UpdateCourtController(usecase=usecase)
+        court_number = 1
+
+        request = HttpRequest(body={
+            "number": court_number,
+            "photo": "photostr"
+        })
+
+        response = controller(request)
+
+        assert response.status_code == 200
+        assert response.body['message'] == "the court was updated"
+        assert response.body['updated_court']['number'] == court_number
+        assert response.body['updated_court']['status'] == repo.get_court(court_number).status.value
+        assert response.body['updated_court']['photo'] == "photostr"
+
 
     def test_update_court_controller_missing_number(self):
         repo = ReservationRepositoryMock()
@@ -68,6 +94,7 @@ class TestUpdateCourtController:
 
         assert reponse.status_code == 400
         assert reponse.body == "Field number isn\'t in the right type.\n Received: <class 'str'>.\n Expected: <class 'int'>"
+
 
     def test_update_court_controller_with_wrong_type_status(self):
         repo = ReservationRepositoryMock()

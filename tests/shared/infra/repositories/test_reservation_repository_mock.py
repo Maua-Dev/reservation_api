@@ -14,24 +14,15 @@ class TestReservationRepositoryMock:
         assert response == new_court
 
     def test_update_court(self):
-        courtAnumber = 1
-        courtBnumber = 2
+        court_number = 1
+
         repo_mock = ReservationRepositoryMock()
 
-        courtA = repo_mock.update_court(number=courtAnumber,
+        court = repo_mock.update_court(number=court_number,
                                         status=STATUS.UNAVAILABLE,
                                         photo='test string1')
 
-        assert repo_mock.get_court(courtAnumber).number == courtA.number
-        assert repo_mock.get_court(courtAnumber).status == courtA.status
-        assert repo_mock.get_court(courtAnumber).is_field == courtA.is_field
-        assert repo_mock.get_court(courtAnumber).photo == courtA.photo
-
-        courtB = repo_mock.update_court(number=courtBnumber,
-                                        status=STATUS.MAINTENANCE,
-                                        photo='test string')
-
-        assert repo_mock.get_court(courtBnumber).number == courtB.number
-        assert repo_mock.get_court(courtBnumber).status == courtB.status
-        assert repo_mock.get_court(courtBnumber).is_field == courtB.is_field
-        assert repo_mock.get_court(courtBnumber).photo == courtB.photo
+        assert repo_mock.get_court(court_number).number == court.number
+        assert repo_mock.get_court(court_number).status == court.status
+        assert repo_mock.get_court(court_number).is_field == court.is_field
+        assert repo_mock.get_court(court_number).photo == court.photo

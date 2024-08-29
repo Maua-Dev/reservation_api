@@ -23,19 +23,24 @@ class UpdateCourtController:
                                          fieldTypeReceived=type(request.data.get('number')))
 
             status_str = request.data.get('status')
+            photo_str = request.data.get('photo')
+            print(status_str)
+            print(photo_str)
 
-            if status_str not in [status_type.value for status_type in STATUS]:
-                raise EntityError('status')
-            status = STATUS[status_str]
+            if status_str:
+                if status_str not in [status_type.value for status_type in STATUS]:
+                    raise EntityError('status')
+                status_str = STATUS[status_str]
 
-            if type(request.data.get('photo')) is not str:
-                raise WrongTypeParameter(fieldName='photo', fieldTypeExpected=str,
-                                         fieldTypeReceived=type(request.data.get('photo')))
+            if photo_str:
+                if type(photo_str) is not str:
+                    raise WrongTypeParameter(fieldName='photo', fieldTypeExpected=str,
+                                             fieldTypeReceived=type(request.data.get('photo')))
 
             court = self.usecase(
                 number=request.data.get('number'),
-                status=status,
-                photo=request.data.get('photo')
+                status=status_str,
+                photo=photo_str
             )
 
             viewmodel = UpdateCourtViewmodel(court=court)
