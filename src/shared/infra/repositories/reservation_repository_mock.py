@@ -35,7 +35,14 @@ class ReservationRepositoryMock(IReservationRepository):
                 status = STATUS.MAINTENANCE,
                 is_field = True,
                 photo = None
-            )                                                                                                             
+            ),
+
+            Court(
+                number = 5,
+                status = STATUS.AVAILABLE,
+                is_field = False,
+                photo = 'https://www.linkedin.com/in/vinicius-berti-a80354209/'
+            ),                                                                                                              
         ]
 
     def create_court(self, court: Court):
@@ -48,5 +55,8 @@ class ReservationRepositoryMock(IReservationRepository):
                 return court
         return None
     
-    def delete_court(self):
-        pass
+    def delete_court(self, number: str) -> Court:
+        for i in range(len(self.courts)):
+            if self.courts[i].number == number:
+                return self.courts.pop(i)
+        return None
