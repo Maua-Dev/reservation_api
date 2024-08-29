@@ -46,3 +46,15 @@ class TestUpdateCourtUsecase:
                 status=STATUS.MAINTENANCE,
                 photo="https://super.abril.com.br/mundo-estranho/os-poneis-sao-cavalos-anoes"
             )
+
+    def test_update_court_usecase_court_number_not_found(self):
+
+        repo = ReservationRepositoryMock()
+        usecase = UpdateCourtUsecase(repo=repo)
+
+        with pytest.raises(NoItemsFound):
+            court = usecase(
+                number=9,
+                status=STATUS.MAINTENANCE,
+                photo="https://super.abril.com.br/mundo-estranho/os-poneis-sao-cavalos-anoes"
+            )

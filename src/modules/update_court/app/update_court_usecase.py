@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from src.shared.domain.entities.court import Court
 from src.shared.domain.enums.status_enum import STATUS
 from src.shared.helpers.errors.domain_errors import EntityError
 from src.shared.helpers.errors.usecase_errors import NoItemsFound
@@ -14,7 +14,11 @@ class UpdateCourtUsecase:
                  status: STATUS = None,
                  photo: str = None):
 
-        if number < 0 or number > 10:
+        if Court.validate_number(number):
+            if self.repo.get_court(number) is None:
+                raise NoItemsFound(f'number: {number}')
+
+        else:
             raise EntityError('number')
 
         if self.repo.get_court(number) is None:

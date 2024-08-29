@@ -2,9 +2,10 @@ from typing import Any
 from .update_court_usecase import UpdateCourtUsecase
 from .update_court_viewmodel import UpdateCourtViewmodel
 from src.shared.helpers.errors.controller_errors import MissingParameters, WrongTypeParameter
+from src.shared.helpers.errors.usecase_errors import NoItemsFound
 from src.shared.helpers.errors.domain_errors import EntityError
-from src.shared.helpers.external_interfaces.external_interface import IRequest, IResponse
-from src.shared.helpers.external_interfaces.http_codes import BadRequest, OK, InternalServerError
+from src.shared.helpers.external_interfaces.external_interface import IRequest
+from src.shared.helpers.external_interfaces.http_codes import BadRequest, OK, InternalServerError, NotFound
 from src.shared.domain.enums.status_enum import STATUS
 
 
@@ -24,8 +25,6 @@ class UpdateCourtController:
 
             status_str = request.data.get('status')
             photo_str = request.data.get('photo')
-            print(status_str)
-            print(photo_str)
 
             if status_str:
                 if status_str not in [status_type.value for status_type in STATUS]:
@@ -46,6 +45,9 @@ class UpdateCourtController:
             viewmodel = UpdateCourtViewmodel(court=court)
 
             return OK(viewmodel.to_dict())
+
+        except NoItemsFound as err:
+            return NotFound(body=err.message)
 
         except MissingParameters as err:
             return BadRequest(body=err.message)

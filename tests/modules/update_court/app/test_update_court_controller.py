@@ -144,3 +144,34 @@ class TestUpdateCourtController:
         assert response.status_code == 400
         assert response.body == "Field photo isn\'t in the right type.\n Received: <class 'int'>.\n Expected: <class 'str'>"
 
+    def test_update_court_controller_number_not_found(self):
+        repo = ReservationRepositoryMock()
+        usecase = UpdateCourtUsecase(repo=repo)
+        controller = UpdateCourtController(usecase=usecase)
+        request = HttpRequest(body={
+            "number": 9,
+            "status": "AVAILABLE",
+            "is_field": False,
+            "photo": "1234"
+        })
+
+        response = controller(request)
+        print(response)
+        assert response.status_code == 404
+        assert response.body == "No items found for number: 9"
+
+    def test_update_court_controller_invalid_number(self):
+        repo = ReservationRepositoryMock()
+        usecase = UpdateCourtUsecase(repo=repo)
+        controller = UpdateCourtController(usecase=usecase)
+        request = HttpRequest(body={
+            "number": -999,
+            "status": "AVAILABLE",
+            "is_field": False,
+            "photo": "1234"
+        })
+
+        response = controller(request)
+
+        assert response.status_code == 400
+        assert response.body == "Field number is not valid"
