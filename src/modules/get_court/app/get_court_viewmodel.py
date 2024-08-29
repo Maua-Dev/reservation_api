@@ -26,11 +26,11 @@ class GetCourtViewmodel:
     court_viewmodel: CourtViewmodel
 
     def __init__(self, court: Court):
-        self.court_viewmodel = CourtViewmodel(court)
+        self.court = court
 
     def to_dict(self):
         return{
-            'court' : self.court_viewmodel.to_dict(),
+            'court' : CourtViewmodel(self.court).to_dict(),
             'message': 'the court was retrieved'
         }
 

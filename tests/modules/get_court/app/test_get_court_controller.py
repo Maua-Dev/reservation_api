@@ -20,10 +20,10 @@ class TestGetCourtController:
         response = controller(request)
         
         assert response.status_code == 200
-        assert response.body.to_dict()['court']['number'] == 2
-        assert response.body.to_dict()['court']['status'] == "AVAILABLE"
-        assert response.body.to_dict()['court']['is_field'] == False
-        assert response.body.to_dict()['court']['photo'] == "https://www.linkedin.com/in/giovanna-albuquerque-16917a245/"
+        assert response.body['court']['number'] == 2
+        assert response.body['court']['status'] == "AVAILABLE"
+        assert response.body['court']['is_field'] == False
+        assert response.body['court']['photo'] == "https://www.linkedin.com/in/giovanna-albuquerque-16917a245/"
 
 
     def test_get_court_controller_missing_number(self):
@@ -54,8 +54,10 @@ class TestGetCourtController:
         })
 
         response = controller(request)
-        assert response.status_code == 400
-        assert response.body == 'Field number is not valid'
+        assert response.status_code == 500
+        assert "Field number isn't in the right type." in response.body
+        assert "Received: str." in response.body
+        assert "Expected: int" in response.body
 
 
     def test_get_court_controller_entity_error(self):
@@ -71,4 +73,21 @@ class TestGetCourtController:
 
         response = controller(request)
         assert response.status_code == 404
-        assert response.body == 'No items found for court'
+        assert response.body == 'No items found for court not found'
+
+  
+
+    def test_get_court_controller_court_not_found(self):
+        repo = ReservationRepositoryMock()
+        usecase = GetCourtUsecase(repo=repo)
+        controller = GetCourtController(usecase=usecase)
+        request = HttpRequest(body={
+            "number": 10,
+            "status": "AVAILABLE",
+            "is_field": False,
+            "photo": "https://www.linkedin.com/in/giovanna-albuquerque-16917a245/"
+        })
+
+        response = controller(request)
+        assert response.status_code == 404
+        assert response.body == 'No items found for court not found'

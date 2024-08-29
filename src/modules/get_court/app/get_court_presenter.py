@@ -3,7 +3,7 @@ from .get_court_usecase import GetCourtUsecase
 from src.shared.environments import Environments
 from src.shared.helpers.external_interfaces.http_lambda_requests import LambdaHttpRequest, LambdaHttpResponse
 
-repo = Environments.get_reservation_repo()
+repo = Environments.get_reservation_repo()()
 usecase = GetCourtUsecase(repo=repo)
 controller = GetCourtController(usecase=usecase)
 
