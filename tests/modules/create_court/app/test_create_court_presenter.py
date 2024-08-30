@@ -48,7 +48,6 @@ class TestCreateCourtPresenter:
         }
          
         response = lambda_handler(event, None)
-        print(response)
         assert response['statusCode'] == 201
         assert json.loads(response['body'])['message'] == 'the court was created'
         assert json.loads(response['body'])['court']['number'] == 7
