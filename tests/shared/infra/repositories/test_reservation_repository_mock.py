@@ -12,6 +12,10 @@ class TestReservationRepositoryMock:
         assert len(repo_mock.courts) == len_before + 1
         assert response == new_court
 
+    def test_get_all_courts(self):
+        repo = ReservationRepositoryMock()
+        courts = repo.get_all_courts()
 
+        assert len(courts) == 5
 
     

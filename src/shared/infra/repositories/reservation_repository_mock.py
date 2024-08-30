@@ -60,3 +60,6 @@ class ReservationRepositoryMock(IReservationRepository):
             if self.courts[i].number == number:
                 return self.courts.pop(i)
         return None
+    
+    def get_all_courts(self):
+        return self.courts
