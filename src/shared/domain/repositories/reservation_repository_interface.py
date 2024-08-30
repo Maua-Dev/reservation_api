@@ -25,3 +25,10 @@ class IReservationRepository(ABC):
         else returns None
         '''
         pass
+
+    @abstractmethod
+    def get_all_courts(self):
+        '''
+        Returns all courts
+        '''
+        pass
