@@ -26,3 +26,13 @@ class TestReservationRepositoryMock:
         assert repo_mock.get_court(court_number).status == court.status
         assert repo_mock.get_court(court_number).is_field == court.is_field
         assert repo_mock.get_court(court_number).photo == court.photo
+
+    def test_get_court(self):
+        repo_mock = ReservationRepositoryMock()
+        court_number = 1
+        court = repo_mock.get_court(court_number)
+
+        assert court.number == court_number
+        assert court.status == STATUS.AVAILABLE
+        assert court.is_field == False
+        assert court.photo == 'https://www.linkedin.com/in/giovanna-albuquerque-16917a245/'
