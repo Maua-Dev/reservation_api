@@ -31,6 +31,13 @@ class TestReservationRepositoryMock:
         repo_mock = ReservationRepositoryMock()
         court_number = 1
         court = repo_mock.get_court(court_number)
+        
+    def test_get_all_courts(self):
+        repo = ReservationRepositoryMock()
+        courts = repo.get_all_courts()
+
+        assert len(courts) == 5
+
 
         assert court.number == court_number
         assert court.status == STATUS.AVAILABLE

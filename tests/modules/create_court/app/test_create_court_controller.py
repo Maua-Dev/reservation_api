@@ -81,8 +81,7 @@ class TestCreateCourtController:
 
         response = controller(request)
         assert response.status_code == 400
-        assert response.body == 'Field status is not valid'
-
+        assert response.body == "Field status is not valid"
 
     def test_create_court_controllerwith_duplicated_item(self):
         repo = ReservationRepositoryMock()

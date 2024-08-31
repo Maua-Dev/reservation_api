@@ -19,7 +19,7 @@ class Court(abc.ABC):
             raise EntityError('status')
         self.status = status
         
-        if type(is_field) != bool:
+        if type(is_field) != bool or not self.determin_is_field(is_field, number):
             raise EntityError('is_field')
         self.is_field = is_field
 
@@ -42,10 +42,10 @@ class Court(abc.ABC):
         return True
     
     @staticmethod
-    def determin_is_field(is_field, number) -> bool:
-       if is_field and number == 4:
-           return True
-       return False
+    def determin_is_field(is_field: bool, number: int) -> bool:
+        if number == 4:
+            return is_field == True
+        return is_field == False
 
     @staticmethod
     def validate_photo(photo: str)->bool:
