@@ -10,25 +10,25 @@ class ReservationRepositoryMock(IReservationRepository):
     def __init__(self):
         self.courts = [
             Court(
-                number = 1,
-                status = STATUS.AVAILABLE,
-                is_field = False,
-                photo = 'https://www.linkedin.com/in/giovanna-albuquerque-16917a245/'
-            ),
-           
-            Court(
-                number = 2,
-                status = STATUS.AVAILABLE,
-                is_field = False,
-                photo = 'https://www.linkedin.com/in/giovanna-albuquerque-16917a245/'
+                number=1,
+                status=STATUS.AVAILABLE,
+                is_field=False,
+                photo='https://www.linkedin.com/in/giovanna-albuquerque-16917a245/'
             ),
 
             Court(
-                number = 3,
-                status = STATUS.UNAVAILABLE,
-                is_field = False,
-                photo = 'https://super.abril.com.br/mundo-estranho/os-poneis-sao-cavalos-anoes'
-            )  ,
+                number=2,
+                status=STATUS.AVAILABLE,
+                is_field=False,
+                photo='https://www.linkedin.com/in/giovanna-albuquerque-16917a245/'
+            ),
+
+            Court(
+                number=3,
+                status=STATUS.UNAVAILABLE,
+                is_field=False,
+                photo='https://super.abril.com.br/mundo-estranho/os-poneis-sao-cavalos-anoes'
+            ),
 
             Court(
                 number = 4,
@@ -43,12 +43,30 @@ class ReservationRepositoryMock(IReservationRepository):
                 is_field = False,
                 photo = 'https://www.linkedin.com/in/vinicius-berti-a80354209/'
             ),                                                                                                              
+
         ]
 
     def create_court(self, court: Court):
         self.courts.append(court)
         return court
-    
+
+    def update_court(self,
+                     number: int,
+                     status: STATUS = None,
+                     photo: str = None):
+
+        court = self.get_court(number)
+
+        if court is None:
+            return None
+
+        if status is not None:
+            court.status = status
+        if photo is not None:
+            court.photo = photo
+
+        return court
+
     def get_court(self, number: int):
         for court in self.courts:
             if court.number == number:
@@ -63,3 +81,4 @@ class ReservationRepositoryMock(IReservationRepository):
     
     def get_all_courts(self):
         return self.courts
+
