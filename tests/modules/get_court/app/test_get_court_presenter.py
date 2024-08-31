@@ -248,4 +248,4 @@ class Test_GetCourtPresenter:
         response = lambda_handler(event=event, context=None)
         
         assert response['statusCode'] == 404
-        assert json.loads(response['body']) == 'No items found for court not found'
+        assert json.loads(response['body']) == 'No items found for number'

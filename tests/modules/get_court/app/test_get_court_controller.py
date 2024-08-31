@@ -73,5 +73,5 @@ class TestGetCourtController:
 
         response = controller(request)
         assert response.status_code == 404
-        assert response.body == 'No items found for court not found'
+        assert response.body == 'No items found for number'
 

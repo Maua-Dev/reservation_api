@@ -17,6 +17,6 @@ class GetCourtUsecase:
         court = self.repo.get_court(number = number)
 
         if court is None:
-            raise NoItemsFound('court not found')
+            raise NoItemsFound('number')
         
         return court
