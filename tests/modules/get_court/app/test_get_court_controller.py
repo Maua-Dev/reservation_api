@@ -42,7 +42,7 @@ class TestGetCourtController:
 
 
 
-    def test_get_controller_wrong_type_parameters(self):
+    def test_get_court_controller_wrong_type_parameters(self):
         repo = ReservationRepositoryMock()
         usecase = GetCourtUsecase(repo=repo)
         controller = GetCourtController(usecase=usecase)
@@ -54,29 +54,12 @@ class TestGetCourtController:
         })
 
         response = controller(request)
-        assert response.status_code == 500
+        assert response.status_code == 400
         assert "Field number isn't in the right type." in response.body
         assert "Received: str." in response.body
         assert "Expected: int" in response.body
 
-
-    def test_get_court_controller_entity_error(self):
-        repo = ReservationRepositoryMock()
-        usecase = GetCourtUsecase(repo=repo)
-        controller = GetCourtController(usecase=usecase)
-        request = HttpRequest(body={
-            "number": 7,
-            "status": "AVAILABLE",
-            "is_field": False,
-            "photo": "https://www.linkedin.com/in/giovanna-albuquerque-16917a245/"
-        })
-
-        response = controller(request)
-        assert response.status_code == 404
-        assert response.body == 'No items found for court not found'
-
   
-
     def test_get_court_controller_court_not_found(self):
         repo = ReservationRepositoryMock()
         usecase = GetCourtUsecase(repo=repo)
@@ -91,3 +74,4 @@ class TestGetCourtController:
         response = controller(request)
         assert response.status_code == 404
         assert response.body == 'No items found for court not found'
+

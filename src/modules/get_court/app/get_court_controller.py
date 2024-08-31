@@ -40,8 +40,12 @@ class GetCourtController:
         except NoItemsFound as err:
             return NotFound(body=err.message)
         
+        except WrongTypeParameter as err:
+            return BadRequest(body=err.message)
+        
         except Exception as err:
             return InternalServerError(body=str(err)) 
 
-        except WrongTypeParameter as err:
-            return BadRequest(body=err.message)
+        
+    
+    
