@@ -1,71 +1,72 @@
 from decimal import Decimal
 
-from src.shared.domain.entities.user import User
-from src.shared.domain.enums.state_enum import STATE
+from src.shared.domain.enums.status_enum import STATUS
+from src.shared.domain.entities.court import Court
+
+class CourtDynamoDTO:
+    number: int
+    status: STATUS
+    is_field: bool
+    photo: str = None
+    MIN_PHOTO_LENGTH = 3
 
 
-class UserDynamoDTO:
-    name: str
-    email: str
-    state: STATE
-    user_id: int
-
-    def __init__(self, name: str, email: str, state: STATE, user_id: int):
-        self.name = name
-        self.email = email
-        self.user_id = user_id
-        self.state = state
+    def __init__(self, number: int, status: STATUS, is_field: bool, photo: str = None):
+        self.number = number
+        self.status = status
+        self.is_field = is_field
+        self.photo = photo
 
     @staticmethod
-    def from_entity(user: User) -> "UserDynamoDTO":
+    def from_entity(court: Court) -> "CourtDynamoDTO":
         """
-        Parse data from User to UserDynamoDTO
+        Parse data from User to CourtDynamoDTO
         """
-        return UserDynamoDTO(
-            name=user.name,
-            email=user.email,
-            user_id=user.user_id,
-            state=user.state
+        return CourtDynamoDTO(
+            number=court.number,
+            status=court.status,
+            is_field=court.is_field,
+            photo=court.photo
         )
 
     def to_dynamo(self) -> dict:
         """
-        Parse data from UserDynamoDTO to dict
+        Parse data from CourtDynamoDTO to dict
         """
         return {
-            "entity": "user",
-            "name": self.name,
-            "email": self.email,
-            "user_id": Decimal(self.user_id),
+            "entity": "Court",
+            "number": self.number,
+            "status": self.status.value,
+            "is_field": self.is_field,
             "state": self.state.value
         }
 
     @staticmethod
-    def from_dynamo(user_data: dict) -> "UserDynamoDTO":
+    def from_dynamo(court_data: dict) -> "CourtDynamoDTO":
         """
-        Parse data from DynamoDB to UserDynamoDTO
-        @param user_data: dict from DynamoDB
+        Parse data from DynamoDB to CourtDynamoDTO
+        @param court_data: dict from DynamoDB
         """
-        return UserDynamoDTO(
-            name=user_data["name"],
-            email=user_data["email"],
-            user_id=int(user_data["user_id"]),
-            state=STATE(user_data["state"])
+        return CourtDynamoDTO(
+            number=court_data["number"],
+            status=STATUS(court_data["status"]),
+            is_field=bool(court_data["is_field"]),
+            photo=court_data["state"]
         )
 
-    def to_entity(self) -> User:
+    def to_entity(self) -> Court:
         """
-        Parse data from UserDynamoDTO to User
+        Parse data from CourtDynamoDTO to User
         """
-        return User(
-            name=self.name,
-            email=self.email,
-            user_id=self.user_id,
-            state=self.state
+        return Court(
+            number=self.number,
+            status=self.status,
+            is_field=self.is_field,
+            photo=self.photo
         )
 
     def __repr__(self):
-        return f"UserDynamoDto(name={self.name}, email={self.email}, user_id={self.user_id}, state={self.state})"
+        return f"CourtDynamoDto(number={self.number}, status={self.status}, is_field={self.is_field}, photo={self.photo})"
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
