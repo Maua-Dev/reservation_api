@@ -1,5 +1,4 @@
 from decimal import Decimal
-
 from src.shared.domain.enums.status_enum import STATUS
 from src.shared.domain.entities.court import Court
 
@@ -38,7 +37,7 @@ class CourtDynamoDTO:
             "number": self.number,
             "status": self.status.value,
             "is_field": self.is_field,
-            "state": self.state.value
+            "photo": self.photo
         }
 
     @staticmethod
@@ -51,7 +50,7 @@ class CourtDynamoDTO:
             number=court_data["number"],
             status=STATUS(court_data["status"]),
             is_field=bool(court_data["is_field"]),
-            photo=court_data["state"]
+            photo=court_data["photo"]
         )
 
     def to_entity(self) -> Court:

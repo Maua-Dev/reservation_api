@@ -31,6 +31,11 @@ class TestReservationRepositoryMock:
         repo_mock = ReservationRepositoryMock()
         court_number = 1
         court = repo_mock.get_court(court_number)
+
+        assert court.number == court_number
+        assert court.status == STATUS.AVAILABLE
+        assert court.is_field == False
+        assert court.photo == 'https://www.linkedin.com/in/giovanna-albuquerque-16917a245/'
         
     def test_get_all_courts(self):
         repo = ReservationRepositoryMock()
@@ -39,7 +44,3 @@ class TestReservationRepositoryMock:
         assert len(courts) == 5
 
 
-        assert court.number == court_number
-        assert court.status == STATUS.AVAILABLE
-        assert court.is_field == False
-        assert court.photo == 'https://www.linkedin.com/in/giovanna-albuquerque-16917a245/'
