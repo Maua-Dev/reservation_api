@@ -23,8 +23,6 @@ class ReservationRepositoryDynamo(IReservationRepository):
             region=Environments.get_envs().region,
             partition_key=Environments.get_envs().dynamo_partition_key,
             sort_key=Environments.get_envs().dynamo_sort_key,
-            gsi_partition_key=Environments.get_envs().dynamo_gsi_1_partition_key,
-            gsi_sort_key=Environments.get_envs().dynamo_gsi_1_sort_key,
         )
 
     def create_court(self, court: Court) -> Court:
@@ -32,3 +30,16 @@ class ReservationRepositoryDynamo(IReservationRepository):
         resp = self.dynamo.put_item(item, partition_key=self.court_partition_key_format(court.number), sort_key=self.court_sort_key_format(court.number))
 
         return Court
+    
+    def get_court(self, number: int):
+        return super().get_court(number)
+    
+    def get_all_courts(self):
+        return super().get_all_courts()
+    
+    def update_court(self, number: int, status: STATUS = None, photo: str = None) -> Court:
+        return super().update_court(number, status, photo)
+    
+
+    def delete_court(self, number: int):
+        return super().delete_court(number)
