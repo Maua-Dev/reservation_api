@@ -27,19 +27,27 @@ class ReservationRepositoryDynamo(IReservationRepository):
 
     def create_court(self, court: Court) -> Court:
         item = CourtDynamoDTO.from_entity(court).to_dynamo()
-        resp = self.dynamo.put_item(item, partition_key=self.court_partition_key_format(court.number), sort_key=self.court_sort_key_format(court.number))
+        resp = self.dynamo.put_item(item,
+                                    partition_key=self.court_partition_key_format(court.number),
+                                    sort_key=self.court_sort_key_format(court.number))
 
-        return Court
+        return court
     
     def get_court(self, number: int):
         return super().get_court(number)
     
-    def get_all_courts(self):
-        return super().get_all_courts()
-    
+    def get_all_courts(self) -> list[Court]:
+
+        all_courts = []
+        for item in self.dynamo.get_all_items().get('Items'):
+            all_courts.append(CourtDynamoDTO.from_dynamo(item).to_entity())
+
+        return all_courts
+
+
     def update_court(self, number: int, status: STATUS = None, photo: str = None) -> Court:
         return super().update_court(number, status, photo)
-    
 
     def delete_court(self, number: int):
         return super().delete_court(number)
+

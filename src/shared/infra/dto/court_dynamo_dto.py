@@ -19,7 +19,7 @@ class CourtDynamoDTO:
     @staticmethod
     def from_entity(court: Court) -> "CourtDynamoDTO":
         """
-        Parse data from User to CourtDynamoDTO
+        Parse data from Court to CourtDynamoDTO
         """
         return CourtDynamoDTO(
             number=court.number,
@@ -47,7 +47,7 @@ class CourtDynamoDTO:
         @param court_data: dict from DynamoDB
         """
         return CourtDynamoDTO(
-            number=court_data["number"],
+            number=int(court_data["number"]),
             status=STATUS(court_data["status"]),
             is_field=bool(court_data["is_field"]),
             photo=court_data["photo"]
@@ -55,7 +55,7 @@ class CourtDynamoDTO:
 
     def to_entity(self) -> Court:
         """
-        Parse data from CourtDynamoDTO to User
+        Parse data from CourtDynamoDTO to Court
         """
         return Court(
             number=self.number,
