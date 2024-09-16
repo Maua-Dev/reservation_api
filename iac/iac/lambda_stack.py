@@ -32,10 +32,12 @@ class LambdaStack(Construct):
 
     def __init__(self, scope: Construct, api_gateway_resource: Resource, environment_variables: dict) -> None:
         self.stack_name = os.environ.get("STACK_NAME")
+        self.github_ref = os.environ.get("GITHUB_REF_NAME")
+
         stage = ""
-        if 'prod' in self.stack_name:
+        if 'prod' in self.github_ref:
             stage = 'PROD'
-        elif 'homolog' in self.stack_name:
+        elif 'homolog' in self.github_ref:
             stage = 'HOMOLOG'
         else:
             stage = 'DEV'
