@@ -8,7 +8,6 @@ from aws_cdk.aws_apigateway import RestApi, Cors
 import os
 
 from .lambda_stack import LambdaStack
-from .template_dynamo_table import TemplateDynamoTable
 
 
 class IacStack(Stack):
@@ -19,6 +18,7 @@ class IacStack(Stack):
         self.github_ref_name = os.environ.get("GITHUB_REF_NAME")
         self.aws_region = os.environ.get("AWS_REGION")
         self.stack_name = os.environ.get("STACK_NAME")
+        self.region = os.environ.get("AWS_REGION")
         
         stage = ""
         if 'prod' in self.github_ref_name:
@@ -55,7 +55,7 @@ class IacStack(Stack):
             # "DYNAMO_TABLE_NAME": self.dynamo_table.table.table_name,
             # "DYNAMO_PARTITION_KEY": "PK",
             # "DYNAMO_SORT_KEY": "SK",
-            "REGION": self.region,
+            "AWS_REGION": self.region,
         }
 
 
