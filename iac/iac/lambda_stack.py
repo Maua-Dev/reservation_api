@@ -38,7 +38,7 @@ class LambdaStack(Construct):
         elif 'homolog' in self.stack_name:
             stage = 'HOMOLOG'
         else:
-            stage = 'DEV'x
+            stage = 'DEV'
         
         super().__init__(scope, f"{self.stack_name}_LambdaStack_{stage}")
 
