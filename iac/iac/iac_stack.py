@@ -1,7 +1,5 @@
 from aws_cdk import (
-    # Duration,
     Stack,
-    # aws_sqs as sqs,
 )
 from constructs import Construct
 from aws_cdk.aws_apigateway import RestApi, Cors
@@ -29,8 +27,8 @@ class IacStack(Stack):
             stage = 'DEV'    
         
 
-        self.rest_api = RestApi(self, f"{stack_name}_RestApi_{stage}",
-                                    rest_api_name=f"{stack_name}_RestApi_{stage}",
+        self.rest_api = RestApi(self, f"{self.stack_name}_RestApi_{stage}",
+                                    rest_api_name=f"{self.stack_name}_RestApi_{stage}",
                                     description="This is the Maua Reservation RestApi",
                                     default_cors_preflight_options=
                                     {
