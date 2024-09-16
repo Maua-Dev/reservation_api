@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import os
 
 import aws_cdk as cdk
@@ -34,13 +33,13 @@ else:
     stage = 'TEST'
 
 tags = {
-    'project': 'Template',
+    'project': 'MauaReservation Courts & Schedule',
     'stage': stage,
     'stack': 'BACK',
     'owner': 'DevCommunity'
 }
 
-IacStack(app, stack_name=stack_name, env=cdk.Environment(account=aws_account_id, region=aws_region), tags=tags)
+IacStack(app, construct_id=f"{stack_name}_IacStack_{stage}", stack_name=stack_name, env=cdk.Environment(account=aws_account_id, region=aws_region), tags=tags)
 
 
 app.synth()
