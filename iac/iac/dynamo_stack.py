@@ -3,6 +3,7 @@ from aws_cdk import (
     aws_dynamodb as dynamodb, RemovalPolicy,
 )
 from constructs import Construct
+import os
 
 
 class DynamoStack(Construct):
