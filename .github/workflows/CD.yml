@@ -31,7 +31,7 @@ jobs:
         - name: Setting stage and stack name
           run: |
             echo "STAGE=${{ github.ref_name }}" 
-            echo "STACK_NAME=MauaReservationSchedule&CourtsStack${{github.ref_name}}" >> $GITHUB_ENV
+            echo "STACK_NAME=MauaReservationScheduleANDCourtsStack${{github.ref_name}}" >> $GITHUB_ENV
 
         - uses: actions/checkout@v3
         - uses: actions/setup-python@v4
