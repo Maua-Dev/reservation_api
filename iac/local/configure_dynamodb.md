@@ -88,7 +88,7 @@ Finally, you can run the `load_user_mock_to_dynamo` script to load mock data int
 3. Once you have located or created the `load_user_mock_to_dynamo` file, make sure it is in the correct location within your project structure. The file should be located in the `src/shared/infra/repositories`
 ```bash
 .
-├── iac
+├── stacks
 ├── src
 │   ├── ...
 │   │     

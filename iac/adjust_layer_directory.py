@@ -3,7 +3,7 @@ import shutil
 from pathlib import Path
 import sys
 
-IAC_DIRECTORY_NAME = "iac"
+IAC_DIRECTORY_NAME = "stacks"
 SOURCE_DIRECTORY_NAME = "src"
 LAMBDA_LAYER_PREFIX = os.path.join("python", "src")
 

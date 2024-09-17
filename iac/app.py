@@ -2,9 +2,9 @@ import os
 
 import aws_cdk as cdk
 from adjust_layer_directory import adjust_layer_directory
-from get_stage import get_stage_env
+from iac.get_stage import get_stage_env
 
-from iac.iac_stack import IacStack
+from stacks.iac_stack import IacStack
 
 
 

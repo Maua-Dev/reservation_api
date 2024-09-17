@@ -7,7 +7,8 @@ from aws_cdk import (
 )
 from constructs import Construct
 from aws_cdk.aws_apigateway import Resource, LambdaIntegration
-from ..get_stage import get_stage_env
+
+from iac.get_stage import get_stage_env
 
 
 class LambdaStack(Construct):
