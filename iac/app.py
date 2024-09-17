@@ -2,7 +2,7 @@ import os
 
 import aws_cdk as cdk
 from adjust_layer_directory import adjust_layer_directory
-from iac.get_stage import get_stage_env
+import get_stage
 
 from stacks.iac_stack import IacStack
 
@@ -21,7 +21,7 @@ aws_region = os.environ.get("AWS_REGION")
 aws_account_id = os.environ.get("AWS_ACCOUNT_ID")
 stack_name = os.environ.get("STACK_NAME")
 
-stage = get_stage_env()
+stage = get_stage.get_stage_env()
 
 tags = {
     'project': 'Reservation Courts and Schedule MSS',
