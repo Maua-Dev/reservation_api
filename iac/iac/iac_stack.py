@@ -6,6 +6,7 @@ from aws_cdk.aws_apigateway import RestApi, Cors
 import os
 
 from .lambda_stack import LambdaStack
+from .dynamo_stack import DynamoStack
 
 
 class IacStack(Stack):
@@ -46,14 +47,14 @@ class IacStack(Stack):
         }
                                                                )
 
-        # self.dynamo_table = TemplateDynamoTable(self, "")
+        self.dynamo_table = DynamoStack(self, f"{stack_name}_DynamoStack_{stage}")
 
         ENVIRONMENT_VARIABLES = {
             "STAGE": stage,
-            # "DYNAMO_TABLE_NAME": self.dynamo_table.table.table_name,
-            # "DYNAMO_PARTITION_KEY": "PK",
-            # "DYNAMO_SORT_KEY": "SK",
-            "AWS_REGION": self.region,
+            "DYNAMO_TABLE_NAME": self.dynamo_table.table.table_name,
+            "DYNAMO_PARTITION_KEY": "PK",
+            "DYNAMO_SORT_KEY": "SK",
+            "REGION": region,
         }
 
 
