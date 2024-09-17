@@ -1,7 +1,8 @@
 import os
 from aws_cdk import (
     aws_lambda as lambda_,
-    NestedStack, Duration
+    NestedStack, Duration,
+    aws_iam as iam
 )
 from constructs import Construct
 from aws_cdk.aws_apigateway import Resource, LambdaIntegration
@@ -27,6 +28,11 @@ class LambdaStack(Construct):
         mss_student_api_resource.add_resource(module_name.replace("_", "-")).add_method(method,
                                                                                         integration=LambdaIntegration(
                                                                                             function))
+
+        function.add_to_role_policy(iam.PolicyStatement(
+            actions=["lambda:GetLayerVersion"],
+            resources=["arn:aws:lambda:us-east-2:017000801446:layer:AWSLambdaPowertoolsPythonV2:22"]
+        ))
 
         return function
 
