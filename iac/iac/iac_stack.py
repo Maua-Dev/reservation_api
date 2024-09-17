@@ -15,8 +15,8 @@ class IacStack(Stack):
         
         self.github_ref_name = os.environ.get("GITHUB_REF_NAME")
         self.aws_region = os.environ.get("AWS_REGION")
-        self.stack_name = os.environ.get("STACK_NAME")
-        self.region = os.environ.get("AWS_REGION")
+        stack_name = os.environ.get("STACK_NAME")
+        region = os.environ.get("AWS_REGION")
         
         stage = ""
         if 'prod' in self.github_ref_name:
@@ -27,8 +27,8 @@ class IacStack(Stack):
             stage = 'DEV'    
         
 
-        self.rest_api = RestApi(self, f"{self.stack_name}_RestApi_{stage}",
-                                    rest_api_name=f"{self.stack_name}_RestApi_{stage}",
+        self.rest_api = RestApi(self, f"{stack_name}_RestApi_{stage}",
+                                    rest_api_name=f"{stack_name}_RestApi_{stage}",
                                     description="This is the Maua Reservation RestApi",
                                     default_cors_preflight_options=
                                     {
