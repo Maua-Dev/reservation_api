@@ -33,7 +33,7 @@ else:
     stage = 'TEST'
 
 tags = {
-    'project': 'MauaReservation Courts & Schedule',
+    'project': 'Reservation Courts and Schedule MSS',
     'stage': stage,
     'stack': 'BACK',
     'owner': 'DevCommunity'
