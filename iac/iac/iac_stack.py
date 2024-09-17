@@ -7,6 +7,7 @@ import os
 
 from .lambda_stack import LambdaStack
 from .dynamo_stack import DynamoStack
+from ..get_stage import get_stage_env
 
 
 class IacStack(Stack):
@@ -14,19 +15,10 @@ class IacStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
         
-        self.github_ref_name = os.environ.get("GITHUB_REF_NAME")
+        stage = get_stage_env()
         self.aws_region = os.environ.get("AWS_REGION")
         stack_name = os.environ.get("STACK_NAME")
         region = os.environ.get("AWS_REGION")
-        
-        stage = ""
-        if 'prod' in self.github_ref_name:
-            stage = 'PROD'
-        elif 'homolog' in self.github_ref_name:
-            stage = 'HOMOLOG'
-        else:
-            stage = 'DEV'    
-        
 
         self.rest_api = RestApi(self, f"{stack_name}_RestApi_{stage}",
                                     rest_api_name=f"{stack_name}_RestApi_{stage}",
