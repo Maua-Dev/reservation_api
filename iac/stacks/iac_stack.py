@@ -45,7 +45,7 @@ class IacStack(Stack):
         }
                                                                )
 
-        self.dynamo_table = DynamoStack(self, f"{stack_name}_DynamoStack_{stage}")
+        self.dynamo_table = DynamoStack(self)
 
         ENVIRONMENT_VARIABLES = {
             "STAGE": stage,
