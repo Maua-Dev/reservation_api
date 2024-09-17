@@ -24,7 +24,8 @@ class LambdaStack(Construct):
             stage = 'DEV'
 
         function = lambda_.Function(
-            self, 
+            self,
+            id=f"{stack_name}_LambdaStack_{stage}",
             function_name=f"{stack_name}_{module_name.title()}_{stage}",
             code=lambda_.Code.from_asset(f"../src/modules/{module_name}"),
             handler=f"app.{module_name}_presenter.lambda_handler",
