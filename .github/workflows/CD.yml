@@ -38,6 +38,10 @@ jobs:
           with:
             python-version: '3.9'
 
+        - name: Set PYTHONPATH
+          run: |
+            export PYTHONPATH="${PYTHONPATH}:${GITHUB_WORKSPACE}"
+
         - name: Installing Dependencies
           run: |
             npm install -g aws-cdk
