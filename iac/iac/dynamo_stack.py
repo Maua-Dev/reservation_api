@@ -5,6 +5,8 @@ from aws_cdk import (
 from constructs import Construct
 import os
 
+from iac.get_stage import get_stage_env
+
 
 class DynamoStack(Construct):
     table: dynamodb.Table
@@ -12,16 +14,10 @@ class DynamoStack(Construct):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        self.github_ref_name = os.environ.get("GITHUB_REF_NAME")
+        stage = get_stage_env()
         self.stack_name = os.environ.get("STACK_NAME")
 
-        stage = ""
-        if 'prod' in self.github_ref_name:
-            stage = 'PROD'
-        elif 'homolog' in self.github_ref_name:
-            stage = 'HOMOLOG'
-        else:
-            stage = 'DEV'
+
     
         self.table = dynamodb.Table(
             self, f"{self.stack_name}_DynamoTable_{stage}",
