@@ -7,7 +7,7 @@ import os
 
 from .lambda_stack import LambdaStack
 from .dynamo_stack import DynamoStack
-from ..get_stage import get_stage_env
+from iac.get_stage import get_stage_env
 
 
 class IacStack(Stack):
