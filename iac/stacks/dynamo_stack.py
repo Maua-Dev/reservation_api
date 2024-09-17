@@ -8,7 +8,7 @@ class DynamoStack(Construct):
     table: dynamodb.Table
 
     def __init__(self, scope: Construct, **kwargs) -> None:
-        super().__init__(scope, **kwargs)
+        super().__init__(scope,  "DynamoStack",**kwargs)
 
         self.github_ref = os.environ.get('GITHUB_REF_NAME')
         self.stack_name = os.environ.get("STACK_NAME")
