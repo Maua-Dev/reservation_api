@@ -1,5 +1,4 @@
 import os
-from inspect import stack
 
 from aws_cdk import (
     aws_lambda as lambda_,
@@ -8,16 +7,21 @@ from aws_cdk import (
 from constructs import Construct
 from aws_cdk.aws_apigateway import Resource, LambdaIntegration
 
-from iac.get_stage import get_stage_env
-
 
 class LambdaStack(Construct):
     functions_that_need_dynamo_permissions = []
 
     def create_lambda_api_gateway_integration(self, module_name: str, method: str, mss_student_api_resource: Resource,
                                               environment_variables: dict = {"STAGE": "TEST"}):
+        github_ref = os.environ.get('GITHUB_REF_NAME')
         stack_name = os.environ.get("STACK_NAME")
-        stage = get_stage_env()
+        stage = ''
+        if 'prod' in github_ref:
+            stage = 'PROD'
+        elif 'homolog' in github_ref:
+            stage = 'HOMOLOG'
+        else:
+            stage = 'DEV'
 
         function = lambda_.Function(
             self, 
@@ -37,8 +41,15 @@ class LambdaStack(Construct):
         return function
 
     def __init__(self, scope: Construct, api_gateway_resource: Resource, environment_variables: dict) -> None:
+        self.github_ref = os.environ.get('GITHUB_REF_NAME')
         self.stack_name = os.environ.get("STACK_NAME")
-        stage = get_stage_env()
+        stage = ''
+        if 'prod' in self.github_ref:
+            stage = 'PROD'
+        elif 'homolog' in self.github_ref:
+            stage = 'HOMOLOG'
+        else:
+            stage = 'DEV'
         
         super().__init__(scope, f"{self.stack_name}_LambdaStack_{stage}")
 

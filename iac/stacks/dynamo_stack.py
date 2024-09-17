@@ -1,12 +1,8 @@
-from decimal import Decimal
 from aws_cdk import (
     aws_dynamodb as dynamodb, RemovalPolicy,
 )
 from constructs import Construct
 import os
-
-from iac.get_stage import get_stage_env
-
 
 class DynamoStack(Construct):
     table: dynamodb.Table
@@ -14,11 +10,17 @@ class DynamoStack(Construct):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        stage = get_stage_env()
+        self.github_ref = os.environ.get('GITHUB_REF_NAME')
         self.stack_name = os.environ.get("STACK_NAME")
 
+        stage = ''
+        if 'prod' in self.github_ref:
+            stage = 'PROD'
+        elif 'homolog' in self.github_ref:
+            stage = 'HOMOLOG'
+        else:
+            stage = 'DEV'
 
-    
         self.table = dynamodb.Table(
             self, f"{self.stack_name}_DynamoTable_{stage}",
             partition_key=dynamodb.Attribute(
