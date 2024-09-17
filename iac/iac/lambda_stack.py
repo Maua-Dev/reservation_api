@@ -2,7 +2,6 @@ import os
 from aws_cdk import (
     aws_lambda as lambda_,
     NestedStack, Duration,
-    aws_iam as iam
 )
 from constructs import Construct
 from aws_cdk.aws_apigateway import Resource, LambdaIntegration
@@ -29,11 +28,6 @@ class LambdaStack(Construct):
                                                                                         integration=LambdaIntegration(
                                                                                             function))
 
-        function.add_to_role_policy(iam.PolicyStatement(
-            actions=["lambda:GetLayerVersion"],
-            resources=["arn:aws:lambda:us-east-2:017000801446:layer:AWSLambdaPowertoolsPythonV2:22"]
-        ))
-
         return function
 
     def __init__(self, scope: Construct, api_gateway_resource: Resource, environment_variables: dict) -> None:
@@ -55,8 +49,7 @@ class LambdaStack(Construct):
                                                  compatible_runtimes=[lambda_.Runtime.PYTHON_3_9]
                                                  )
 
-        self.lambda_power_tools = lambda_.LayerVersion.from_layer_version_arn(self, "Lambda_Power_Tools", layer_version_arn="arn:aws:lambda:us-east-2:017000801446:layer:AWSLambdaPowertoolsPythonV2:22")
-        
+
         # self.create_court = self.create_lambda_api_gateway_integration(
         #     module_name="create_court",
         #     method="POST",
