@@ -26,6 +26,7 @@ class TestReservationRepositoryDynamo:
         deleted_court = dynamo_repo.delete_court(999)
         assert deleted_court is None
 
+    @pytest.mark.skip("Can't run test in github actions")
     def test_update_court(self):
         repo = ReservationRepositoryDynamo()
         resp = repo.update_court(number=3, new_photo="https://www.linkedin.com/in/giovanna-albuquerque-16917a245/")
