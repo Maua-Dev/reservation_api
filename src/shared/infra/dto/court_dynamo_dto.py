@@ -47,7 +47,7 @@ class CourtDynamoDTO:
         @param court_data: dict from DynamoDB
         """
         return CourtDynamoDTO(
-            number=court_data["number"],
+            number=int(court_data["number"]),
             status=STATUS(court_data["status"]),
             is_field=bool(court_data["is_field"]),
             photo=court_data["photo"]
