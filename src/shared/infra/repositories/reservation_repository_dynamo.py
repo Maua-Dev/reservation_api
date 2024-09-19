@@ -2,6 +2,7 @@ from src.shared.domain.entities.court import Court
 from src.shared.domain.repositories.reservation_repository_interface import IReservationRepository
 from src.shared.environments import Environments
 from src.shared.infra.dto.court_dynamo_dto import CourtDynamoDTO
+from typing import List, Optional
 from src.shared.infra.external.dynamo.datasources.dynamo_datasource import DynamoDatasource
 from src.shared.domain.enums.status_enum import STATUS
 from boto3.dynamodb.conditions import Key
@@ -43,11 +44,34 @@ class ReservationRepositoryDynamo(IReservationRepository):
 
     def get_all_courts(self):
         return super().get_all_courts()
-    
-    def update_court(self, number: int, status: STATUS = None, photo: str = None) -> Court:
-        return super().update_court(number, status, photo)
-    
 
     def delete_court(self, number: int):
-        return super().delete_court(number)
-
+        delete_court = self.dynamo.delete_item(partition_key=self.court_partition_key_format(number), sort_key=self.court_sort_key_format(number))
+        if "Attributes" not in delete_court:
+            return None
+        attributes = delete_court["Attributes"]
+        attributes["number"] = int(attributes["number"])
+        return CourtDynamoDTO.from_dynamo(delete_court["Attributes"]).to_entity()
+    
+    def update_court(self, number: int, new_status: Optional[STATUS] = None, new_photo: Optional[str] = None) -> Court:
+        court_to_update = self.get_court(number=number)
+        
+        if court_to_update is None:
+            return None
+        
+        if new_status is not None:
+            court_to_update.status = new_status
+        if new_photo is not None:
+            court_to_update.photo = new_photo
+            
+        update_dict = {
+            "status": court_to_update.status.value,
+            "photo": court_to_update.photo
+        }
+        
+        resp = self.dynamo.update_item(partition_key=self.court_partition_key_format(court_to_update), sort_key=self.court_sort_key_format(court_to_update.number), update_dict=update_dict)
+        
+        if "Attributes" not in resp:
+            return None
+        
+        return CourtDynamoDTO.from_dynamo(resp["Attributes"]).to_entity()
