@@ -33,8 +33,15 @@ class ReservationRepositoryDynamo(IReservationRepository):
         return Court
     
     def get_court(self, number: int):
-        return super().get_court(number)
-    
+        court = self.dynamo.get_item(partition_key=self.court_partition_key_format(number), sort_key=self.court_sort_key_format(number))
+
+        if "Item" not in court:
+            return None
+        
+        court_dto = CourtDynamoDTO.from_dynamo(court['Item'])
+        return court_dto.to_entity()
+        
+
     def get_all_courts(self):
         return super().get_all_courts()
 

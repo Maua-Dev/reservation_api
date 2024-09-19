@@ -1,4 +1,6 @@
 import pytest
+from src.shared.infra.repositories.reservation_repository_mock import ReservationRepositoryMock
+from src.shared.infra.repositories.reservation_repository_dynamo import ReservationRepositoryDynamo
 from src.shared.domain.entities.court import Court
 from src.shared.environments import Environments
 from src.shared.infra.external.dynamo.datasources.dynamo_datasource import DynamoDatasource
@@ -33,3 +35,10 @@ class TestReservationRepositoryDynamo:
 
         assert resp.number == 3
         assert resp.photo == "https://www.linkedin.com/in/giovanna-albuquerque-16917a245/"
+        
+    def test_get_court(self):
+        repo = ReservationRepositoryDynamo()
+
+        resp = repo.get_court(3)
+
+        assert resp.number == 3
