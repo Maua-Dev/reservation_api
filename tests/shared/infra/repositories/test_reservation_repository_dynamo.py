@@ -35,7 +35,8 @@ class TestReservationRepositoryDynamo:
 
         assert resp.number == 3
         assert resp.photo == "https://www.linkedin.com/in/giovanna-albuquerque-16917a245/"
-        
+
+    @pytest.mark.skip("Can't run test in github actions")    
     def test_get_court(self):
         repo = ReservationRepositoryDynamo()
 
