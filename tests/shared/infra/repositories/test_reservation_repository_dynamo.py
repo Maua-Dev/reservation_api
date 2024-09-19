@@ -25,3 +25,10 @@ class TestReservationRepositoryDynamo:
         mock_repo = ReservationRepositoryMock()
         deleted_court = dynamo_repo.delete_court(999)
         assert deleted_court is None
+
+    def test_update_court(self):
+        repo = ReservationRepositoryDynamo()
+        resp = repo.update_court(number=3, new_photo="https://www.linkedin.com/in/giovanna-albuquerque-16917a245/")
+
+        assert resp.number == 3
+        assert resp.photo == "https://www.linkedin.com/in/giovanna-albuquerque-16917a245/"
