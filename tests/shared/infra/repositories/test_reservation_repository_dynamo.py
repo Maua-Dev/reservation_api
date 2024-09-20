@@ -43,3 +43,27 @@ class TestReservationRepositoryDynamo:
         resp = repo.get_court(3)
 
         assert resp.number == 3
+
+    @pytest.mark.skip("Github Skip")
+    def test_dynamo_create_court(self):
+        dynamo_repo = ReservationRepositoryDynamo()
+        new_court = Court(number=6, status=STATUS.MAINTENANCE, is_field=False, photo=None)
+        size = len(dynamo_repo.get_all_courts())
+    
+        assert new_court == dynamo_repo.create_court(new_court)
+        assert dynamo_repo.get_court(6)== new_court 
+
+        dynamo_repo.delete_court(new_court)
+
+    @pytest.mark.skip("Github Skip")
+    def test_dynamo_get_all_courts(self):
+        mock_repo = ReservationRepositoryMock()
+        dynamo_repo = ReservationRepositoryDynamo()
+
+        dynamo_courts = dynamo_repo.get_all_courts()
+        mock_courts = mock_repo.get_all_courts()
+
+        assert len(dynamo_courts) == len(mock_courts)
+
+        for d_court, m_court in zip(dynamo_courts, mock_courts):
+            assert d_court.__dict__.items() == m_court.__dict__.items()

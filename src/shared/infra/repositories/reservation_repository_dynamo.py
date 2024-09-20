@@ -30,7 +30,7 @@ class ReservationRepositoryDynamo(IReservationRepository):
         item = CourtDynamoDTO.from_entity(court).to_dynamo()
         resp = self.dynamo.put_item(item, partition_key=self.court_partition_key_format(court.number), sort_key=self.court_sort_key_format(court.number))
 
-        return Court
+        return court
     
     def get_court(self, number: int):
         court = self.dynamo.get_item(partition_key=self.court_partition_key_format(number), sort_key=self.court_sort_key_format(number))
@@ -42,8 +42,13 @@ class ReservationRepositoryDynamo(IReservationRepository):
         return court_dto.to_entity()
         
 
-    def get_all_courts(self):
-        return super().get_all_courts()
+    def get_all_courts(self) -> list[Court]:
+
+        all_courts = []
+        for item in self.dynamo.get_all_items().get('Items'):
+            all_courts.append(CourtDynamoDTO.from_dynamo(item).to_entity())
+
+        return all_courts
 
     def delete_court(self, number: int):
         delete_court = self.dynamo.delete_item(partition_key=self.court_partition_key_format(number), sort_key=self.court_sort_key_format(number))
