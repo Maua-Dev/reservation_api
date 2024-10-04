@@ -60,40 +60,40 @@ class LambdaStack(Construct):
                                                  )
 
 
-        # self.create_court = self.create_lambda_api_gateway_integration(
-        #     module_name="create_court",
-        #     method="POST",
-        #     mss_student_api_resource=api_gateway_resource,
-        #     environment_variables=environment_variables
-        # )
+        self.create_court = self.create_lambda_api_gateway_integration(
+            module_name="create_court",
+            method="POST",
+            mss_student_api_resource=api_gateway_resource,
+            environment_variables=environment_variables
+        )
         
-        # self.get_court = self.create_lambda_api_gateway_integration(
-        #     module_name="get_court",
-        #     method="GET",
-        #     mss_student_api_resource=api_gateway_resource,
-        #     environment_variables=environment_variables
-        # )
+        self.get_court = self.create_lambda_api_gateway_integration(
+            module_name="get_court",
+            method="GET",
+            mss_student_api_resource=api_gateway_resource,
+            environment_variables=environment_variables
+        )
         
-        # self.update_court = self.create_lambda_api_gateway_integration(
-        #     module_name="update_court",
-        #     method="PUT",
-        #     mss_student_api_resource=api_gateway_resource,
-        #     environment_variables=environment_variables
-        # )
+        self.update_court = self.create_lambda_api_gateway_integration(
+            module_name="update_court",
+            method="PUT",
+            mss_student_api_resource=api_gateway_resource,
+            environment_variables=environment_variables
+        )
         
-        # self.delete_court = self.create_lambda_api_gateway_integration(
-        #     module_name="delete_court",
-        #     method="DELETE",
-        #     mss_student_api_resource=api_gateway_resource,
-        #     environment_variables=environment_variables
-        # )
+        self.delete_court = self.create_lambda_api_gateway_integration(
+            module_name="delete_court",
+            method="DELETE",
+            mss_student_api_resource=api_gateway_resource,
+            environment_variables=environment_variables
+        )
         
-        # self.get_all_courts = self.create_lambda_api_gateway_integration(
-        #     module_name="get_all_courts",
-        #     method="GET",
-        #     mss_student_api_resource=api_gateway_resource,
-        #     environment_variables=environment_variables
-        # )
+        self.get_all_courts = self.create_lambda_api_gateway_integration(
+            module_name="get_all_courts",
+            method="GET",
+            mss_student_api_resource=api_gateway_resource,
+            environment_variables=environment_variables
+        )
         
         self.health_check = self.create_lambda_api_gateway_integration(
             module_name="health_check",
@@ -102,5 +102,10 @@ class LambdaStack(Construct):
             environment_variables=environment_variables
         )
 
-        # self.functions_that_need_dynamo_permissions = [self.get_user_function, self.create_user_function,
-                                                #   self.delete_user_function, self.update_user_function]
+        self.functions_that_need_dynamo_permissions = [
+            self.create_court,
+            self.get_court,
+            self.update_court,
+            self.delete_court,
+            self.get_all_courts
+        ]

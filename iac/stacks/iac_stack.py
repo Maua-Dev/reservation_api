@@ -60,7 +60,7 @@ class IacStack(Stack):
         self.lambda_stack = LambdaStack(self, api_gateway_resource=api_gateway_resource,
                                         environment_variables=ENVIRONMENT_VARIABLES)
 
-        # for function in self.lambda_stack.functions_that_need_dynamo_permissions:
-        #     self.dynamo_table.table.grant_read_write_data(function)
+        for function in self.lambda_stack.functions_that_need_dynamo_permissions:
+            self.dynamo_table.table.grant_read_write_data(function)
 
         
