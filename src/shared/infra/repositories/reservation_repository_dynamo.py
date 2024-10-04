@@ -58,8 +58,7 @@ class ReservationRepositoryDynamo(IReservationRepository):
                                                sort_key=self.court_sort_key_format(number))
         if "Attributes" not in delete_court:
             return None
-        attributes = delete_court["Attributes"]
-        attributes["number"] = int(attributes["number"])
+       
         return CourtDynamoDTO.from_dynamo(delete_court["Attributes"]).to_entity()
 
     def update_court(self, number: int, new_status: Optional[STATUS] = None, new_photo: Optional[str] = None) -> Court:
