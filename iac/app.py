@@ -26,8 +26,10 @@ if 'prod' in github_ref:
     stage = 'PROD'
 elif 'homolog' in github_ref:
     stage = 'HOMOLOG'
-else:
+elif 'dev' in github_ref:
     stage = 'DEV'
+else:
+    stage = 'TEST'
 
 tags = {
     'project': 'Reservation Courts and Schedule MSS',
