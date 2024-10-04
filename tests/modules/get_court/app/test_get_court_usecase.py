@@ -28,7 +28,7 @@ class TestGetCourtUseCase:
         with pytest.raises(NoItemsFound):
             repo = ReservationRepositoryMock()
             usecase = GetCourtUsecase(repo = repo)
-            response = usecase(5)
+            response = usecase(9)
             
             
             
