@@ -11,21 +11,9 @@ from aws_cdk.aws_apigateway import Resource, LambdaIntegration
 class LambdaStack(Construct):
     functions_that_need_dynamo_permissions = []
 
-    def create_lambda_api_gateway_integration(self, module_name: str, method: str, mss_student_api_resource: Resource,
-                                              environment_variables: dict = {"STAGE": "TEST"}):
-        github_ref = os.environ.get('GITHUB_REF_NAME')
-        stack_name = os.environ.get("STACK_NAME")
-        stage = ''
-        if 'prod' in github_ref:
-            stage = 'PROD'
-        elif 'homolog' in github_ref:
-            stage = 'HOMOLOG'
-        else:
-            stage = 'DEV'
-
+    def create_lambda_api_gateway_integration(self, module_name: str, method: str, api_resource: Resource, environment_variables: dict = {"STAGE": "TEST"}, authorizer=None ):
         function = lambda_.Function(
-            self,
-            function_name=f"{stack_name}_{module_name.title()}_{stage}",
+            self, module_name.title(),
             code=lambda_.Code.from_asset(f"../src/modules/{module_name}"),
             handler=f"app.{module_name}_presenter.lambda_handler",
             runtime=lambda_.Runtime.PYTHON_3_9,
@@ -34,11 +22,13 @@ class LambdaStack(Construct):
             timeout=Duration.seconds(15)
         )
 
-        mss_student_api_resource.add_resource(module_name.replace("_", "-")).add_method(method,
+        api_resource.add_resource(module_name.replace("_", "-")).add_method(method,
                                                                                         integration=LambdaIntegration(
-                                                                                            function))
+                                                                                            function),
+                                                                                        authorizer=authorizer)
 
         return function
+
 
     def __init__(self, scope: Construct, api_gateway_resource: Resource, environment_variables: dict) -> None:
         self.github_ref = os.environ.get('GITHUB_REF_NAME')
