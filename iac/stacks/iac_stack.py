@@ -37,7 +37,7 @@ class IacStack(Stack):
                                     },
                                 )
 
-        api_gateway_resource = self.rest_api.root.add_resource("mss-reservation", default_cors_preflight_options=
+        api_gateway_resource = self.rest_api.root.add_resource("reservation-api", default_cors_preflight_options=
         {
             "allow_origins": Cors.ALL_ORIGINS,
             "allow_methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
