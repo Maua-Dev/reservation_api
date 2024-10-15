@@ -12,6 +12,7 @@ class IReservationRepository(ABC):
         '''
         pass
 
+    @abstractmethod
     def update_court(self,
                      number: int,
                      status: STATUS = None,
