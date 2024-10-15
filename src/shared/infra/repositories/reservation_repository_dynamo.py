@@ -61,16 +61,16 @@ class ReservationRepositoryDynamo(IReservationRepository):
        
         return CourtDynamoDTO.from_dynamo(delete_court["Attributes"]).to_entity()
 
-    def update_court(self, number: int, new_status: Optional[STATUS] = None, new_photo: Optional[str] = None) -> Court:
+    def update_court(self, number: int, status: Optional[STATUS] = None, photo: Optional[str] = None) -> Court:
         court_to_update = self.get_court(number=number)
 
         if court_to_update is None:
             return None
 
-        if new_status is not None:
-            court_to_update.status = new_status
-        if new_photo is not None:
-            court_to_update.photo = new_photo
+        if status is not None:
+            court_to_update.status = status
+        if photo is not None:
+            court_to_update.photo = photo
 
         update_dict = {
             "status": court_to_update.status.value,
