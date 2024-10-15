@@ -77,7 +77,7 @@ class ReservationRepositoryDynamo(IReservationRepository):
             "photo": court_to_update.photo
         }
 
-        resp = self.dynamo.update_item(partition_key=self.court_partition_key_format(court_to_update),
+        resp = self.dynamo.update_item(partition_key=self.court_partition_key_format(court_to_update.number),
                                        sort_key=self.court_sort_key_format(court_to_update.number),
                                        update_dict=update_dict)
 
