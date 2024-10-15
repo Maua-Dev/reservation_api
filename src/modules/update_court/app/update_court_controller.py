@@ -24,12 +24,12 @@ class UpdateCourtController:
                                          fieldTypeReceived=type(request.data.get('number')))
 
             status_str = request.data.get('status')
-            photo_str = request.data.get('photo')
 
             if status_str:
                 if status_str not in [status_type.value for status_type in STATUS]:
                     raise EntityError('status')
-                status_str = STATUS[status_str]
+
+            photo_str = request.data.get('photo')
 
             if photo_str:
                 if type(photo_str) is not str:
@@ -38,7 +38,7 @@ class UpdateCourtController:
 
             court = self.usecase(
                 number=request.data.get('number'),
-                status=status_str,
+                status=STATUS[status_str] if status_str is not None else None,
                 photo=photo_str
             )
 
