@@ -1,3 +1,4 @@
+from typing import Optional
 from src.shared.domain.entities.court import Court
 from src.shared.domain.enums.status_enum import STATUS
 from src.shared.helpers.errors.domain_errors import EntityError
@@ -11,8 +12,8 @@ class UpdateCourtUsecase:
 
     def __call__(self,
                  number: int,
-                 status: STATUS = None,
-                 photo: str = None):
+                 status: Optional[STATUS] = None,
+                 photo: Optional[str] = None):
 
         if Court.validate_number(number):
             if self.repo.get_court(number) is None:
