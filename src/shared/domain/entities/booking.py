@@ -1,5 +1,5 @@
 import abc
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime
 from src.shared.helpers.errors.domain_errors import EntityError
 
@@ -11,10 +11,10 @@ class Booking(abc.ABC):
     user_id: str
     ra: Optional[str]
     booking_id: str
-    materials: str
+    materials: List[str]
 
 
-    def __init__(self, start_date: datetime, end_date: datetime, court: int, sport: str, user_id: str, ra: Optional[str], booking_id: str, materials: str):
+    def __init__(self, start_date: datetime, end_date: datetime, court: int, sport: str, user_id: str, ra: Optional[str], booking_id: str, materials: List[str]):
         if not Booking.validate_dates(start_date, end_date):
             raise EntityError("dates")
         self.start_date = start_date
@@ -87,8 +87,8 @@ class Booking(abc.ABC):
         return True
 
     @staticmethod
-    def validate_materials(materials: str) -> bool:
-        if not isinstance(materials, str):
+    def validate_materials(materials: List[str]) -> bool:
+        if not isinstance(materials, list) or not all(isinstance(item, str) for item in materials):
             return False
         return True
     
@@ -101,5 +101,5 @@ class Booking(abc.ABC):
             "user_id": self.user_id,
             "ra": self.ra,
             "booking_id": self.booking_id,
-            "materials": self.materials
+            "materials": list(self.materials)
         }
