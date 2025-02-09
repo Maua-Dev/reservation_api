@@ -4,10 +4,10 @@ from src.shared.domain.enums.sport import SPORT
 from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
 
 class BookingRepositoryMock(IBookingRepository):
-    bookins: List[Booking]
+    bookings: List[Booking]
 
     def __init__(self):
-        self.bookins = [
+        self.bookings = [
             Booking(
                 start_date=1634576165000,
                 end_date=1634583365000,
@@ -91,16 +91,20 @@ class BookingRepositoryMock(IBookingRepository):
 
     
     def create_booking(self, booking: Booking) -> Booking:
-        self.bookins.append(booking)
+        self.bookings.append(booking)
         return booking 
     
     def update_booking(self, 
-                    start_date: int,
-                    end_date: int,
-                    court_number: int,
-                    sport: SPORT
+                    booking_id: str,  
+                    start_date: int = None,
+                    end_date: int = None,
+                    court_number: int = None,
+                    sport: SPORT = None
                     ) -> Booking:
-        booking = self.get_booking(start_date)
+        booking = self.get_booking(booking_id)  
+
+        if booking is None:
+            raise ValueError("Booking not found")
 
         if start_date is not None:
             booking.start_date = start_date
@@ -114,7 +118,7 @@ class BookingRepositoryMock(IBookingRepository):
         return booking
 
     def get_booking(self, booking_id: int):
-        for booking in self.bookins:
+        for booking in self.bookings:
             if booking.booking_id == booking_id:
                 return booking
         return None
@@ -122,9 +126,12 @@ class BookingRepositoryMock(IBookingRepository):
     def delete_booking(self, booking_id: int):
         booking = self.get_booking(booking_id)
         if booking is not None:
-            self.bookins.remove(booking)
+            self.bookings.remove(booking)
             return booking
         return None
+    
+    def get_all_bookings(self) -> List[Booking]:
+        return self.bookings
     
         
         
