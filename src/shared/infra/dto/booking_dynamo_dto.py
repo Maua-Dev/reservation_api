@@ -4,7 +4,7 @@ from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
 
 
-class Booking_DynamoDTO:
+class BookingDynamoDTO:
     start_date: int
     end_date: int
     court_number: int
@@ -23,11 +23,11 @@ class Booking_DynamoDTO:
         self.materials = materials
 
     @staticmethod
-    def from_entity(booking: Booking) -> 'Booking_DynamoDTO':
+    def from_entity(booking: Booking) -> 'BookingDynamoDTO':
         '''
-        Converts a Booking entity to a Booking_DynamoDTO
+        Converts a Booking entity to a BookingDynamoDTO
         '''
-        return Booking_DynamoDTO(
+        return BookingDynamoDTO(
             start_date = booking.start_date,
             end_date = booking.end_date,
             court_number = booking.court_number,
@@ -39,7 +39,7 @@ class Booking_DynamoDTO:
 
     def to_dynamo(self) -> dict:
         """
-        Converts a Booking_DynamoDTO to a dynamo item
+        Converts a BookingDynamoDTO to a dynamo item
         """
         data = {
             "entity": "booking",
@@ -57,14 +57,14 @@ class Booking_DynamoDTO:
         return booking_without_none_values
     
     @staticmethod
-    def from_dynamo(booking_data: dict) -> "Booking_DynamoDTO":
+    def from_dynamo(booking_data: dict) -> "BookingDynamoDTO":
         """
-        Converts a dynamo item to a Booking_DynamoDTO
+        Converts a dynamo item to a BookingDynamoDTO
         """
-        return Booking_DynamoDTO(
-            start_date = booking_data["start_date"],
-            end_date = booking_data["end_date"],
-            court_number = booking_data["court_number"],
+        return BookingDynamoDTO(
+            start_date = int(booking_data["start_date"]),
+            end_date = int(booking_data["end_date"]),
+            court_number = int(booking_data["court_number"]),
             sport = SPORT(booking_data["sport"]),
             user_id = booking_data["user_id"],
             booking_id = booking_data["booking_id"],
@@ -73,7 +73,7 @@ class Booking_DynamoDTO:
     
     def to_entity(self) -> Booking:
         """
-        Parse a Booking_DynamoDTO to a Booking entity
+        Parse a BookingDynamoDTO to a Booking entity
         """
         return Booking(
             start_date=self.start_date,
