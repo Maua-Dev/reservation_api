@@ -14,7 +14,7 @@ class TestBookingRepositoryMock:
         assert response == new_booking
 
     def test_update_booking(self):
-        booking_id = 'c2d3bebf-dc0d-4fc1-861c-506a40cc2925'
+        booking_id = 'b1d3bebf-dc0d-4fc1-861c-506a40cc2925'
 
         repo_mock = BookingRepositoryMock()
 
@@ -34,7 +34,7 @@ class TestBookingRepositoryMock:
 
     def test_get_booking(self):
         repo_mock = BookingRepositoryMock()
-        booking_id = 'c2d3bebf-dc0d-4fc1-861c-506a40cc2925'
+        booking_id = 'b1d3bebf-dc0d-4fc1-861c-506a40cc2925'
 
         booking = repo_mock.get_booking(booking_id)
 
@@ -54,3 +54,15 @@ class TestBookingRepositoryMock:
         assert len(bookings) == len(repo_mock.bookings)
         assert isinstance(bookings, list)
         assert all(isinstance(booking, Booking) for booking in bookings)
+
+    def test_delete_booking(self):
+        repo_mock = BookingRepositoryMock()
+        booking_id = 'b1d3bebf-dc0d-4fc1-861c-506a40cc2925'
+
+        len_before = len(repo_mock.bookings)
+        deleted_booking = repo_mock.delete_booking(booking_id)
+        len_after = len(repo_mock.bookings)
+
+        assert deleted_booking is not None
+        assert len_after == len_before - 1
+        assert repo_mock.get_booking(booking_id) is None
