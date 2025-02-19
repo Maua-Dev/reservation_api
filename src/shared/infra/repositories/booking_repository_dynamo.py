@@ -35,7 +35,7 @@ class BookingRepositoryDynamo(IBookingRepository):
                                     partition_key=self.booking_partition_key_format(),
                                     sort_key=self.booking_sort_key_format(booking.booking_id))
 
-        if 'Attributes' not in resp:
+        if resp.get('ResponseMetadata').get('HTTPStatusCode') != 200:
             return None
 
         return booking
@@ -65,7 +65,7 @@ class BookingRepositoryDynamo(IBookingRepository):
                                        partition_key=self.booking_partition_key_format(),
                                        sort_key=self.booking_sort_key_format(booking_id))
 
-        if 'Attributes' not in resp:
+        if resp.get('ResponseMetadata').get('HTTPStatusCode') != 200:
             return None
 
         return BookingDynamoDTO.from_dynamo(resp['Attributes']).to_entity()
