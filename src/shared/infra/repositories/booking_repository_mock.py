@@ -3,6 +3,7 @@ from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
 from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
 
+
 class BookingRepositoryMock(IBookingRepository):
     bookings: List[Booking]
 
@@ -89,19 +90,20 @@ class BookingRepositoryMock(IBookingRepository):
             ),
         ]
 
-    
     def create_booking(self, booking: Booking) -> Booking:
         self.bookings.append(booking)
-        return booking 
-    
-    def update_booking(self, 
-                    booking_id: str,  
-                    start_date: int = None,
-                    end_date: int = None,
-                    court_number: int = None,
-                    sport: SPORT = None
-                    ) -> Booking:
-        booking = self.get_booking(booking_id)  
+        return booking
+
+    def update_booking(self,
+                       booking_id: str,
+                       start_date: int = None,
+                       end_date: int = None,
+                       court_number: int = None,
+                       sport: SPORT = None,
+                       materials: List[str] = None
+                       ) -> Booking:
+
+        booking = self.get_booking(booking_id)
 
         if booking is None:
             raise ValueError("Booking not found")
@@ -114,24 +116,23 @@ class BookingRepositoryMock(IBookingRepository):
             booking.court_number = court_number
         if sport is not None:
             booking.sport = sport
+        if materials is not None:
+            booking.materials = materials
 
         return booking
 
-    def get_booking(self, booking_id: int):
+    def get_booking(self, booking_id: str):
         for booking in self.bookings:
             if booking.booking_id == booking_id:
                 return booking
         return None
-    
-    def delete_booking(self, booking_id: int):
+
+    def delete_booking(self, booking_id: str):
         booking = self.get_booking(booking_id)
         if booking is not None:
             self.bookings.remove(booking)
             return booking
         return None
-    
+
     def get_all_bookings(self) -> List[Booking]:
         return self.bookings
-    
-        
-        
