@@ -6,7 +6,7 @@ def setup_dynamo_table():
     print("Setting up dynamo table")
     dynamo_client = boto3.client('dynamodb', endpoint_url='http://localhost:8000', region_name='sa-east-1')
     tables = dynamo_client.list_tables()['TableNames']
-    table_name = "reservation_api_table"
+    table_name = "local_reservation_api_table"
 
     if not table_name in tables:
         print("Creating table")
@@ -35,7 +35,7 @@ def setup_dynamo_table():
             BillingMode='PAY_PER_REQUEST',
 
         )
-        print('Table "port_mss_action-table" created!\n')
+        print('Table "local_reservation_api_table" created!\n')
     else:
         print('Table already exists!\n')
 
