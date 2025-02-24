@@ -2,6 +2,7 @@ import enum
 from enum import Enum
 import os
 
+from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
 from src.shared.domain.repositories.reservation_repository_interface import IReservationRepository
 
 
@@ -84,7 +85,17 @@ class Environments:
         else:
             raise Exception("no repository found for this stage")
 
-    
+    @staticmethod
+    def get_booking_repo() -> IBookingRepository:
+        if Environments.get_envs().stage == STAGE.TEST:
+            from src.shared.infra.repositories.booking_repository_mock import BookingRepositoryMock
+            return BookingRepositoryMock
+        elif Environments.get_envs().stage in [STAGE.DEV, STAGE.HOMOLOG, STAGE.PROD]:
+            from src.shared.infra.repositories.booking_repository_dynamo import BookingRepositoryDynamo
+            return BookingRepositoryDynamo
+        else:
+            raise Exception("no repository found for this stage")
+
     @staticmethod
     def get_envs() -> "Environments":
         """
