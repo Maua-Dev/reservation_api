@@ -96,3 +96,8 @@ class Booking(abc.ABC):
             "booking_id": self.booking_id,
             "materials": self.materials
         }
+
+    def __eq__(self, other):
+        if not isinstance(other, Booking):
+            return False
+        return self.__dict__ == other.__dict__
