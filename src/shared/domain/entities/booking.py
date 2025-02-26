@@ -101,3 +101,4 @@ class Booking(abc.ABC):
         if not isinstance(other, Booking):
             return False
         return self.__dict__ == other.__dict__
+      

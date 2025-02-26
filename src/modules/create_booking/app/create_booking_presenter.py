@@ -1,0 +1,15 @@
+from src.modules.create_booking.app.create_booking_controller import CreateBookingController
+from src.modules.create_booking.app.create_booking_usecase import CreateBookingUsecase
+from src.shared.environments import Environments
+from src.shared.helpers.external_interfaces.http_lambda_requests import LambdaHttpRequest, LambdaHttpResponse
+
+repo = Environments.get_booking_repo()()
+usecase = CreateBookingUsecase(repo)
+controller = CreateBookingController(usecase)
+
+def lambda_handler(event, context):
+    httpRequest = LambdaHttpRequest(data=event)
+    response = controller(request=httpRequest)
+    httpResponse = LambdaHttpResponse(status_code=response.status_code, body=response.body, headers=response.headers)
+
+    return httpResponse.toDict()
