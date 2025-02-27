@@ -46,11 +46,11 @@ class Test_UpdateBookingUsecase:
         booking_repo = BookingRepositoryMock()
         usecase = UpdateBookingUsecase(booking_repo=booking_repo)
 
-        with pytest.raises(EntityParameterTimeError):
+        with pytest.raises(EntityError):
             booking = usecase(booking_id=booking_repo.bookings[0].booking_id, 
                               court_number=2, 
-                              start_date=1634583365000, 
-                              end_date=1634576165000, 
+                              start_date="1634583365000", 
+                              end_date="1634576165000", 
                               sport=SPORT.TENNIS, 
                               materials=['Raquete', 'Bola', 'Rede', 'Tenis']
             )

@@ -2,7 +2,7 @@ from typing import List
 from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
 from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
-from src.shared.helpers.errors.domain_errors import EntityError, EntityParameterTimeError
+from src.shared.helpers.errors.domain_errors import EntityError, EntityParameterOrderDatesError, EntityParameterTimeError
 from src.shared.helpers.errors.usecase_errors import NoItemsFound
 
 
@@ -25,7 +25,7 @@ class UpdateBookingUsecase:
             raise EntityError(f"date")
         
         if Booking.validate_order_dates(start_date, end_date) is False:
-            raise EntityParameterTimeError(start_date, end_date)
+            raise EntityParameterOrderDatesError(start_date, end_date)
 
         if Booking.validate_court(court_number) is False:
             raise EntityError(f"court_number")
