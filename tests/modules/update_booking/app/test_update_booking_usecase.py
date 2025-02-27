@@ -2,7 +2,7 @@ import pytest
 
 from src.modules.update_booking.app.update_booking_usecase import UpdateBookingUsecase
 from src.shared.domain.enums.sport import SPORT
-from src.shared.helpers.errors.domain_errors import EntityError, EntityParameterTimeError
+from src.shared.helpers.errors.domain_errors import EntityError, EntityParameterOrderDatesError, EntityParameterTimeError
 from src.shared.helpers.errors.usecase_errors import NoItemsFound
 from src.shared.infra.repositories.booking_repository_mock import BookingRepositoryMock
 
@@ -137,7 +137,7 @@ class Test_UpdateBookingUsecase:
         booking_repo = BookingRepositoryMock()
         usecase = UpdateBookingUsecase(booking_repo=booking_repo)
 
-        with pytest.raises(EntityParameterTimeError):
+        with pytest.raises(EntityParameterOrderDatesError):
             booking = usecase(booking_id=booking_repo.bookings[0].booking_id, 
                               court_number=2, 
                               start_date=1634583365000, 

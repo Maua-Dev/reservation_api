@@ -13,6 +13,10 @@ class EntityParameterTypeError(EntityError):
     @property
     def message(self):
         return self.__message
+    
+class EntityParameterOrderDatesError(EntityError):
+    def __init__(self, start_date: int, end_date: int):
+        super().__init__(f'Initial date {start_date} must be less than or equal to end date {end_date}')
 
 class EntityParameterError(EntityError):
     def __init__(self, message: str):

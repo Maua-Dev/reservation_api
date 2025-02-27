@@ -2,7 +2,7 @@ import pytest
 
 from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
-from src.shared.helpers.errors.domain_errors import EntityError
+from src.shared.helpers.errors.domain_errors import EntityError, EntityParameterOrderDatesError
 
 
 class TestBooking:
@@ -45,6 +45,18 @@ class TestBooking:
             Booking(
                 start_date= 'a',
                 end_date= 'b',
+                court_number= 1,
+                sport= SPORT.FOOTBALL,
+                user_id= "d3b07384-d9a1-4e8a-b3ef-4f1d2a87c6f5",
+                booking_id= "a1f5e2c3-7d8b-4c9e-b012-34f6a789d0e1",
+                materials= ["ball"]
+            )
+
+    def test_order_dates_incorrect(self):
+        with pytest.raises(EntityParameterOrderDatesError):
+            Booking(
+                start_date= 1838940138,
+                end_date= 1738940138,
                 court_number= 1,
                 sport= SPORT.FOOTBALL,
                 user_id= "d3b07384-d9a1-4e8a-b3ef-4f1d2a87c6f5",
