@@ -3,7 +3,7 @@ import uuid
 from typing import Optional, List
 from src.shared.domain.entities.court import Court
 from src.shared.domain.enums.sport import SPORT
-from src.shared.helpers.errors.domain_errors import EntityError
+from src.shared.helpers.errors.domain_errors import EntityError, EntityParameterOrderDatesError
 
 class Booking(abc.ABC):
     start_date: int
@@ -20,6 +20,9 @@ class Booking(abc.ABC):
             raise EntityError("dates")
         self.start_date = start_date
         self.end_date = end_date
+
+        if not Booking.validate_order_dates(start_date, end_date):
+            raise EntityParameterOrderDatesError(start_date, end_date)
 
         if not Booking.validate_court(court_number):
             raise EntityError("court")
@@ -44,7 +47,13 @@ class Booking(abc.ABC):
 
     @staticmethod
     def validate_dates(start_date: int, end_date: int) -> bool:
-        if not isinstance(start_date, int) or not isinstance(end_date, int) or start_date >= end_date:
+        if not isinstance(start_date, int) or not isinstance(end_date, int):
+            return False
+        return True
+    
+    @staticmethod
+    def validate_order_dates(start_date: int, end_date: int) -> bool:
+        if start_date >= end_date:
             return False
         return True
 
@@ -96,3 +105,9 @@ class Booking(abc.ABC):
             "booking_id": self.booking_id,
             "materials": self.materials
         }
+
+    def __eq__(self, other):
+        if not isinstance(other, Booking):
+            return False
+        return self.__dict__ == other.__dict__
+      
