@@ -313,3 +313,24 @@ class TestCreateBookingController:
             assert response.body == "Field materials isn't in the right type.\n Received: str.\n Expected: list"
             assert response.status_code == 400
 
+    def test_create_booking_controller_wrong_type_inside_list(self):
+
+        repo = BookingRepositoryMock()
+        usecase = CreateBookingUsecase(repo)
+        controller = CreateBookingController(usecase)
+
+        request = HttpRequest(body= {
+            "start_date": 1630000000,
+            "end_date": 1630003600,
+            "court_number": 1,
+            "sport": "Tennis",
+            "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+            "booking_id": 'e1d3bebf-dc0d-4fc1-861c-506a40cc2925',
+            "materials": ["racket", 1]
+        })
+
+        response = controller(request)
+
+        assert response.body == "Invalid material type"
+        assert response.status_code == 400
+
