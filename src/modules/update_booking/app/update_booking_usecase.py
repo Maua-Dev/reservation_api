@@ -19,22 +19,22 @@ class UpdateBookingUsecase:
                  materials: List[str] = None):
 
         if Booking.validate_booking_id(booking_id) is False: 
-            raise EntityError(f'booking_id')
+            raise EntityError('booking_id')
         
         if Booking.validate_dates(start_date, end_date) is False:
-            raise EntityError(f"date")
+            raise EntityError("date")
         
         if Booking.validate_order_dates(start_date, end_date) is False:
             raise EntityParameterOrderDatesError(start_date, end_date)
 
         if Booking.validate_court(court_number) is False:
-            raise EntityError(f"court_number")
+            raise EntityError("court_number")
              
         if Booking.validate_sport(sport) is False:
-            raise EntityError(f"sport")
+            raise EntityError("sport")
             
         if Booking.validate_materials(materials) is False:
-            raise EntityError(f"materials")
+            raise EntityError("materials")
             
         booking = self.booking_repo.update_booking(booking_id=booking_id,
                                                    start_date=start_date,

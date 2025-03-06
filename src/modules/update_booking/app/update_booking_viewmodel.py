@@ -27,7 +27,6 @@ class BookingViewmodel:
         }
     
 class UpdateBookingViewmodel:
-    booking_viewmodel: BookingViewmodel
 
     def __init__(self, booking: Booking):
         self.booking = BookingViewmodel(booking)
