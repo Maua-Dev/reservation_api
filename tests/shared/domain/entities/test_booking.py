@@ -28,35 +28,23 @@ class TestBooking:
         assert booking.booking_id == "a1f5e2c3-7d8b-4c9e-b012-34f6a789d0e1"
         assert booking.materials == ["ball"]
 
-    def test_invalid_dates(self):
-        with pytest.raises(EntityError):
-            Booking(
-                start_date= 1838940138,
-                end_date= 1738940138,
-                court_number= 1,
-                sport= SPORT.FOOTBALL,
-                user_id= "d3b07384-d9a1-4e8a-b3ef-4f1d2a87c6f5",
-                booking_id= "a1f5e2c3-7d8b-4c9e-b012-34f6a789d0e1",
-                materials= ["ball"]
-            )
-
-    def test_invalid_dates2(self):
-        with pytest.raises(EntityError):
-            Booking(
-                start_date= 'a',
-                end_date= 'b',
-                court_number= 1,
-                sport= SPORT.FOOTBALL,
-                user_id= "d3b07384-d9a1-4e8a-b3ef-4f1d2a87c6f5",
-                booking_id= "a1f5e2c3-7d8b-4c9e-b012-34f6a789d0e1",
-                materials= ["ball"]
-            )
-
     def test_order_dates_incorrect(self):
         with pytest.raises(EntityParameterOrderDatesError):
             Booking(
                 start_date= 1838940138,
                 end_date= 1738940138,
+                court_number= 1,
+                sport= SPORT.FOOTBALL,
+                user_id= "d3b07384-d9a1-4e8a-b3ef-4f1d2a87c6f5",
+                booking_id= "a1f5e2c3-7d8b-4c9e-b012-34f6a789d0e1",
+                materials= ["ball"]
+            )
+
+    def test_invalid_dates(self):
+        with pytest.raises(EntityError):
+            Booking(
+                start_date= 'a',
+                end_date= 'b',
                 court_number= 1,
                 sport= SPORT.FOOTBALL,
                 user_id= "d3b07384-d9a1-4e8a-b3ef-4f1d2a87c6f5",
@@ -146,6 +134,78 @@ class TestBooking:
                 user_id= "d3b07384-d9a1-4e8a-b3ef-4f1d2a87c6f5",
                 booking_id= "a1f5e2c3-7d8b-4c9e-b012-34f6a789d0e1",
                 materials= ["ball", 2]
+            )
+
+    def test_booking_none_dates(self):
+        with pytest.raises(EntityError):
+            Booking(
+                start_date= None,
+                end_date= None,
+                court_number= 1,
+                sport= SPORT.FOOTBALL,
+                user_id= "d3b07384-d9a1-4e8a-b3ef-4f1d2a87c6f5",
+                booking_id= "a1f5e2c3-7d8b-4c9e-b012-34f6a789d0e1",
+                materials= ["ball"]
+            )
+
+    def test_booking_none_court_number(self):
+        with pytest.raises(EntityError):
+            Booking(
+                start_date= 1738940138,
+                end_date= 1838940138,
+                court_number= None,
+                sport= SPORT.FOOTBALL,
+                user_id= "d3b07384-d9a1-4e8a-b3ef-4f1d2a87c6f5",
+                booking_id= "a1f5e2c3-7d8b-4c9e-b012-34f6a789d0e1",
+                materials= ["ball"]
+            )
+
+    def test_booking_none_sport(self):
+        with pytest.raises(EntityError):
+            Booking(
+                start_date= 1738940138,
+                end_date= 1838940138,
+                court_number= 1,
+                sport= None,
+                user_id= "d3b07384-d9a1-4e8a-b3ef-4f1d2a87c6f5",
+                booking_id= "a1f5e2c3-7d8b-4c9e-b012-34f6a789d0e1",
+                materials= ["ball"]
+            )
+    
+    def test_booking_none_user_id(self):
+        with pytest.raises(EntityError):
+            Booking(
+                start_date= 1738940138,
+                end_date= 1838940138,
+                court_number= 1,
+                sport= SPORT.FOOTBALL,
+                user_id= None,
+                booking_id= "a1f5e2c3-7d8b-4c9e-b012-34f6a789d0e1",
+                materials= ["ball"]
+            )
+
+    def test_booking_none_booking_id(self):
+        with pytest.raises(EntityError):
+            Booking(
+                start_date= 1738940138,
+                end_date= 1838940138,
+                court_number= 1,
+                sport= SPORT.FOOTBALL,
+                user_id= "d3b07384-d9a1-4e8a-b3ef-4f1d2a87c6f5",
+                booking_id= None,
+                materials= ["ball"]
+            )
+
+    def test_booking_none_materials(self):
+        with pytest.raises(EntityError):
+            Booking(
+                start_date= 1738940138,
+                end_date= 1838940138,
+                court_number= 1,
+                sport= SPORT.FOOTBALL,
+                user_id= "d3b07384-d9a1-4e8a-b3ef-4f1d2a87c6f5",
+                booking_id= "a1f5e2c3-7d8b-4c9e-b012-34f6a789d0e1",
+                materials= None
             )
 
     def test_booking_to_dict(self):
