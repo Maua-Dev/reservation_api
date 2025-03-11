@@ -29,6 +29,9 @@ class UpdateBookingController:
                 raise MissingParameters('sport')
             
             sport = request.data.get('sport')
+
+            if sport not in [sport_type.value for sport_type in SPORT]:
+                raise EntityError('sport')
             
             if request.data.get('materials') is None:
                 raise MissingParameters('materials')
