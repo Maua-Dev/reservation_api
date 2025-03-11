@@ -1,5 +1,5 @@
-from .get_all_bookings_controller import GetAllBookingsController
-from .get_all_bookings_usecase import GetAllBookingsUsecase
+from .get_all_booking_controller import GetAllBookingsController
+from .get_all_booking_usecase import GetAllBookingsUsecase
 from src.shared.environments import Environments
 from src.shared.helpers.external_interfaces.http_lambda_requests import LambdaHttpRequest, LambdaHttpResponse
 

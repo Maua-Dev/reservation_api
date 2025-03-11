@@ -1,4 +1,4 @@
-from src.modules.get_all_bookings.app.get_all_bookings_usecase import GetAllBookingsUsecase
+from src.modules.get_all_bookings.app.get_all_booking_usecase import GetAllBookingsUsecase
 from src.shared.infra.repositories.booking_repository_mock import BookingRepositoryMock
 from src.shared.domain.entities.booking import Booking
 import pytest
