@@ -1,7 +1,7 @@
 from typing import Any
 from src.shared.domain.entities.booking import Booking
-from .delete_bookings_usecase import DeleteBookingUsecase
-from .delete_bookings_viewmodel import DeleteBookingViewModel
+from .delete_booking_usecase import DeleteBookingUsecase
+from .delete_booking_viewmodel import DeleteBookingViewModel
 from src.shared.helpers.errors.controller_errors import MissingParameters, WrongTypeParameter
 from src.shared.helpers.errors.domain_errors import EntityError
 from src.shared.helpers.errors.usecase_errors import NoItemsFound
@@ -18,7 +18,6 @@ class DeleteBookingController:
         try:
             if request.data.get('booking_id') is None:
                 raise MissingParameters('booking_id')
-            print(request.data.get('booking_id'))
             booking = self.usecase(booking_id=request.data.get('booking_id'))
             viewmodel = DeleteBookingViewModel(booking)
             

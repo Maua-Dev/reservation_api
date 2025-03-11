@@ -1,5 +1,5 @@
-from src.modules.delete_bookings.app.delete_bookings_controller import DeleteBookingController
-from src.modules.delete_bookings.app.delete_bookings_usecase import DeleteBookingUsecase
+from src.modules.delete_booking.app.delete_booking_controller import DeleteBookingController
+from src.modules.delete_booking.app.delete_booking_usecase import DeleteBookingUsecase
 from src.shared.helpers.external_interfaces.http_models import HttpRequest
 from src.shared.infra.repositories.booking_repository_mock import BookingRepositoryMock
 

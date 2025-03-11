@@ -1,5 +1,5 @@
-from .delete_bookings_controller import DeleteBookingController
-from .delete_bookings_usecase import DeleteBookingUsecase
+from .delete_booking_controller import DeleteBookingController
+from .delete_booking_usecase import DeleteBookingUsecase
 from src.shared.environments import Environments
 from src.shared.helpers.external_interfaces.http_lambda_requests import LambdaHttpRequest, LambdaHttpResponse
 

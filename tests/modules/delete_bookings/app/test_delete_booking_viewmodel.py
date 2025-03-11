@@ -1,5 +1,5 @@
-from src.modules.delete_bookings.app.delete_bookings_viewmodel import DeleteBookingViewModel
-from src.modules.delete_bookings.app.delete_bookings_usecase import DeleteBookingUsecase
+from src.modules.delete_booking.app.delete_booking_viewmodel import DeleteBookingViewModel
+from src.modules.delete_booking.app.delete_booking_usecase import DeleteBookingUsecase
 from src.shared.domain.entities.booking import Booking
 from src.shared.infra.repositories.booking_repository_mock import BookingRepositoryMock
 

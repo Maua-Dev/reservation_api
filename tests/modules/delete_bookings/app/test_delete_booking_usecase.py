@@ -4,7 +4,7 @@ from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.status_enum import STATUS
 from src.shared.helpers.errors.usecase_errors import DuplicatedItem
 from src.shared.helpers.errors.domain_errors import EntityError
-from src.modules.delete_bookings.app.delete_bookings_usecase import DeleteBookingUsecase
+from src.modules.delete_booking.app.delete_booking_usecase import DeleteBookingUsecase
 from src.shared.infra.repositories.booking_repository_mock import BookingRepositoryMock
 from src.shared.helpers.errors.usecase_errors import NoItemsFound
 from src.shared.domain.repositories.booking_repository_interface import IBookingRepository

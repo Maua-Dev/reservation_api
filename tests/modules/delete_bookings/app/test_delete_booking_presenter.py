@@ -1,5 +1,5 @@
 import json
-from src.modules.delete_bookings.app.delete_bookings_presenter import lambda_handler
+from src.modules.delete_booking.app.delete_booking_presenter import lambda_handler
 
 
 class TestDeleteBookingPresenter:
