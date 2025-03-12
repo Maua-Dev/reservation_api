@@ -11,10 +11,10 @@ class GetBookingUseCase:
     
     def __call__(self, booking_id: str):
         if not Booking.validate_booking_id(booking_id=booking_id):
-            raise EntityError('Invalid booking id')
+            raise EntityError('booking_id')
         
         booking = self.repo.get_booking(booking_id=booking_id)
         if booking is None:
-            raise NoItemsFound('booking id')
+            raise NoItemsFound('booking_id')
         
         return booking
