@@ -156,7 +156,7 @@ class Test_GetBookingPresenter:
         response = lambda_handler(event, None)
 
         assert response['statusCode'] == 400
-        assert json.loads(response['body']) == 'Field Invalid booking id is not valid'
+        assert json.loads(response['body']) == 'Field booking_id is not valid'
 
 
     def test_get_booking_presenter_wrong_type_parameter(self):
@@ -256,7 +256,7 @@ class Test_GetBookingPresenter:
         response = lambda_handler(event, None)
 
         assert response['statusCode'] == 404
-        assert json.loads(response['body']) == 'No items found for booking id'
+        assert json.loads(response['body']) == 'No items found for booking_id'
 
         
 
