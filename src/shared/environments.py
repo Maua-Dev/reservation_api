@@ -3,6 +3,7 @@ from enum import Enum
 import os
 
 from src.shared.domain.repositories.reservation_repository_interface import IReservationRepository
+from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
 
 
 
@@ -48,7 +49,7 @@ class Environments:
             self.s3_bucket_name = "bucket-test"
             self.region = "sa-east-1"
             self.endpoint_url = "http://localhost:8000"
-            self.dynamo_table_name = "reservation_api_table"
+            self.dynamo_table_name = "local_reservation_api_table"
             self.dynamo_partition_key = "PK"
             self.dynamo_sort_key = "SK"
             self.cloud_front_distribution_domain = "https://d3q9q9q9q9q9q9.cloudfront.net"
@@ -81,6 +82,17 @@ class Environments:
         elif Environments.get_envs().stage in [STAGE.DEV, STAGE.HOMOLOG, STAGE.PROD]:
             from src.shared.infra.repositories.reservation_repository_dynamo import ReservationRepositoryDynamo
             return ReservationRepositoryDynamo
+        else:
+            raise Exception("no repository found for this stage")
+        
+    @staticmethod
+    def get_booking_repo() -> IBookingRepository:
+        if Environments.get_envs().stage == STAGE.TEST:
+            from src.shared.infra.repositories.booking_repository_mock import BookingRepositoryMock
+            return BookingRepositoryMock
+        elif Environments.get_envs().stage in [STAGE.DEV, STAGE.HOMOLOG, STAGE.PROD]:
+            from src.shared.infra.repositories.booking_repository_dynamo import BookingRepositoryDynamo
+            return BookingRepositoryDynamo
         else:
             raise Exception("no repository found for this stage")
 

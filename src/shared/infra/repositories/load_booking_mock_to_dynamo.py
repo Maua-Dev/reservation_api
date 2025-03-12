@@ -1,6 +1,7 @@
 import boto3
-from src.shared.infra.repositories.reservation_repository_mock import ReservationRepositoryMock
-from src.shared.infra.repositories.reservation_repository_dynamo import ReservationRepositoryDynamo
+from src.shared.infra.repositories.booking_repository_dynamo import BookingRepositoryDynamo
+from src.shared.infra.repositories.booking_repository_mock import BookingRepositoryMock
+
 
 def setup_dynamo_table():
     print("Setting up dynamo table")
@@ -39,37 +40,39 @@ def setup_dynamo_table():
     else:
         print('Table already exists!\n')
 
+
 def load_mock_to_local_dynamo():
-    repo_dynamo = ReservationRepositoryDynamo()
-    repo_mock = ReservationRepositoryMock()
-
-    print('Loading mock to data to dynamo...')
-
-    print("Loading courts")
-    count = 0
-    for court in repo_mock.courts:
-        print(f'Loading court {court.number}...')
-        repo_dynamo.create_court(court=court)
-        count += 1
-        print(court)
-    print(f'{count} courts loaded\n')
-
-    print("Done!")
-
-def load_mock_to_real_dynamo():
-    repo_dynamo = ReservationRepositoryDynamo()
-    repo_mock = ReservationRepositoryMock()
+    repo_dynamo = BookingRepositoryDynamo()
+    repo_mock = BookingRepositoryMock()
 
     print('Loading mock data to dynamo...')
 
-    print("Loading courts")
-    count = 0
-    for court in repo_mock.courts:
-        print(f'Loading court {court.number}...')
-        repo_dynamo.create_court(court=court)
-        count += 1
-        print(court)
-    print(f'{count} courts loaded\n')
+    print('Loading bookings...')
+
+    booking_count = 0
+    for booking in repo_mock.bookings:
+        print(f'Loading booking {booking.booking_id}...')
+        repo_dynamo.create_booking(booking=booking)
+        booking_count += 1
+    print(f'{booking_count} bookings loaded\n')
+
+    print("Done!")
+
+
+def load_mock_to_real_dynamo():
+    repo_dynamo = BookingRepositoryDynamo()
+    repo_mock = BookingRepositoryMock()
+
+    print('Loading mock data to dynamo...')
+
+    print('Loading users...')
+
+    booking_count = 0
+    for booking in repo_mock.bookings:
+        print(f'Loading booking {booking.booking_id}...')
+        repo_dynamo.create_booking(booking=booking)
+        booking_count += 1
+    print(f'{booking_count} bookings loaded\n')
 
     print("Done!")
 
