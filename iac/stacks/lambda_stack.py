@@ -48,6 +48,40 @@ class LambdaStack(Construct):
                                                  compatible_runtimes=[lambda_.Runtime.PYTHON_3_9]
                                                  )
 
+        self.create_booking = self.create_lambda_api_gateway_integration(
+            module_name="create_booking",
+            method="POST",
+            api_resource=api_gateway_resource,
+            environment_variables=environment_variables
+        )
+
+        self.update_booking = self.create_lambda_api_gateway_integration(
+            module_name="update_booking",
+            method="PUT",
+            api_resource=api_gateway_resource,
+            environment_variables=environment_variables
+        )
+
+        self.get_booking = self.create_lambda_api_gateway_integration(
+            module_name="get_booking",
+            method="POST",
+            api_resource=api_gateway_resource,
+            environment_variables=environment_variables
+        )
+
+        self.delete_booking = self.create_lambda_api_gateway_integration(
+            module_name="delete_booking",
+            method="DELETE",
+            api_resource=api_gateway_resource,
+            environment_variables=environment_variables
+        )
+
+        self.get_all_bookings = self.create_lambda_api_gateway_integration(
+            module_name="get_all_bookings",
+            method="GET",
+            api_resource=api_gateway_resource,
+            environment_variables=environment_variables
+        )
 
         self.create_court = self.create_lambda_api_gateway_integration(
             module_name="create_court",
@@ -58,7 +92,7 @@ class LambdaStack(Construct):
         
         self.get_court = self.create_lambda_api_gateway_integration(
             module_name="get_court",
-            method="GET",
+            method="POST",
             api_resource=api_gateway_resource,
             environment_variables=environment_variables
         )
