@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Optional
 from src.shared.domain.entities.court import Court
 from src.shared.domain.enums.status_enum import STATUS
 from src.shared.helpers.errors.usecase_errors import DuplicatedItem

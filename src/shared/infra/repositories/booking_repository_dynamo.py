@@ -1,4 +1,4 @@
-from typing_extensions import List, Optional
+from typing import Optional, List
 
 from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT

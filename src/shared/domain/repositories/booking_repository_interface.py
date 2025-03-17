@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from typing_extensions import Optional, List
+from typing import Optional, List
 
 from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT

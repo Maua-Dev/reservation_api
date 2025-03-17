@@ -1,4 +1,3 @@
-from typing import Any
 from .create_court_usecase import CreateCourtUsecase
 from .create_court_viewmodel import CreateCourtViewmodel
 from src.shared.helpers.errors.controller_errors import MissingParameters, WrongTypeParameter
