@@ -11,10 +11,7 @@ class TestGetCourtController:
         usecase = GetCourtUsecase(repo=repo)
         controller = GetCourtController(usecase=usecase)
         request = HttpRequest(body={
-            "number": 2,
-            "status": "AVAILABLE",
-            "is_field": False,
-            "photo": "https://www.linkedin.com/in/giovanna-albuquerque-16917a245/"
+            "number": 2
         })
 
         response = controller(request)

@@ -33,18 +33,20 @@ class GetCourtController:
 
         except MissingParameters as err:
             return BadRequest(body=err.message)
-        
-        except EntityError as err:
+
+        except WrongTypeParameter as err:
             return BadRequest(body=err.message)
 
         except NoItemsFound as err:
             return NotFound(body=err.message)
-        
-        except WrongTypeParameter as err:
+
+        except EntityError as err:
             return BadRequest(body=err.message)
-        
+
         except Exception as err:
-            return InternalServerError(body=str(err)) 
+            return InternalServerError(body=err.args[0])
+
+
 
         
     
