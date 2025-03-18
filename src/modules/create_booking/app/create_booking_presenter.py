@@ -1,5 +1,5 @@
-from src.modules.create_booking.app.create_booking_controller import CreateBookingController
-from src.modules.create_booking.app.create_booking_usecase import CreateBookingUsecase
+from .create_booking_controller import CreateBookingController
+from .create_booking_usecase import CreateBookingUsecase
 from src.shared.environments import Environments
 from src.shared.helpers.external_interfaces.http_lambda_requests import LambdaHttpRequest, LambdaHttpResponse
 
