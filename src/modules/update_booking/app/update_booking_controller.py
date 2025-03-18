@@ -1,6 +1,5 @@
-from src.modules.update_booking.app.update_booking_usecase import UpdateBookingUsecase
-
-from src.modules.update_booking.app.update_booking_viewmodel import UpdateBookingViewmodel
+from .update_booking_usecase import UpdateBookingUsecase
+from .update_booking_viewmodel import UpdateBookingViewmodel
 from src.shared.domain.enums.sport import SPORT
 from src.shared.helpers.errors.controller_errors import MissingParameters, WrongTypeParameter
 from src.shared.helpers.errors.domain_errors import EntityError

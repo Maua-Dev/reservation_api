@@ -1,5 +1,5 @@
-from src.modules.update_booking.app.update_booking_controller import UpdateBookingController
-from src.modules.update_booking.app.update_booking_usecase import UpdateBookingUsecase
+from .update_booking_controller import UpdateBookingController
+from .update_booking_usecase import UpdateBookingUsecase
 from src.shared.environments import Environments
 from src.shared.helpers.external_interfaces.http_lambda_requests import LambdaHttpRequest, LambdaHttpResponse
 
