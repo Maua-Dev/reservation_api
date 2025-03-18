@@ -1,5 +1,5 @@
-from src.modules.create_booking.app.create_booking_usecase import CreateBookingUsecase
-from src.modules.create_booking.app.create_booking_viewmodel import CreateBookingViewmodel
+from .create_booking_usecase import CreateBookingUsecase
+from .create_booking_viewmodel import CreateBookingViewmodel
 from src.shared.helpers.errors.controller_errors import MissingParameters, WrongTypeParameter
 from src.shared.helpers.errors.domain_errors import EntityError
 from src.shared.helpers.errors.usecase_errors import DuplicatedItem
