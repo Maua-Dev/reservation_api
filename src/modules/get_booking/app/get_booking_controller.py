@@ -43,6 +43,6 @@ class GetBookingController:
         
         except WrongTypeParameter as err:
             return BadRequest(body=err.message)
-        
+
         except Exception as err:
-            return InternalServerError(body=str(err)) 
+            return InternalServerError(body=err.args[0])
