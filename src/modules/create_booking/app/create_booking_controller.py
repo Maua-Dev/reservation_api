@@ -1,5 +1,3 @@
-from multiprocessing.managers import Value
-
 from src.modules.create_booking.app.create_booking_usecase import CreateBookingUsecase
 from src.modules.create_booking.app.create_booking_viewmodel import CreateBookingViewmodel
 from src.shared.helpers.errors.controller_errors import MissingParameters, WrongTypeParameter

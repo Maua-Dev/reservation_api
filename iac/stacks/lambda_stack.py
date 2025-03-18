@@ -130,5 +130,10 @@ class LambdaStack(Construct):
             self.get_court,
             self.update_court,
             self.delete_court,
-            self.get_all_courts
+            self.get_all_courts,
+            self.create_booking,
+            self.get_booking,
+            self.update_booking,
+            self.delete_booking,
+            self.get_all_bookings
         ]

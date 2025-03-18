@@ -4,7 +4,6 @@ from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
 from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
 from src.shared.helpers.errors.usecase_errors import DuplicatedItem
-from src.shared.infra.repositories.booking_repository_dynamo import BookingRepositoryDynamo
 
 
 class CreateBookingUsecase:
