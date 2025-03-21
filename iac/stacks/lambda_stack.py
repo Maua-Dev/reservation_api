@@ -6,7 +6,7 @@ from aws_cdk import (
 )
 from constructs import Construct
 from aws_cdk.aws_apigateway import Resource, LambdaIntegration
-from aws_cdk.aws_events import Rule, EventPattern
+from aws_cdk.aws_events import Rule, Schedule
 from aws_cdk.aws_events_targets import LambdaFunction
 
 
@@ -49,7 +49,7 @@ class LambdaStack(Construct):
 
         rule = Rule(
             self, f"{module_name.title()}EventRule",
-            event_pattern=EventPattern(schedule_expression)
+            event_pattern=Schedule.expression(schedule_expression)
         )
 
         rule.add_target(LambdaFunction(function))
