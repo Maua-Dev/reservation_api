@@ -30,11 +30,3 @@ class BucketStack(Construct):
             removal_policy=RemovalPolicy.DESTROY if not (stage == 'PROD') else RemovalPolicy.RETAIN,
             auto_delete_objects=True,
         )
-
-        self.bucket.add_to_resource_policy(
-            iam.PolicyStatement(
-                actions=["s3:GetObject", "s3:PutObject"],
-                resources=[f"{self.bucket.bucket_arn}/*"],
-                principals=[iam.AnyPrincipal()],
-            )
-        )
