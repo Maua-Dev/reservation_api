@@ -29,7 +29,6 @@ class BucketStack(Construct):
             versioned=True,
             removal_policy=RemovalPolicy.DESTROY if not (stage == 'PROD') else RemovalPolicy.RETAIN,
             auto_delete_objects=True,
-            block_public_access=s3.BlockPublicAccess.BLOCK_ALL,
         )
 
         self.bucket.add_to_resource_policy(
