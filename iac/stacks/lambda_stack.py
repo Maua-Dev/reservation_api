@@ -151,7 +151,7 @@ class LambdaStack(Construct):
             environment_variables=environment_variables
         )
 
-        self.test_handler = self.create_lambda_event_bridge_integration(
+        self.generate_report = self.create_lambda_event_bridge_integration(
             module_name="generate_report",
             cron_schedule=Schedule.cron(minute="1"),
             environment_variables=environment_variables
@@ -168,4 +168,10 @@ class LambdaStack(Construct):
             self.update_booking,
             self.delete_booking,
             self.get_all_bookings
+        ]
+
+        self.functions_that_need_s3_permissions = [
+            self.create_court,
+            self.update_court,
+            self.generate_report
         ]

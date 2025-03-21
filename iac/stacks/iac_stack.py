@@ -5,6 +5,7 @@ from constructs import Construct
 from aws_cdk.aws_apigateway import RestApi, Cors
 import os
 
+from .bucket_stack import BucketStack
 from .lambda_stack import LambdaStack
 from .dynamo_stack import DynamoStack
 
@@ -46,6 +47,7 @@ class IacStack(Stack):
                                                                )
 
         self.dynamo_table = DynamoStack(self)
+        self.s3_bucket = BucketStack(self)
 
         ENVIRONMENT_VARIABLES = {
             "STAGE": stage,
@@ -62,5 +64,8 @@ class IacStack(Stack):
 
         for function in self.lambda_stack.functions_that_need_dynamo_permissions:
             self.dynamo_table.table.grant_read_write_data(function)
+
+        for function in self.lambda_stack.functions_that_need_s3_permissions:
+            self.s3_bucket.grant_read_write(function)
 
         

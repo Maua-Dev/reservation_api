@@ -1,0 +1,41 @@
+from aws_cdk import (
+    aws_s3 as s3,
+    aws_iam as iam,
+    RemovalPolicy,
+    Stack,
+)
+from constructs import Construct
+import os
+
+class BucketStack(Construct):
+
+    def __init__(self, scope: Construct, **kwargs) -> None:
+        super().__init__(scope,  "BucketStack", **kwargs)
+
+        self.github_ref = os.environ.get('GITHUB_REF_NAME')
+        self.stack_name = os.environ.get("STACK_NAME")
+
+        stage = ''
+        if 'prod' in self.github_ref:
+            stage = 'PROD'
+        elif 'homolog' in self.github_ref:
+            stage = 'HOMOLOG'
+        else:
+            stage = 'DEV'
+
+        self.bucket = s3.Bucket(
+            self, f"BACK_S3_REPORT_BUCKET_{stage}",
+            bucket_name=f"{self.stack_name}-ReportBucket-{stage}",
+            versioned=True,
+            removal_policy=RemovalPolicy.DESTROY if not (stage is 'PROD') else RemovalPolicy.RETAIN,
+            auto_delete_objects=True,
+            block_public_access=s3.BlockPublicAccess.BLOCK_ALL,
+        )
+
+        self.bucket.add_to_resource_policy(
+            iam.PolicyStatement(
+                actions=["s3:GetObject", "s3:PutObject"],
+                resources=[f"{self.bucket.bucket_arn}/*"],
+                principals=[iam.AnyPrincipal()],
+            )
+        )
