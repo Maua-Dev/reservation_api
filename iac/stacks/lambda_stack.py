@@ -152,7 +152,7 @@ class LambdaStack(Construct):
         )
 
         self.test_handler = self.create_lambda_event_bridge_integration(
-            module_name="make_calendar",
+            module_name="generate_report",
             cron_schedule=Schedule.cron(minute="1"),
             environment_variables=environment_variables
         )
