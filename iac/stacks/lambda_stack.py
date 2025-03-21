@@ -49,7 +49,7 @@ class LambdaStack(Construct):
 
         rule = Rule(
             self, f"{module_name.title()}EventRule",
-            event_pattern=EventPattern(**schedule_expression)
+            event_pattern=EventPattern(schedule_expression)
         )
 
         rule.add_target(LambdaFunction(function))
