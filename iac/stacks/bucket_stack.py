@@ -25,9 +25,9 @@ class BucketStack(Construct):
 
         self.bucket = s3.Bucket(
             self, f"BACK_S3_REPORT_BUCKET_{stage}",
-            bucket_name=f"{self.stack_name}-ReportBucket-{stage}",
+            bucket_name=f"{self.stack_name}-report-bucket-{stage.lower()}",
             versioned=True,
-            removal_policy=RemovalPolicy.DESTROY if not (stage is 'PROD') else RemovalPolicy.RETAIN,
+            removal_policy=RemovalPolicy.DESTROY if not (stage == 'PROD') else RemovalPolicy.RETAIN,
             auto_delete_objects=True,
             block_public_access=s3.BlockPublicAccess.BLOCK_ALL,
         )
