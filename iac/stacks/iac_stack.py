@@ -66,6 +66,6 @@ class IacStack(Stack):
             self.dynamo_table.table.grant_read_write_data(function)
 
         for function in self.lambda_stack.functions_that_need_s3_permissions:
-            self.s3_bucket.grant_read_write(function)
+            self.s3_bucket.bucket.grant_read_write(function)
 
         
