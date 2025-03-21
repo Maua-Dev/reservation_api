@@ -6,12 +6,15 @@ from aws_cdk import (
 )
 from constructs import Construct
 from aws_cdk.aws_apigateway import Resource, LambdaIntegration
+from aws_cdk.aws_events import Rule, EventPattern
+from aws_cdk.aws_events_targets import LambdaFunction
 
 
 class LambdaStack(Construct):
     functions_that_need_dynamo_permissions = []
 
-    def create_lambda_api_gateway_integration(self, module_name: str, method: str, api_resource: Resource, environment_variables: dict = {"STAGE": "TEST"}, authorizer=None ):
+    def create_lambda_api_gateway_integration(self, module_name: str, method: str, api_resource: Resource,
+                                              environment_variables: dict = {"STAGE": "TEST"}, authorizer=None):
         function = lambda_.Function(
             self, module_name.title(),
             code=lambda_.Code.from_asset(f"../src/modules/{module_name}"),
@@ -23,12 +26,35 @@ class LambdaStack(Construct):
         )
 
         api_resource.add_resource(module_name.replace("_", "-")).add_method(method,
-                                                                                        integration=LambdaIntegration(
-                                                                                            function),
-                                                                                        authorizer=authorizer)
+                                                                            integration=LambdaIntegration(
+                                                                                function),
+                                                                            authorizer=authorizer)
 
         return function
 
+    def create_lambda_event_bridge_integration(self,
+                                               module_name: str,
+                                               schedule_expression: str,
+                                               environment_variables: dict = {"STAGE": "TEST"}):
+        function = lambda_.Function(
+            self,
+            module_name.title(),
+            code=lambda_.Code.from_asset(f"../src/modules/{module_name}"),
+            handler=f"app.{module_name}_presenter.lambda_handler",
+            runtime=lambda_.Runtime.PYTHON_3_9,
+            layers=[self.lambda_layer],
+            environment_variables=environment_variables,
+            timeout=Duration.seconds(15)
+        )
+
+        rule = Rule(
+            self, f"{module_name.title()}EventRule",
+            event_pattern=EventPattern(**schedule_expression)
+        )
+
+        rule.add_target(LambdaFunction(function))
+
+        return function
 
     def __init__(self, scope: Construct, api_gateway_resource: Resource, environment_variables: dict) -> None:
         self.github_ref = os.environ.get('GITHUB_REF_NAME')
@@ -40,7 +66,7 @@ class LambdaStack(Construct):
             stage = 'HOMOLOG'
         else:
             stage = 'DEV'
-        
+
         super().__init__(scope, f"{self.stack_name}_LambdaStack_{stage}")
 
         self.lambda_layer = lambda_.LayerVersion(self, f"{self.stack_name}_Lambda_Layer_{stage}",
@@ -89,39 +115,45 @@ class LambdaStack(Construct):
             api_resource=api_gateway_resource,
             environment_variables=environment_variables
         )
-        
+
         self.get_court = self.create_lambda_api_gateway_integration(
             module_name="get_court",
             method="POST",
             api_resource=api_gateway_resource,
             environment_variables=environment_variables
         )
-        
+
         self.update_court = self.create_lambda_api_gateway_integration(
             module_name="update_court",
             method="PUT",
             api_resource=api_gateway_resource,
             environment_variables=environment_variables
         )
-        
+
         self.delete_court = self.create_lambda_api_gateway_integration(
             module_name="delete_court",
             method="DELETE",
             api_resource=api_gateway_resource,
             environment_variables=environment_variables
         )
-        
+
         self.get_all_courts = self.create_lambda_api_gateway_integration(
             module_name="get_all_courts",
             method="GET",
             api_resource=api_gateway_resource,
             environment_variables=environment_variables
         )
-        
+
         self.health_check = self.create_lambda_api_gateway_integration(
             module_name="health_check",
             method="GET",
             api_resource=api_gateway_resource,
+            environment_variables=environment_variables
+        )
+
+        self.test_handler = self.create_lambda_event_bridge_integration(
+            module_name="make_calendar",
+            schedule_expression="rate(1 minute)",
             environment_variables=environment_variables
         )
 
