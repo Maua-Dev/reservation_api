@@ -28,5 +28,4 @@ class BucketStack(Construct):
             bucket_name=f"{self.stack_name}-report-bucket{stage}".lower(),
             versioned=True,
             removal_policy=RemovalPolicy.DESTROY if not (stage == 'PROD') else RemovalPolicy.RETAIN,
-            auto_delete_objects=True,
         )
