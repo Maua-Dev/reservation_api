@@ -34,7 +34,7 @@ class LambdaStack(Construct):
 
     def create_lambda_event_bridge_integration(self,
                                                module_name: str,
-                                               schedule_expression: str,
+                                               cron_schedule: Schedule.cron,
                                                environment_variables: dict = {"STAGE": "TEST"}):
         function = lambda_.Function(
             self,
@@ -49,7 +49,7 @@ class LambdaStack(Construct):
 
         rule = Rule(
             self, f"{module_name.title()}EventRule",
-            event_pattern=Schedule.expression(schedule_expression)
+            schedule=cron_schedule
         )
 
         rule.add_target(LambdaFunction(function))
@@ -153,7 +153,7 @@ class LambdaStack(Construct):
 
         self.test_handler = self.create_lambda_event_bridge_integration(
             module_name="make_calendar",
-            schedule_expression="rate(1 minute)",
+            cron_schedule=Schedule.cron(minute="1"),
             environment_variables=environment_variables
         )
 
