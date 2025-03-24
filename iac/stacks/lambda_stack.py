@@ -153,7 +153,7 @@ class LambdaStack(Construct):
 
         self.generate_report = self.create_lambda_event_bridge_integration(
             module_name="generate_report",
-            cron_schedule=Schedule.cron(week_day="FRI", hour="18"),
+            cron_schedule=Schedule.cron(minute="0", hour="18", week_day="FRI"),
             environment_variables=environment_variables
         )
 
