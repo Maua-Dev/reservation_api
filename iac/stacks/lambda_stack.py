@@ -6,8 +6,8 @@ from aws_cdk import (
 )
 from constructs import Construct
 from aws_cdk.aws_apigateway import Resource, LambdaIntegration
-from aws_cdk.aws_events import Rule, Schedule
-from aws_cdk.aws_events_targets import LambdaFunction
+from aws_cdk.aws_events import Rule, Schedule, EventField
+from aws_cdk.aws_events_targets import LambdaFunction, RuleTargetInput
 
 
 class LambdaStack(Construct):
@@ -48,11 +48,16 @@ class LambdaStack(Construct):
         )
 
         rule = Rule(
-            self, f"{module_name.title()}EventRule",
+            self, f"{module_name.title()}EventRuleForWeeklyUpload",
             schedule=cron_schedule
         )
 
-        rule.add_target(LambdaFunction(function))
+        input_transformer = RuleTargetInput.from_object({
+            "current_date": EventField.time,
+            "message": "weekly report trigger!"
+        })
+
+        rule.add_target(LambdaFunction(function, event=input_transformer))
 
         return function
 

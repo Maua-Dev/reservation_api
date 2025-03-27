@@ -49,3 +49,12 @@ class IBookingRepository(ABC):
         Returns all bookings
         '''
         pass
+
+    @abstractmethod
+    def get_all_bookings_by_date_range(self,
+                                       initial_date: int,
+                                       final_date: int) -> Optional[List[Booking]]:
+        '''
+        Returns all bookings that are in the date range
+        '''
+        pass

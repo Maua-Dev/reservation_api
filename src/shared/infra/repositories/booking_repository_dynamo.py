@@ -98,5 +98,16 @@ class BookingRepositoryDynamo(IBookingRepository):
             if item.get('entity') == 'booking':
                 all_bookings.append(BookingDynamoDTO.from_dynamo(item).to_entity())
 
+    def get_all_bookings_by_date_range(self, initial_date: int, final_date: int) -> Optional[List[Booking]]:
+
+        all_bookings = []
+        all_items = self.dynamo.get_all_items().get('Items')
+
+        for item in all_items:
+            if item.get('entity') == 'booking':
+                booking = BookingDynamoDTO.from_dynamo(item).to_entity()
+                if initial_date <= booking.start_date/1000 <= final_date:
+                    all_bookings.append(booking)
+
         return all_bookings
 

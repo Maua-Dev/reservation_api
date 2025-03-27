@@ -136,3 +136,13 @@ class BookingRepositoryMock(IBookingRepository):
 
     def get_all_bookings(self) -> List[Booking]:
         return self.bookings
+
+    def get_all_bookings_by_date_range(self, initial_date, final_date):
+
+        all_bookings = []
+        for booking in self.bookings:
+            if initial_date <= booking.start_date <= final_date:
+                all_bookings.append(booking)
+
+        return all_bookings
+
