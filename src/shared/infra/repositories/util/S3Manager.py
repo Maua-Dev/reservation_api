@@ -13,7 +13,7 @@ class S3Manager:
                 "s3",
                 aws_access_key_id=self.__envs.client_id,
                 aws_secret_access_key=self.__envs.client_secret,
-                endpoint_url=self.__envs.endpoint_url_s3bucket_back,
+                endpoint_url=self.__envs.bucket_endpoint_url,
                 region_name=self.__envs.region,
                 config=boto3.session.Config(signature_version="s3v4"),
             )
