@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  minio:
+    image: minio/minio:latest
+    container_name: minio-reservation
+    ports:
+      - 9000:9000
+      - 9001:9001
+    environment:
+      - MINIO_ROOT_USER=${CLIENT_ID}
+      - MINIO_ROOT_PASSWORD=${CLIENT_SECRET}
+    volumes:
+      - minio-data:/data
+    command: server /data --console-address :9001
+
+  create-bucket:
+    image: minio/mc:latest
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c " 
+      /usr/bin/mc config host add --api s3v4 s3 http://minio:9000 ${CLIENT_ID} ${CLIENT_SECRET}; 
+      /usr/bin/mc mb s3/bucket-test; 
+      /usr/bin/mc policy set public s3/bucket-test; 
+      "
+
+volumes:
+  minio-data:
