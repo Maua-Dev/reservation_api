@@ -1,0 +1,46 @@
+import boto3
+
+from src.shared.environments import Environments
+
+
+class S3Manager:
+
+    def __init__(self):
+        self.__envs = Environments.get_envs()
+        stage = self.__envs.stage.value
+        if stage == "TEST":
+            self.s3 = boto3.client(
+                "s3",
+                aws_access_key_id=self.__envs.client_id,
+                aws_secret_access_key=self.__envs.client_secret,
+                endpoint_url=self.__envs.endpoint_url_s3bucket_back,
+                region_name=self.__envs.region,
+                config=boto3.session.Config(signature_version="s3v4"),
+            )
+        else:
+            self.s3 = boto3.client("s3")
+
+    def upload_file(self, key, file_type, decode_string):
+
+        response = self.s3.put_object(
+            Bucket=self.__envs.s3_bucket_name,
+            Key=key,
+            Body=decode_string,
+            ContentType=file_type.replace(".", ""),
+        )
+
+        return {
+            's3_response': response,
+            'key': key
+        }
+
+    def delete_file(self):
+        pass
+    def get_all_files(self):
+        pass
+    def get_file(self):
+        pass
+    def generate_presigned_url(self, expiration_time: int, object_name: str, method: str, content_type: str):
+        pass
+
+
