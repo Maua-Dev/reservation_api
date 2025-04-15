@@ -10,6 +10,9 @@ from src.shared.infra.repositories.booking_repository_dynamo import BookingRepos
 class TestGenerateReportSender:
 
     @pytest.mark.skip("Can't run test in gh actions")
+
+    #WONT WORK WITH CURRENT MOCK, ALL DATES ARE OUTDATED AND DO NOT MATCH WITH CURRENT YEAR
+
     def test_generate_report_sender(self):
 
         event_from_event_bridge = {
@@ -30,3 +33,6 @@ class TestGenerateReportSender:
         }
 
         sender = lambda_handler(event_from_event_bridge, None)
+
+    #WONT WORK WITH CURRENT MOCK, ALL DATES ARE OUTDATED AND DO NOT MATCH WITH CURRENT YEAR
+
