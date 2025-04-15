@@ -52,9 +52,9 @@ class Environments:
             self.dynamo_partition_key = "PK"
             self.dynamo_sort_key = "SK"
             self.cloud_front_distribution_domain = "https://d3q9q9q9q9q9q9.cloudfront.net"
-            self.client_id = "local-client-id"
-            self.client_secret = "local-client-secret"
-            self.bucket_endpoint_url = "http://localhost:8001"
+            self.client_id = "local_client_id"
+            self.client_secret = "local_client_secret"
+            self.bucket_endpoint_url = "http://localhost:9000"
 
         else:
             self.s3_bucket_name = os.environ.get("S3_BUCKET_NAME")
