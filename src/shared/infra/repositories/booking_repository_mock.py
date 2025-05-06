@@ -121,7 +121,7 @@ class BookingRepositoryMock(IBookingRepository):
 
         return booking
 
-    def get_booking(self,
+    def get_bookings(self,
                     booking_id: Optional[str] = None,
                     user_id: Optional[str] = None,
                     sport: Optional[str] = None,
@@ -142,6 +142,13 @@ class BookingRepositoryMock(IBookingRepository):
                 return booking
 
         return None
+
+    def get_booking(self,
+                    booking_id: str) -> Optional[Booking]:
+
+        for booking in self.bookings:
+            if booking.booking_id == booking_id:
+                return booking
 
     def delete_booking(self, booking_id: str):
         booking = self.get_booking(booking_id)
