@@ -127,21 +127,23 @@ class BookingRepositoryMock(IBookingRepository):
                     sport: Optional[str] = None,
                     court_number: Optional[int] = None,
                     end_date: Optional[int] = None,
-                    start_date: Optional[int] = None) -> Optional[Booking]:
+                    start_date: Optional[int] = None) -> List[Optional[Booking]]:
 
         filters = locals().copy()
         filters.pop('self')
 
         filters = {k: v for k, v in filters.items() if v is not None}
 
+        bookings = []
+
         for booking in self.bookings:
             booking_dict = booking.__dict__
             if all(
                 booking_dict.get(key) == value for key, value in filters.items()
             ):
-                return booking
+                bookings.append(booking)
 
-        return None
+        return bookings
 
     def get_booking(self,
                     booking_id: str) -> Optional[Booking]:

@@ -14,13 +14,13 @@ class TestGetBookingsController:
         response = controller(request)
 
         assert response.status_code == 200
-        assert response.body['booking']['booking_id'] == 'b2d3bebf-dc0d-4fc1-861c-506a40cc2925'
-        assert response.body['booking']['start_date'] == 1634563800000
-        assert response.body['booking']['end_date'] == 1634567400000
-        assert response.body['booking']['court_number'] == 2
-        assert response.body['booking']['sport'] == 'Football'
-        assert response.body['booking']['user_id'] == 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
-        assert response.body['booking']['materials'] == ['Bola', 'Chuteira']
+        assert response.body['bookings'][0]['booking_id'] == 'b2d3bebf-dc0d-4fc1-861c-506a40cc2925'
+        assert response.body['bookings'][0]['start_date'] == 1634563800000
+        assert response.body['bookings'][0]['end_date'] == 1634567400000
+        assert response.body['bookings'][0]['court_number'] == 2
+        assert response.body['bookings'][0]['sport'] == 'Football'
+        assert response.body['bookings'][0]['user_id'] == 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+        assert response.body['bookings'][0]['materials'] == ['Bola', 'Chuteira']
 
     def test_get_bookings_controller_missing_booking_id(self):
         repo = BookingRepositoryMock()
@@ -59,8 +59,4 @@ class TestGetBookingsController:
         response = controller(request)
         assert response.status_code == 404
         assert response.body == 'No items found for booking_id'
-
-
-
-
        

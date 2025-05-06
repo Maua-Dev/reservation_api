@@ -11,7 +11,7 @@ class TestGetBookingsUseCase:
         usecase = GetBookingsUseCase(repo=repo)
         booking = repo.bookings[0].booking_id
         response = usecase(booking)
-        assert response == repo.bookings[0]
+        assert response[0] == repo.bookings[0]
     
     def test_get_bookings_usecase_invalid_id(self):
         with pytest.raises(EntityError):

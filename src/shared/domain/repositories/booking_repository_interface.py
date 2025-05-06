@@ -43,7 +43,7 @@ class IBookingRepository(ABC):
                      sport: Optional[str] = None,
                      court_number: Optional[int] = None,
                      end_date: Optional[int] = None,
-                     start_date: Optional[int] = None) -> Optional[Booking]:
+                     start_date: Optional[int] = None) -> List[Optional[Booking]]:
         '''
         If the booking exists, returns it, else returns None
         '''

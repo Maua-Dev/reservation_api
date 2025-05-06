@@ -51,14 +51,14 @@ class Test_GetBookingPresenter:
 
         response = lambda_handler(event, None)
         assert response['statusCode'] == 200
-        assert json.loads(response['body'])['message'] == 'the booking was retrieved'
-        assert json.loads(response['body'])['booking']['booking_id'] == 'b1d3bebf-dc0d-4fc1-861c-506a40cc2925'
-        assert json.loads(response['body'])['booking']['start_date'] == 1634576165000
-        assert json.loads(response['body'])['booking']['end_date'] == 1634583365000
-        assert json.loads(response['body'])['booking']['court_number'] == 1
-        assert json.loads(response['body'])['booking']['sport'] == 'Tennis'
-        assert json.loads(response['body'])['booking']['user_id'] == 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
-        assert json.loads(response['body'])['booking']['materials'] == ['Raquete', 'Bola', 'Rede', 'Tenis']
+        assert json.loads(response['body'])['message'] == 'the bookings were retrieved'
+        assert json.loads(response['body'])['bookings'][0]['booking_id'] == 'b1d3bebf-dc0d-4fc1-861c-506a40cc2925'
+        assert json.loads(response['body'])['bookings'][0]['start_date'] == 1634576165000
+        assert json.loads(response['body'])['bookings'][0]['end_date'] == 1634583365000
+        assert json.loads(response['body'])['bookings'][0]['court_number'] == 1
+        assert json.loads(response['body'])['bookings'][0]['sport'] == 'Tennis'
+        assert json.loads(response['body'])['bookings'][0]['user_id'] == 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+        assert json.loads(response['body'])['bookings'][0]['materials'] == ['Raquete', 'Bola', 'Rede', 'Tenis']
 
 
     def test_get_bookings_presenter_missing_parameters(self):
