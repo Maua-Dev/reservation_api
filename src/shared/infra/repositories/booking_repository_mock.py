@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
 from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
@@ -121,10 +121,26 @@ class BookingRepositoryMock(IBookingRepository):
 
         return booking
 
-    def get_booking(self, booking_id: str):
+    def get_booking(self,
+                    booking_id: Optional[str] = None,
+                    user_id: Optional[str] = None,
+                    sport: Optional[str] = None,
+                    court_number: Optional[int] = None,
+                    end_date: Optional[int] = None,
+                    start_date: Optional[int] = None) -> Optional[Booking]:
+
+        filters = locals().copy()
+        filters.pop('self')
+
+        filters = {k: v for k, v in filters.items() if v is not None}
+
         for booking in self.bookings:
-            if booking.booking_id == booking_id:
+            booking_dict = booking.__dict__
+            if all(
+                booking_dict.get(key) == value for key, value in filters.items()
+            ):
                 return booking
+
         return None
 
     def delete_booking(self, booking_id: str):
