@@ -15,50 +15,14 @@ class GetBookingController:
         try:
 
             booking_id = request.data.get('booking_id', None)
-            user_id = request.data.get('user_id', None)
-            sport = request.data.get('sport', None)
-            court_number = request.data.get('court_number', None)
-            end_date = request.data.get('end_date', None)
-            start_date = request.data.get('start_date', None)
-
-            if not booking_id and not user_id and not sport and not court_number and not end_date and not start_date:
-                raise EmptyQueryParameters('At least one of the filters must be provided: booking_id, user_id, sport, court_number, end_date, start_date')
 
             if booking_id is not None:
                 if not isinstance(booking_id, str):
                     raise WrongTypeParameter('booking_id',
                                              fieldTypeReceived=type(booking_id).__name__,
                                              fieldTypeExpected='str')
-
-            if user_id is not None:
-                if not isinstance(user_id, str):
-                    raise WrongTypeParameter('user_id',
-                                             fieldTypeReceived=type(user_id).__name__,
-                                             fieldTypeExpected='str')
-
-            if sport is not None:
-                if not isinstance(sport, str):
-                    raise WrongTypeParameter('sport',
-                                             fieldTypeReceived=type(sport).__name__,
-                                             fieldTypeExpected='str')
-
-            if court_number is not None:
-                if not isinstance(court_number, int):
-                    raise WrongTypeParameter('court_number',
-                                             fieldTypeReceived=type(court_number).__name__,
-                                             fieldTypeExpected='int')
-
-            if end_date is not None:
-                if not isinstance(end_date, int):
-                    raise WrongTypeParameter('end_date',
-                                             fieldTypeReceived=type(end_date).__name__,
-                                             fieldTypeExpected='int')
-
-            if start_date is not None:
-                if not isinstance(start_date, int):
-                    raise WrongTypeParameter('start_date',
-                                             fieldTypeReceived=type(start_date).__name__,
-                                             fieldTypeExpected='int')
+            else:
+                raise MissingParameters('booking_id')
                 
             booking = self.usecase(
                 booking_id=booking_id
