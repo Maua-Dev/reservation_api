@@ -46,7 +46,18 @@ jobs:
       - name: Setting stage and stack name
         run: |
           echo "STAGE=${{ github.ref_name }}" 
-          echo "STACK_NAME=ReservationStackScheduleANDCourts${{github.ref_name}}" >> $GITHUB_ENV
+          if [[ "${{ github.ref_name }}" == "prod" ]]; then
+            echo "STAGE=prod" >> $GITHUB_ENV
+          elif [[ "${{ github.ref_name }}" == "homolog" ]]; then
+            echo "STAGE=homolog" >> $GITHUB_ENV
+          elif [[ "${{ github.ref_name }}" == "dev" ]]; then
+            echo "STAGE=dev" >> $GITHUB_ENV
+          elif [[ "${{ github.ref_name }}" == "fix/githubActions" ]]; then
+            echo "STAGE=dev" >> $GITHUB_ENV
+          else
+            echo "Invalid branch name!" && exit 1
+          fi
+          echo "STACK_NAME=ReservationStackScheduleANDCourts${{env.STAGE}}" >> $GITHUB_ENV
 
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
@@ -69,4 +80,4 @@ jobs:
           AWS_REGION: ${{ vars.AWS_REGION }}
           AWS_ACCOUNT_ID: ${{ env.AWS_ACCOUNT_ID }}
           STACK_NAME: ${{ env.STACK_NAME }}
-          GITHUB_REF_NAME: ${{ github.ref_name }}
+          GITHUB_REF_NAME: ${{ env.STAGE }}
