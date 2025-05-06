@@ -51,7 +51,7 @@ class TestBookingRepositoryDynamo:
         updated_booking = dynamo_repo.update_booking(
             booking_id=booking_id,
             start_date=1234567890,  
-            court_number=2,        
+            court_number=2,
             sport=SPORT.TENNIS.value      
         )
 

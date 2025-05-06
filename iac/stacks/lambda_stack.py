@@ -90,7 +90,7 @@ class LambdaStack(Construct):
 
         self.get_booking = self.create_lambda_api_gateway_integration(
             module_name="get_booking",
-            method="POST",
+            method="GET",
             api_resource=api_gateway_resource,
             environment_variables=environment_variables
         )
@@ -118,7 +118,7 @@ class LambdaStack(Construct):
 
         self.get_court = self.create_lambda_api_gateway_integration(
             module_name="get_court",
-            method="POST",
+            method="GET",
             api_resource=api_gateway_resource,
             environment_variables=environment_variables
         )
