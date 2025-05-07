@@ -122,15 +122,17 @@ class BookingRepositoryMock(IBookingRepository):
         return booking
 
     def get_bookings(self,
-                    booking_id: Optional[str] = None,
-                    user_id: Optional[str] = None,
-                    sport: Optional[str] = None,
-                    court_number: Optional[int] = None,
-                    end_date: Optional[int] = None,
-                    start_date: Optional[int] = None) -> List[Optional[Booking]]:
+                     booking_id: Optional[str] = None,
+                     user_id: Optional[str] = None,
+                     sport: Optional[str] = None,
+                     court_number: Optional[int] = None,
+                     end_date: Optional[int] = None,
+                     start_date: Optional[int] = None) -> List[Optional[Booking]]:
 
         filters = locals().copy()
         filters.pop('self')
+        filters.pop('end_date')
+        filters.pop('start_date')
 
         filters = {k: v for k, v in filters.items() if v is not None}
 
@@ -138,10 +140,16 @@ class BookingRepositoryMock(IBookingRepository):
 
         for booking in self.bookings:
             booking_dict = booking.__dict__
-            if all(
-                booking_dict.get(key) == value for key, value in filters.items()
-            ):
-                bookings.append(booking)
+            if start_date and end_date:
+                if all(
+                    booking_dict.get(key) == value for key, value in filters.items()
+                ) and booking.start_date >= start_date and booking.end_date <= end_date:
+                    bookings.append(booking)
+            else:
+                if all(
+                    booking_dict.get(key) == value for key, value in filters.items()
+                ):
+                    bookings.append(booking)
 
         return bookings
 

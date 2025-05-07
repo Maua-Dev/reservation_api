@@ -2,7 +2,7 @@ from .get_bookings_viewmodel import GetBookingsViewmodel
 from .get_bookings_usecase import GetBookingsUseCase
 from src.shared.helpers.errors.controller_errors import MissingParameters, WrongTypeParameter, EmptyQueryParameters
 from src.shared.helpers.errors.domain_errors import EntityError
-from src.shared.helpers.errors.usecase_errors import NoItemsFound
+from src.shared.helpers.errors.usecase_errors import NoItemsFound, DependantFilter
 from src.shared.helpers.external_interfaces.external_interface import IRequest
 from src.shared.helpers.external_interfaces.http_codes import BadRequest, OK, NotFound, InternalServerError
 
@@ -61,12 +61,20 @@ class GetBookingsController:
                                              fieldTypeExpected='int')
                 
             booking = self.usecase(
-                booking_id=booking_id
+                booking_id=booking_id,
+                user_id=user_id,
+                sport=sport,
+                court_number=court_number,
+                end_date=end_date,
+                start_date=start_date
             )
             booking_viewmodel = GetBookingsViewmodel(booking)
             return OK(booking_viewmodel.to_dict())
         
         except EmptyQueryParameters as err:
+            return BadRequest(body=err.message)
+
+        except DependantFilter as err:
             return BadRequest(body=err.message)
 
         except MissingParameters as err:

@@ -42,7 +42,7 @@ class GetBookingsUseCase:
         bookings = self.repo.get_bookings(
             booking_id=booking_id if booking_id else None,
             user_id=user_id if user_id else None,
-            sport=sport if sport else None,
+            sport=SPORT(sport) if sport else None,
             court_number=court_number if court_number else None,
             end_date=end_date if end_date else None,
             start_date=start_date if start_date else None)

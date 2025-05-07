@@ -40,7 +40,7 @@ class IBookingRepository(ABC):
     def get_bookings(self,
                      booking_id: Optional[str] = None,
                      user_id: Optional[str] = None,
-                     sport: Optional[str] = None,
+                     sport: Optional[SPORT] = None,
                      court_number: Optional[int] = None,
                      end_date: Optional[int] = None,
                      start_date: Optional[int] = None) -> List[Optional[Booking]]:
