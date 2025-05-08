@@ -43,6 +43,7 @@ class TestBookingRepositoryDynamo:
         dynamo_repo = BookingRepositoryDynamo()
         resp= dynamo_repo.get_booking('b1d3bebf-dc0d-4fc1-861c-506a40cc2925')
         assert resp.booking_id == 'b1d3bebf-dc0d-4fc1-861c-506a40cc2925'
+        assert resp.sport == SPORT.TENNIS
 
     @pytest.mark.skip("Can't run test in github actions")
     def test_dynamo_update_booking(self):
@@ -52,7 +53,7 @@ class TestBookingRepositoryDynamo:
             booking_id=booking_id,
             start_date=1234567890,  
             court_number=2,
-            sport=SPORT.TENNIS.value      
+            sport=SPORT.BASKETBALL 
         )
 
 
@@ -60,7 +61,7 @@ class TestBookingRepositoryDynamo:
         assert updated_booking.booking_id == booking_id
         assert updated_booking.start_date == 1234567890
         assert updated_booking.court_number == 2
-        assert updated_booking.sport == SPORT.TENNIS
+        assert updated_booking.sport == SPORT.BASKETBALL
 
     @pytest.mark.skip("Can't run test in github actions")
     def test_dynamo_create_booking(self):
