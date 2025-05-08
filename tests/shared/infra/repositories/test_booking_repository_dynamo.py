@@ -7,12 +7,15 @@ from src.shared.domain.entities.booking import Booking
 class TestBookingRepositoryDynamo:
 
     @pytest.mark.skip("Can't run test in github actions")
-    def test_dynamo_get_all_bookings(self):
+    def test_dynamo_get_bookings_sport(self):
         dynamo_repo = BookingRepositoryDynamo()
         mock_repo = BookingRepositoryMock()
-        dynamo_bookings = dynamo_repo.get_all_bookings()
-        mock_bookings = mock_repo.get_all_bookings()
-        assert len(dynamo_bookings) == len(mock_bookings) + 1
+
+        dynamo_bookings = dynamo_repo.get_bookings(sport=SPORT.TENNIS.value)
+        mock_bookings = mock_repo.get_bookings(sport=SPORT.TENNIS.value)
+
+        assert len(dynamo_bookings) == len(mock_bookings)
+
         for d_booking, m_booking in zip(dynamo_bookings, mock_bookings):
             assert d_booking.start_date == m_booking.start_date
             assert d_booking.end_date == m_booking.end_date
@@ -21,6 +24,14 @@ class TestBookingRepositoryDynamo:
             assert d_booking.user_id == m_booking.user_id
             assert d_booking.booking_id == m_booking.booking_id
             assert d_booking.materials == m_booking.materials
+
+    @pytest.mark.skip("Can't run test in github actions")
+    def test_dynamo_get_all_bookings(self):
+        dynamo_repo = BookingRepositoryDynamo()
+        mock_repo = BookingRepositoryMock()
+        dynamo_bookings = dynamo_repo.get_all_bookings()
+        mock_bookings = mock_repo.get_all_bookings()
+        assert len(dynamo_bookings) == len(mock_bookings)
 
     @pytest.mark.skip("Can't run test in github actions")
     def test_dynamo_delete_booking(self):
