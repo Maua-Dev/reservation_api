@@ -1,10 +1,10 @@
 import json
-from src.modules.get_booking.app.get_booking_presenter import lambda_handler
+from src.modules.get_bookings.app.get_bookings_presenter import lambda_handler
 from src.shared.infra.repositories.booking_repository_mock import BookingRepositoryMock
 
 class Test_GetBookingPresenter:
 
-    def test_get_booking_presenter(self):
+    def test_get_bookings_presenter(self):
         event = {
             "version": "2.0",
             "routeKey": "$default",
@@ -51,17 +51,17 @@ class Test_GetBookingPresenter:
 
         response = lambda_handler(event, None)
         assert response['statusCode'] == 200
-        assert json.loads(response['body'])['message'] == 'the booking was retrieved'
-        assert json.loads(response['body'])['booking']['booking_id'] == 'b1d3bebf-dc0d-4fc1-861c-506a40cc2925'
-        assert json.loads(response['body'])['booking']['start_date'] == 1634576165000
-        assert json.loads(response['body'])['booking']['end_date'] == 1634583365000
-        assert json.loads(response['body'])['booking']['court_number'] == 1
-        assert json.loads(response['body'])['booking']['sport'] == 'Tennis'
-        assert json.loads(response['body'])['booking']['user_id'] == 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
-        assert json.loads(response['body'])['booking']['materials'] == ['Raquete', 'Bola', 'Rede', 'Tenis']
+        assert json.loads(response['body'])['message'] == 'the bookings were retrieved'
+        assert json.loads(response['body'])['bookings'][0]['booking_id'] == 'b1d3bebf-dc0d-4fc1-861c-506a40cc2925'
+        assert json.loads(response['body'])['bookings'][0]['start_date'] == 1634576165000
+        assert json.loads(response['body'])['bookings'][0]['end_date'] == 1634583365000
+        assert json.loads(response['body'])['bookings'][0]['court_number'] == 1
+        assert json.loads(response['body'])['bookings'][0]['sport'] == 'Tennis'
+        assert json.loads(response['body'])['bookings'][0]['user_id'] == 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+        assert json.loads(response['body'])['bookings'][0]['materials'] == ['Raquete', 'Bola', 'Rede', 'Tenis']
 
 
-    def test_get_booking_presenter_missing_parameters(self):
+    def test_get_bookings_presenter_missing_parameters(self):
         event = {
             "version": "2.0",
             "routeKey": "$default",
@@ -107,9 +107,9 @@ class Test_GetBookingPresenter:
         
         response = lambda_handler(event, None)
         assert response['statusCode'] == 400
-        assert json.loads(response['body']) == "Field booking_id is missing"
+        assert json.loads(response['body']) == 'Empty query parameters: At least one of the filters must be provided: booking_id, user_id, sport, court_number, end_date, start_date'
 
-    def test_get_booking_presenter_entity_error(self):
+    def test_get_bookings_presenter_entity_error(self):
         event = {
             "version": "2.0",
             "routeKey": "$default",
@@ -159,7 +159,7 @@ class Test_GetBookingPresenter:
         assert json.loads(response['body']) == 'Field booking_id is not valid'
 
 
-    def test_get_booking_presenter_wrong_type_parameter(self):
+    def test_get_bookings_presenter_wrong_type_parameter(self):
         event = {
             "version": "2.0",
             "routeKey": "$default",
@@ -209,7 +209,7 @@ class Test_GetBookingPresenter:
         assert json.loads(response['body']) == 'Field booking_id isn\'t in the right type.\n Received: int.\n Expected: str'
 
 
-    def test_get_booking_presenter_entity_not_found(self):
+    def test_get_bookings_presenter_entity_not_found(self):
         event = {
             "version": "2.0",
             "routeKey": "$default",
