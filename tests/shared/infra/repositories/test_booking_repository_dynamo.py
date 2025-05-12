@@ -148,7 +148,7 @@ class TestBookingRepositoryDynamo:
                 assert booking.user_id == test_user_id
                 assert booking.court_number == court_number
 
-
+                
     @pytest.mark.skip("Can't run test in github actions")
     def test_get_bookings_by_three_filters(self):
         dynamo_repo = BookingRepositoryDynamo()
@@ -236,7 +236,7 @@ class TestBookingRepositoryDynamo:
             booking_id=booking_id,
             start_date=1234567890,  
             court_number=2,
-            sport=SPORT.TENNIS.value      
+            sport=SPORT.BASKETBALL 
         )
 
 
@@ -244,7 +244,7 @@ class TestBookingRepositoryDynamo:
         assert updated_booking.booking_id == booking_id
         assert updated_booking.start_date == 1234567890
         assert updated_booking.court_number == 2
-        assert updated_booking.sport == SPORT.TENNIS
+        assert updated_booking.sport == SPORT.BASKETBALL
 
         
     @pytest.mark.skip("Can't run test in github actions")

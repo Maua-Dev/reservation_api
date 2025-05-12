@@ -57,7 +57,7 @@ class BookingRepositoryDynamo(IBookingRepository):
             "start_date": start_date if start_date is not None else booking_to_update.start_date,
             "end_date": end_date if end_date is not None else booking_to_update.end_date,
             "court_number": court_number if court_number is not None else booking_to_update.court_number,
-            "sport": sport if sport is not None else booking_to_update.sport,
+            "sport": sport.value if sport is not None else booking_to_update.sport.value,
             "materials": materials if materials is not None else booking_to_update.materials
         }
 
