@@ -19,7 +19,12 @@ class Test_GetBookingPresenter:
                 "header2": "value1,value2"
             },
             "queryStringParameters": {
-                "booking_id": "b1d3bebf-dc0d-4fc1-861c-506a40cc2925"
+                "booking_id": "b1d3bebf-dc0d-4fc1-861c-506a40cc2925",
+                "user_id": "",
+                "sport": "",
+                "court_number": "",
+                "end_date": "",
+                "start_date": ""
             },
             "requestContext": {
                 "accountId": "123456789012",
