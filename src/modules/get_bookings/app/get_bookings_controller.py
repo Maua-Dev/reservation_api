@@ -21,6 +21,12 @@ class GetBookingsController:
             end_date = request.data.get('end_date', None)
             start_date = request.data.get('start_date', None)
 
+            booking_id = booking_id if booking_id != "" else None
+            user_id = user_id if user_id != "" else None
+            sport = sport if sport != "" else None
+            court_number = court_number if court_number != "" else None
+            end_date = end_date if end_date != "" else None
+
             if not booking_id and not user_id and not sport and not court_number and not end_date and not start_date:
                 raise EmptyQueryParameters('At least one of the filters must be provided: booking_id, user_id, sport, court_number, end_date, start_date')
 
