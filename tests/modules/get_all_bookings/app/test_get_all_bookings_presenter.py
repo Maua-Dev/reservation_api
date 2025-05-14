@@ -1,5 +1,5 @@
 import json
-from src.modules.get_all_bookings.app.get_all_booking_presenter import lambda_handler
+from src.modules.get_all_bookings.app.get_all_bookings_presenter import lambda_handler
 
 class TestGetAllBookingsPresenter:
     def test_lambda_handler(self):
