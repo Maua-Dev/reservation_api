@@ -47,6 +47,6 @@ class GetBookingsUseCase:
             end_date=end_date if end_date else None,
             start_date=start_date if start_date else None)
         if bookings is None or bookings == []:
-            raise NoItemsFound('booking_id')
+            raise NoItemsFound('booking filters passed')
         
         return bookings
