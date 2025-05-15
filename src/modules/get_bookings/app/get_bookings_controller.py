@@ -44,10 +44,11 @@ class GetBookingsController:
                     'At least one of the filters must be provided: booking_id, user_id, sport, court_number, end_date, start_date')
 
             if user_id is not None:
-                if user_id not in ['true', 'false']:
+                if user_id.lower() not in ['true', 'false']:
                     raise WrongTypeParameter(fieldName='user_id',
                                              fieldTypeExpected='must be passed as the string "false" or "true"',
                                              fieldTypeReceived=user_id)
+                user_id = user_id.lower()
 
             if court_number is not None:
                 try:
@@ -73,7 +74,10 @@ class GetBookingsController:
                                              fieldTypeExpected='int',
                                              fieldTypeReceived=start_date)
 
-            user_id = user_from_authorizer.get('id', None) if user_id else None
+            if user_id == 'false':
+                user_id = None
+            elif user_id == 'true':
+                user_id = user_from_authorizer.get('id', None)
 
             booking = self.usecase(
                 booking_id=booking_id,

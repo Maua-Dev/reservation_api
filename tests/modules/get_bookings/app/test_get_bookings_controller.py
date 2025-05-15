@@ -88,7 +88,7 @@ class TestGetBookingsController:
 
         response = controller(request)
         assert response.status_code == 404
-        assert response.body == 'No items found for booking_id'
+        assert response.body == 'No items found for booking filters passed'
 
     def test_get_bookings_controller_sport(self):
         repo = BookingRepositoryMock()

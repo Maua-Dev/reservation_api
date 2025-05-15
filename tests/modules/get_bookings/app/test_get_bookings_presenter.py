@@ -286,7 +286,7 @@ class Test_GetBookingPresenter:
         response = lambda_handler(event, None)
 
         assert response['statusCode'] == 404
-        assert json.loads(response['body']) == 'No items found for booking_id'
+        assert json.loads(response['body']) == 'No items found for booking filters passed'
 
         
 
