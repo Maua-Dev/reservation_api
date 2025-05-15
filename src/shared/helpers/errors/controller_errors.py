@@ -11,3 +11,7 @@ class WrongTypeParameter(BaseError):
 class EmptyQueryParameters(BaseError):
     def __init__(self, message: str):
         super().__init__(f'Empty query parameters: {message}')
+
+class AuthorizerError(BaseError):
+    def __init__(self):
+        super().__init__('User was not returned from authorizer')

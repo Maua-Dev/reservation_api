@@ -1,6 +1,9 @@
+import json
+
 from .get_bookings_viewmodel import GetBookingsViewmodel
 from .get_bookings_usecase import GetBookingsUseCase
-from src.shared.helpers.errors.controller_errors import MissingParameters, WrongTypeParameter, EmptyQueryParameters
+from src.shared.helpers.errors.controller_errors import MissingParameters, WrongTypeParameter, EmptyQueryParameters, \
+    AuthorizerError
 from src.shared.helpers.errors.domain_errors import EntityError
 from src.shared.helpers.errors.usecase_errors import NoItemsFound, DependantFilter
 from src.shared.helpers.external_interfaces.external_interface import IRequest
@@ -13,6 +16,14 @@ class GetBookingsController:
 
     def __call__(self, request: IRequest):
         try:
+
+            user_from_authorizer = request.data.get('user_from_authorizer', None)
+
+            if not user_from_authorizer:
+                raise AuthorizerError()
+
+            if not isinstance(request.data.get('user_from_authorizer'), dict):
+                user_from_authorizer = json.loads(request.data.get('user_from_authorizer'))
 
             booking_id = request.data.get('booking_id', None)
             user_id = request.data.get('user_id', None)
@@ -29,44 +40,41 @@ class GetBookingsController:
             start_date = start_date if start_date != "" else None
 
             if not booking_id and not user_id and not sport and not court_number and not end_date and not start_date:
-                raise EmptyQueryParameters('At least one of the filters must be provided: booking_id, user_id, sport, court_number, end_date, start_date')
-
-            if booking_id is not None:
-                if not isinstance(booking_id, str):
-                    raise WrongTypeParameter('booking_id',
-                                             fieldTypeReceived=type(booking_id).__name__,
-                                             fieldTypeExpected='str')
+                raise EmptyQueryParameters(
+                    'At least one of the filters must be provided: booking_id, user_id, sport, court_number, end_date, start_date')
 
             if user_id is not None:
-                if not isinstance(user_id, str):
-                    raise WrongTypeParameter('user_id',
-                                             fieldTypeReceived=type(user_id).__name__,
-                                             fieldTypeExpected='str')
-
-            if sport is not None:
-                if not isinstance(sport, str):
-                    raise WrongTypeParameter('sport',
-                                             fieldTypeReceived=type(sport).__name__,
-                                             fieldTypeExpected='str')
+                if user_id not in ['true', 'false']:
+                    raise WrongTypeParameter(fieldName='user_id',
+                                             fieldTypeExpected='must be passed as the string "false" or "true"',
+                                             fieldTypeReceived=user_id)
 
             if court_number is not None:
-                if not isinstance(court_number, int):
-                    raise WrongTypeParameter('court_number',
-                                             fieldTypeReceived=type(court_number).__name__,
-                                             fieldTypeExpected='int')
+                try:
+                    court_number = int(court_number)
+                except ValueError:
+                    raise WrongTypeParameter(fieldName='court_number',
+                                             fieldTypeExpected='int',
+                                             fieldTypeReceived=court_number)
 
             if end_date is not None:
-                if not isinstance(end_date, int):
-                    raise WrongTypeParameter('end_date',
-                                             fieldTypeReceived=type(end_date).__name__,
-                                             fieldTypeExpected='int')
+                try:
+                    end_date = int(end_date)
+                except ValueError:
+                    raise WrongTypeParameter(fieldName='end_date',
+                                             fieldTypeExpected='int',
+                                             fieldTypeReceived=end_date)
 
             if start_date is not None:
-                if not isinstance(start_date, int):
-                    raise WrongTypeParameter('start_date',
-                                             fieldTypeReceived=type(start_date).__name__,
-                                             fieldTypeExpected='int')
-                
+                try:
+                    start_date = int(start_date)
+                except ValueError:
+                    raise WrongTypeParameter(fieldName='start_date',
+                                             fieldTypeExpected='int',
+                                             fieldTypeReceived=start_date)
+
+            user_id = user_from_authorizer.get('id', None) if user_id else None
+
             booking = self.usecase(
                 booking_id=booking_id,
                 user_id=user_id,
@@ -77,7 +85,10 @@ class GetBookingsController:
             )
             booking_viewmodel = GetBookingsViewmodel(booking)
             return OK(booking_viewmodel.to_dict())
-        
+
+        except AuthorizerError as err:
+            return BadRequest(body=err.message)
+
         except EmptyQueryParameters as err:
             return BadRequest(body=err.message)
 
@@ -86,13 +97,13 @@ class GetBookingsController:
 
         except MissingParameters as err:
             return BadRequest(body=err.message)
-        
+
         except EntityError as err:
             return BadRequest(body=err.message)
 
         except NoItemsFound as err:
             return NotFound(body=err.message)
-        
+
         except WrongTypeParameter as err:
             return BadRequest(body=err.message)
 

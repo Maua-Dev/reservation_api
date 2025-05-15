@@ -31,6 +31,11 @@ class Test_GetBookingPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    "user": {
+                        "id": "c8435c66-13a4-4641-9d54-773b4b8ccc98",
+                        "displayName": "User",
+                        "mail": "lbj@maua.br"
+                    }
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -88,6 +93,11 @@ class Test_GetBookingPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    "user": {
+                        "id": "c8435c66-13a4-4641-9d54-773b4b8ccc98",
+                        "displayName": "User",
+                        "mail": "lbj@maua.br"
+                    }
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -136,6 +146,11 @@ class Test_GetBookingPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    "user": {
+                        "id": "c8435c66-13a4-4641-9d54-773b4b8ccc98",
+                        "displayName": "User",
+                        "mail": "lbj@maua.br"
+                    }
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -179,13 +194,18 @@ class Test_GetBookingPresenter:
                 "header2": "value1,value2"
             },
             "queryStringParameters": {
-                "booking_id":10
+                "booking_id": '10'
             },
             "requestContext": {
                 "accountId": "123456789012",
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    "user": {
+                        "id": "c8435c66-13a4-4641-9d54-773b4b8ccc98",
+                        "displayName": "User",
+                        "mail": "lbj@maua.br"
+                    }
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -211,7 +231,7 @@ class Test_GetBookingPresenter:
         response = lambda_handler(event, None)
 
         assert response['statusCode'] == 400
-        assert json.loads(response['body']) == 'Field booking_id isn\'t in the right type.\n Received: int.\n Expected: str'
+        assert json.loads(response['body']) == 'Field booking_id is not valid'
 
 
     def test_get_bookings_presenter_entity_not_found(self):
@@ -236,6 +256,11 @@ class Test_GetBookingPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    "user": {
+                        "id": "c8435c66-13a4-4641-9d54-773b4b8ccc98",
+                        "displayName": "User",
+                        "mail": "lbj@maua.br"
+                    }
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
