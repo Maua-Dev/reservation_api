@@ -2,9 +2,9 @@ from .update_booking_usecase import UpdateBookingUsecase
 from .update_booking_viewmodel import UpdateBookingViewmodel
 from src.shared.domain.enums.sport import SPORT
 from src.shared.helpers.errors.controller_errors import MissingParameters, WrongTypeParameter
-from src.shared.helpers.errors.domain_errors import EntityError
+from src.shared.helpers.errors.domain_errors import EntityError, EntityNotFoundError
 from src.shared.helpers.external_interfaces.external_interface import IRequest, IResponse
-from src.shared.helpers.external_interfaces.http_codes import OK, BadRequest, InternalServerError
+from src.shared.helpers.external_interfaces.http_codes import OK, BadRequest, InternalServerError, NotFound
 
 class UpdateBookingController: 
     def __init__(self, update_booking_use_case: UpdateBookingUsecase):
@@ -54,6 +54,9 @@ class UpdateBookingController:
 
         except EntityError as err:
             return BadRequest(body=err.message)
+        
+        except EntityNotFoundError as err:
+            return NotFound(body=f"Booking not found: {err.message}")
         
         except Exception as err:
             return InternalServerError(body=err.args[0])

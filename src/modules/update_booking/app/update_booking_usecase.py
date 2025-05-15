@@ -2,23 +2,27 @@ from typing import List
 from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
 from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
-from src.shared.helpers.errors.domain_errors import EntityError, EntityParameterOrderDatesError, EntityParameterTimeError
-
+from src.shared.helpers.errors.domain_errors import EntityError, EntityParameterOrderDatesError, EntityParameterTimeError, EntityNotFoundError
 
 class UpdateBookingUsecase:
     def __init__(self, booking_repo: IBookingRepository):
         self.booking_repo = booking_repo
 
     def __call__(self, 
-                 booking_id: str, 
-                 start_date: int, 
-                 end_date: int, 
-                 court_number: int, 
-                 sport: SPORT, 
-                 materials: List[str] = None):
+             booking_id: str, 
+             start_date: int, 
+             end_date: int, 
+             court_number: int, 
+             sport: SPORT, 
+             materials: List[str] = None,
+             user_id: str = None):  # Mantemos o parâmetro, mas ignoramos
 
         if Booking.validate_booking_id(booking_id) is False: 
             raise EntityError('booking_id')
+        
+        existing_booking = self.booking_repo.get_booking(booking_id)
+        if existing_booking is None:
+            raise EntityNotFoundError('booking')
         
         if Booking.validate_dates(start_date, end_date) is False:
             raise EntityError("date")
@@ -28,24 +32,23 @@ class UpdateBookingUsecase:
 
         if Booking.validate_court(court_number) is False:
             raise EntityError("court_number")
-             
+            
         if Booking.validate_sport(sport) is False:
             raise EntityError("sport")
             
         if Booking.validate_materials(materials) is False:
             raise EntityError("materials")
-            
-        booking = self.booking_repo.update_booking(booking_id=booking_id,
-                                                   start_date=start_date,
-                                                   end_date=end_date,
-                                                   court_number=court_number,
-                                                   sport=sport,
-                                                   materials=materials)
+
+        booking = self.booking_repo.update_booking(
+            booking_id=booking_id,
+            start_date=start_date,
+            end_date=end_date,
+            court_number=court_number,
+            sport=sport,
+            materials=materials
+        )
+        
+        if booking.user_id != existing_booking.user_id:
+            booking.user_id = existing_booking.user_id
         
         return booking
-        
-            
-             
-        
-        
-

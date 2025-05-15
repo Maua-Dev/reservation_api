@@ -2,7 +2,7 @@ import pytest
 
 from src.modules.update_booking.app.update_booking_usecase import UpdateBookingUsecase
 from src.shared.domain.enums.sport import SPORT
-from src.shared.helpers.errors.domain_errors import EntityError, EntityParameterOrderDatesError, EntityParameterTimeError
+from src.shared.helpers.errors.domain_errors import EntityError, EntityParameterOrderDatesError, EntityNotFoundError, EntityParameterTimeError
 from src.shared.helpers.errors.usecase_errors import NoItemsFound
 from src.shared.infra.repositories.booking_repository_mock import BookingRepositoryMock
 
@@ -171,3 +171,24 @@ class Test_UpdateBookingUsecase:
                               sport=SPORT.TENNIS, 
                               materials=None
             )
+
+
+    def test_update_booking_usecase_cannot_update_user_id(self):
+        booking_repo = BookingRepositoryMock()
+        usecase = UpdateBookingUsecase(booking_repo=booking_repo)
+
+        original_booking = booking_repo.bookings[0]
+        booking_id = original_booking.booking_id
+        original_user_id = original_booking.user_id
+  
+        booking = usecase(
+            booking_id=booking_id, 
+            court_number=2, 
+            start_date=1634576165000, 
+            end_date=1634583365000, 
+            sport=SPORT.TENNIS, 
+            materials=['Raquete', 'Bola', 'Rede', 'Tenis'],
+            user_id="novo-user-id-que-nao-deve-ser-usado" 
+        )
+   
+        assert booking.user_id == original_user_id
