@@ -18,13 +18,7 @@ class TestGetBookingsController:
         controller = GetBookingsController(usecase=usecase)
         request = HttpRequest(query_params={
             'booking_id': 'b2d3bebf-dc0d-4fc1-861c-506a40cc2925',
-            'user_id': 'false'
-        }, headers={
-            "user_from_authorizer": {
-                "displayName": "John Doe",
-                "mail": "JD@maua.br",
-                "id": "c8435c66-13a4-4641-9d54-773b4b8ccc98"
-            }
+            'user_id': "c8435c66-13a4-4641-9d54-773b4b8ccc98"
         })
         response = controller(request)
 
@@ -42,12 +36,6 @@ class TestGetBookingsController:
         usecase = GetBookingsUseCase(repo=repo)
         controller = GetBookingsController(usecase=usecase)
         request = HttpRequest(query_params={
-        }, headers={
-            "user_from_authorizer": {
-                "displayName": 'Lebron James',
-                "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
-            }
         })
         response = controller(request)
 
@@ -60,12 +48,6 @@ class TestGetBookingsController:
         controller = GetBookingsController(usecase=usecase)
         request = HttpRequest(query_params={
             'booking_id': '123',
-        }, headers={
-            "user_from_authorizer": {
-                "displayName": 'Lebron James',
-                "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
-            }
         })
         response = controller(request)
 
@@ -78,12 +60,6 @@ class TestGetBookingsController:
         controller = GetBookingsController(usecase=usecase)
         request = HttpRequest(query_params={
             'booking_id': 'b2d3bebf-dc0d-4fc1-861c-506a40cc2943',
-        }, headers={
-            "user_from_authorizer": {
-                "displayName": 'Lebron James',
-                "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
-            }
         })
 
         response = controller(request)
@@ -96,12 +72,6 @@ class TestGetBookingsController:
         controller = GetBookingsController(usecase=usecase)
         request = HttpRequest(query_params={
             'sport': 'Tennis',
-        }, headers={
-            "user_from_authorizer": {
-                "displayName": 'Lebron James',
-                "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
-            }
         })
         response = controller(request)
 
@@ -116,12 +86,6 @@ class TestGetBookingsController:
         controller = GetBookingsController(usecase=usecase)
         request = HttpRequest(query_params={
             'court_number': '1',
-        }, headers={
-            'user_from_authorizer': {
-                "displayName": 'Lebron James',
-                "mail": "lbj@maua.br",
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
-            }
         })
         response = controller(request)
 
@@ -135,13 +99,7 @@ class TestGetBookingsController:
         usecase = GetBookingsUseCase(repo=repo)
         controller = GetBookingsController(usecase=usecase)
         request = HttpRequest(query_params={
-            'user_id': 'true',
-        },  headers={
-            "user_from_authorizer": {
-                "displayName": 'Lebron James',
-                "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
-            }
+            'user_id': 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
         })
         response = controller(request)
 
@@ -157,12 +115,6 @@ class TestGetBookingsController:
         controller = GetBookingsController(usecase=usecase)
         request = HttpRequest(query_params={
             'start_date': '1634563800000',
-        }, headers={
-            "user_from_authorizer": {
-                "displayName": 'Lebron James',
-                "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
-            }
         })
         response = controller(request)
 
@@ -175,12 +127,6 @@ class TestGetBookingsController:
         controller = GetBookingsController(usecase=usecase)
         request = HttpRequest(query_params={
             'end_date': '1634567400000',
-        }, headers={
-            "user_from_authorizer": {
-                "displayName": 'Lebron James',
-                "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
-            }
         })
         response = controller(request)
 
@@ -194,12 +140,6 @@ class TestGetBookingsController:
         request = HttpRequest(query_params={
             'start_date': '1634563800000',
             'end_date': '16345674000000',
-        }, headers={
-            "user_from_authorizer": {
-                "displayName": 'Lebron James',
-                "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
-            }
         })
         response = controller(request)
 
@@ -215,17 +155,11 @@ class TestGetBookingsController:
         end = '1634585400000'
         request = HttpRequest(query_params={
             'booking_id': 'b6d3bebf-dc0d-4fc1-861c-506a40cc2925',
-            'user_id': 'true',
+            'user_id': 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
             'sport': 'Futsal',
             'court_number': 5,
             'start_date': start,
             'end_date': end
-        }, headers={
-            "user_from_authorizer": {
-                "displayName": 'Lebron James',
-                "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
-            }
         })
         response = self.controller(request)
         assert response.status_code == 200
@@ -243,17 +177,11 @@ class TestGetBookingsController:
         start = '1634574600000'
         end = '1634578200000'
         request = HttpRequest(query_params={
-            'user_id': 'true',
+            'user_id': 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
             'sport': 'Volleyball',
             'court_number': 4,
             'start_date': start,
             'end_date': end
-        }, headers={
-            "user_from_authorizer": {
-                "displayName": 'Lebron James',
-                "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
-            }
         })
         response = self.controller(request)
         assert response.status_code == 200
@@ -270,13 +198,7 @@ class TestGetBookingsController:
         request = HttpRequest(query_params={
             'sport': 'Rugby',
             'court_number': 5,
-            'user_id': 'true'
-        }, headers={
-            "user_from_authorizer": {
-                "displayName": 'Lebron James',
-                "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
-            }
+            'user_id': 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
         })
         response = self.controller(request)
         assert response.status_code == 200
@@ -290,12 +212,6 @@ class TestGetBookingsController:
     def test_get_bookings_user_id_not_valid(self):
         request = HttpRequest(query_params={
             'user_id': '1'
-        }, headers={
-            "user_from_authorizer": {
-                "displayName": 'Lebron James',
-                "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
-            }
         })
         response = self.controller(request)
         assert response.status_code == 400

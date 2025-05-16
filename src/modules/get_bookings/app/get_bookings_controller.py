@@ -17,14 +17,6 @@ class GetBookingsController:
     def __call__(self, request: IRequest):
         try:
 
-            user_from_authorizer = request.data.get('user_from_authorizer', None)
-
-            if not user_from_authorizer:
-                raise AuthorizerError()
-
-            if not isinstance(request.data.get('user_from_authorizer'), dict):
-                user_from_authorizer = json.loads(request.data.get('user_from_authorizer'))
-
             booking_id = request.data.get('booking_id', None)
             user_id = request.data.get('user_id', None)
             sport = request.data.get('sport', None)
@@ -42,13 +34,6 @@ class GetBookingsController:
             if not booking_id and not user_id and not sport and not court_number and not end_date and not start_date:
                 raise EmptyQueryParameters(
                     'At least one of the filters must be provided: booking_id, user_id, sport, court_number, end_date, start_date')
-
-            if user_id is not None:
-                if user_id.lower() not in ['true', 'false']:
-                    raise WrongTypeParameter(fieldName='user_id',
-                                             fieldTypeExpected='must be passed as the string "false" or "true"',
-                                             fieldTypeReceived=user_id)
-                user_id = user_id.lower()
 
             if court_number is not None:
                 try:
@@ -73,11 +58,6 @@ class GetBookingsController:
                     raise WrongTypeParameter(fieldName='start_date',
                                              fieldTypeExpected='int',
                                              fieldTypeReceived=start_date)
-
-            if user_id == 'false':
-                user_id = None
-            elif user_id == 'true':
-                user_id = user_from_authorizer.get('id', None)
 
             booking = self.usecase(
                 booking_id=booking_id,
