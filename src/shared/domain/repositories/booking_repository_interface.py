@@ -50,7 +50,8 @@ class IBookingRepository(ABC):
         pass
 
     @abstractmethod
-    def delete_booking(self, booking_id: int) -> Optional[Booking]:
+    def delete_booking(self,
+                       booking_id: str) -> Optional[Booking]:
         '''
         If booking exists, deletes it and returns it
         else returns None

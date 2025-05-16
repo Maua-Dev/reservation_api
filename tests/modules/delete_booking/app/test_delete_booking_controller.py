@@ -3,13 +3,20 @@ from src.modules.delete_booking.app.delete_booking_usecase import DeleteBookingU
 from src.shared.helpers.external_interfaces.http_models import HttpRequest
 from src.shared.infra.repositories.booking_repository_mock import BookingRepositoryMock
 
+
 class TestDeleteBookingController:
     def test_delete_booking_controller(self):
         repo = BookingRepositoryMock()
-        usecase = DeleteBookingUsecase(repo= repo)
+        usecase = DeleteBookingUsecase(repo=repo)
         controller = DeleteBookingController(usecase=usecase)
-        request = HttpRequest(body= {
+        request = HttpRequest(body={
             "booking_id": 'b1d3bebf-dc0d-4fc1-861c-506a40cc2925'
+        }, headers={
+            'user_from_authorizer': {
+                'id': 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                'displayName': 'John Doe',
+                'mail': 'JD@maua.br'
+            }
         })
 
         response = controller(request)
@@ -18,10 +25,16 @@ class TestDeleteBookingController:
 
     def test_delete_booking_controller_missing_booking_id(self):
         repo = BookingRepositoryMock()
-        usecase = DeleteBookingUsecase(repo= repo)
+        usecase = DeleteBookingUsecase(repo=repo)
         controller = DeleteBookingController(usecase=usecase)
         request = HttpRequest(body={
             "booking_id": None
+        }, headers={
+            'user_from_authorizer': {
+                'id': 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                'displayName': 'John Doe',
+                'mail': 'JD@maua.br'
+            }
         })
 
         response = controller(request)
@@ -30,12 +43,18 @@ class TestDeleteBookingController:
 
     def test_delete_booking_controller_booking_id_entity_error(self):
         repo = BookingRepositoryMock()
-        usecase = DeleteBookingUsecase(repo= repo)
+        usecase = DeleteBookingUsecase(repo=repo)
         controller = DeleteBookingController(usecase=usecase)
         request = HttpRequest(body={
             "booking_id": 0
+        }, headers={
+            'user_from_authorizer': {
+                'id': 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                'displayName': 'John Doe',
+                'mail': 'JD@maua.br'
+            }
         })
-        
+
         reponse = controller(request)
         assert reponse.status_code == 400
         assert reponse.body == "Field booking_id is not valid"
@@ -45,7 +64,13 @@ class TestDeleteBookingController:
         usecase = DeleteBookingUsecase(repo=repo)
         controller = DeleteBookingController(usecase=usecase)
         request = HttpRequest(body={
-            "booking_id": "wrong_type"  
+            "booking_id": "not an id"
+        }, headers={
+            'user_from_authorizer': {
+                'id': 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                'displayName': 'John Doe',
+                'mail': 'JD@maua.br'
+            }
         })
 
         response = controller(request)
@@ -58,8 +83,31 @@ class TestDeleteBookingController:
         controller = DeleteBookingController(usecase=usecase)
         request = HttpRequest(body={
             "booking_id": 'b1d3bebf-dc0d-4fc1-861c-506a40cc2926'
+        }, headers={
+            'user_from_authorizer': {
+                'id': 'c8435c66-23a4-4641-9d54-773b4b8ccc99',
+                'displayName': 'John Doe',
+                'mail': 'JD@maua.br'
+            }
         })
 
         response = controller(request)
         assert response.status_code == 404
         assert response.body == "No items found for booking"
+
+    def test_delete_bookings_controller_forbidden(self):
+        repo = BookingRepositoryMock()
+        usecase = DeleteBookingUsecase(repo=repo)
+        controller = DeleteBookingController(usecase=usecase)
+        request = HttpRequest(body={
+            "booking_id": 'b1d3bebf-dc0d-4fc1-861c-506a40cc2925'
+        }, headers={
+            'user_from_authorizer': {
+                'id': 'c8435c66-23a4-4641-9d54-773b4b8ccc99',
+                'displayName': 'John Doe',
+                'mail': 'JD@maua.br'
+                }
+        })
+        response = controller(request)
+
+        assert response.status_code == 403
