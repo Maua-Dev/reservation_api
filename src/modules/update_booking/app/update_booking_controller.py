@@ -2,9 +2,10 @@ from .update_booking_usecase import UpdateBookingUsecase
 from .update_booking_viewmodel import UpdateBookingViewmodel
 from src.shared.domain.enums.sport import SPORT
 from src.shared.helpers.errors.controller_errors import MissingParameters, WrongTypeParameter
-from src.shared.helpers.errors.domain_errors import EntityError, EntityNotFoundError
+from src.shared.helpers.errors.domain_errors import EntityError
 from src.shared.helpers.external_interfaces.external_interface import IRequest, IResponse
 from src.shared.helpers.external_interfaces.http_codes import OK, BadRequest, InternalServerError, NotFound
+from src.shared.helpers.errors.usecase_errors import NoItemsFound
 
 class UpdateBookingController: 
     def __init__(self, update_booking_use_case: UpdateBookingUsecase):
@@ -14,33 +15,22 @@ class UpdateBookingController:
         try:
             if request.data.get('booking_id') is None:
                 raise MissingParameters('booking_id')
-                        
-            if request.data.get('start_date') is None:
-                raise MissingParameters('start_date')
             
-            if request.data.get('end_date') is None:
-                raise MissingParameters('end_date')
+            sport = None
+            if request.data.get('sport') is not None:
+                sport_value = request.data.get('sport')
+                if sport_value not in [sport_type.value for sport_type in SPORT]:
+                    raise EntityError('sport')
+                sport = SPORT(sport_value)
             
-            if request.data.get('court_number') is None:
-                raise MissingParameters('court_number')
-            
-            if request.data.get('sport') is None:
-                raise MissingParameters('sport')
-            
-            sport = request.data.get('sport')
-
-            if sport not in [sport_type.value for sport_type in SPORT]:
-                raise EntityError('sport')
-            
-            if request.data.get('materials') is None:
-                raise MissingParameters('materials')
-            
-            booking = self.UpdateBookingUsecase(booking_id=request.data.get('booking_id'),
-                                                start_date=request.data.get('start_date'),
-                                                end_date=request.data.get('end_date'),
-                                                court_number=request.data.get('court_number'),
-                                                sport=SPORT(sport),
-                                                materials=request.data.get('materials'))
+            booking = self.UpdateBookingUsecase(
+                booking_id=request.data.get('booking_id'),
+                start_date=request.data.get('start_date'),
+                end_date=request.data.get('end_date'),
+                court_number=request.data.get('court_number'),
+                sport=sport,
+                materials=request.data.get('materials')
+            )
             
             viewmodel = UpdateBookingViewmodel(booking=booking)
             
@@ -55,7 +45,7 @@ class UpdateBookingController:
         except EntityError as err:
             return BadRequest(body=err.message)
         
-        except EntityNotFoundError as err:
+        except NoItemsFound as err:
             return NotFound(body=f"Booking not found: {err.message}")
         
         except Exception as err:
