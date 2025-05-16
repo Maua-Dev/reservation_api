@@ -12,6 +12,11 @@ class GenerateReportAggregator:
 
         bookings = self.extractor(initial_date, final_date)
 
+        #fazer logica aqui
+        #trocar os bookings por users
+        #dps instalar as dependencias do requirements-dev.txt
+        
+
         users_statistics = {}
 
         for booking in bookings:
