@@ -1,3 +1,5 @@
+import json
+
 from .delete_booking_usecase import DeleteBookingUsecase
 from .delete_booking_viewmodel import DeleteBookingViewModel
 from src.shared.helpers.errors.controller_errors import MissingParameters, WrongTypeParameter, AuthorizerError
@@ -15,12 +17,16 @@ class DeleteBookingController:
     def __call__(self, request: IRequest) -> IResponse:
         try:
 
-            user = request.data.get('user_from_authorizer', None)
+            user_from_authorizer = request.data.get('user_from_authorizer', None)
 
-            if user is None:
+            if not isinstance(request.data.get('user_from_authorizer'), dict):
+
+                user_from_authorizer = json.loads(request.data.get('user_from_authorizer'))
+
+            if user_from_authorizer is None:
                 raise AuthorizerError()
 
-            user_id = user.get('id', None)
+            user_id = user_from_authorizer.get('id', None)
 
             if request.data.get('booking_id') is None:
                 raise MissingParameters('booking_id')
