@@ -14,7 +14,7 @@ class BookingRepositoryMock(IBookingRepository):
                 end_date=1634583365000,
                 court_number=1,
                 sport=SPORT.TENNIS,
-                user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                user_id='1f25448b-3429-4c19-8287-d9e64f17bc3a',
                 booking_id='b1d3bebf-dc0d-4fc1-861c-506a40cc2925',
                 materials=['Raquete', 'Bola', 'Rede', 'Tenis']
             ),
@@ -24,7 +24,7 @@ class BookingRepositoryMock(IBookingRepository):
                 end_date=1634567400000,
                 court_number=2,
                 sport=SPORT.FOOTBALL,
-                user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                user_id='c07e0862-3c07-4227-ab0f-511a267cb7ff',
                 booking_id='b2d3bebf-dc0d-4fc1-861c-506a40cc2925',
                 materials=['Bola', 'Chuteira']
             ),
@@ -34,7 +34,7 @@ class BookingRepositoryMock(IBookingRepository):
                 end_date=1634571000000,
                 court_number=3,
                 sport=SPORT.BASKETBALL,
-                user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                user_id='d351a9b1-937f-423c-a9d1-9929b5795be1',
                 booking_id='b3d3bebf-dc0d-4fc1-861c-506a40cc2925',
                 materials=['Bola']
             ),
@@ -145,4 +145,8 @@ class BookingRepositoryMock(IBookingRepository):
                 all_bookings.append(booking)
 
         return all_bookings
+    
+    def get_all_users(self) -> List[str]:
+        users_id = list(set([booking.user_id for booking in self.bookings]))
+        return users_id
 
