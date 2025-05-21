@@ -1,3 +1,4 @@
+from src.modules.generate_report.app.user_api_client import UserAPIClient
 from src.shared.domain.entities.booking import Booking
 from .generate_report_extractor import GenerateReportExtractor
 from typing import List
@@ -19,9 +20,13 @@ class GenerateReportAggregator:
 
         users_statistics = {}
 
+        user_api_client = UserAPIClient()
+
         for booking in bookings:
             if booking.user_id not in users_statistics:
+                user_name = user_api_client.get_user_name(booking.user_id)
                 users_statistics[booking.user_id] = {
+                    "nome": user_name,
                     "reservas_feitas": 0,
                     "Tennis": 0,
                     "Football": 0,
@@ -38,6 +43,8 @@ class GenerateReportAggregator:
                     5: 0,
                     "tempo_em_quadra": 0
                 }
+
+
 
             users_statistics[booking.user_id]["reservas_feitas"] += 1
             users_statistics[booking.user_id][booking.sport.value] += 1
