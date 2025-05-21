@@ -1,3 +1,5 @@
+import platform
+import subprocess
 import pytest
 
 from src.modules.generate_report.app.generate_report_aggregator import GenerateReportAggregator
@@ -24,4 +26,10 @@ class TestGenerateReportTransformer:
             tmp_file.write(output.read())
             tmp_file_path = tmp_file.name
 
-        os.startfile(tmp_file_path)
+        # os.startfile(tmp_file_path)
+
+        system = platform.system()
+        if system == 'Windows':
+            os.startfile(tmp_file_path)
+        else: # macOS
+            subprocess.call(['open', tmp_file_path])
