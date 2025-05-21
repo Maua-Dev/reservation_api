@@ -51,7 +51,7 @@ class IBookingRepository(ABC):
         pass
 
     @abstractmethod
-    def get_all_users(Self):
+    def get_all_users(self) -> List[str]:
         '''
         Returns name users by user id
         '''

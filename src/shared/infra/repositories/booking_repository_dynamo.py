@@ -110,4 +110,7 @@ class BookingRepositoryDynamo(IBookingRepository):
                     all_bookings.append(booking)
 
         return all_bookings
+    
+    def get_all_users(self):
+        return super().get_all_users()
 
