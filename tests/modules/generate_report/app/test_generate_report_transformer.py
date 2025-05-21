@@ -31,5 +31,7 @@ class TestGenerateReportTransformer:
         system = platform.system()
         if system == 'Windows':
             os.startfile(tmp_file_path)
-        else: # macOS
+        elif system == 'Darwin': 
             subprocess.call(['open', tmp_file_path])
+        else: 
+            subprocess.call(['xdg-open', tmp_file_path])
