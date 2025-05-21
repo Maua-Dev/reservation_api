@@ -6,3 +6,4 @@ aws-lambda-powertools==2.9.0
 aws_xray_sdk==2.11.0
 pandas==2.2.3
 XlsxWriter==3.2.2
+requests==2.32.3
