@@ -25,8 +25,8 @@ class GenerateReportAggregator:
         for booking in bookings:
             if booking.user_id not in users_statistics:
                 user_name = user_api_client.get_user_name(booking.user_id)
-                users_statistics[booking.user_id] = {
-                    "nome": user_name,
+                key = user_name if user_name is not None else booking.user_id
+                users_statistics[key] = {
                     "reservas_feitas": 0,
                     "Tennis": 0,
                     "Football": 0,
@@ -46,10 +46,10 @@ class GenerateReportAggregator:
 
 
 
-            users_statistics[booking.user_id]["reservas_feitas"] += 1
-            users_statistics[booking.user_id][booking.sport.value] += 1
-            users_statistics[booking.user_id][booking.court_number] += 1
-            users_statistics[booking.user_id]["tempo_em_quadra"] += booking.end_date - booking.start_date
+            users_statistics[key]["reservas_feitas"] += 1
+            users_statistics[key][booking.sport.value] += 1
+            users_statistics[key][booking.court_number] += 1
+            users_statistics[key]["tempo_em_quadra"] += booking.end_date - booking.start_date
 
 
         #court statistics logic
