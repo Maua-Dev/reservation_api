@@ -107,7 +107,7 @@ class Test_GetBookingPresenter:
         
         response = lambda_handler(event, None)
         assert response['statusCode'] == 400
-        assert json.loads(response['body']) == "Field booking_id is missing"
+        assert json.loads(response['body']) == 'Field booking_id is missing'
 
     def test_get_booking_presenter_entity_error(self):
         event = {
