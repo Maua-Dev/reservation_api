@@ -9,4 +9,4 @@ class SPORT(Enum):
     FUTSAL = "Futsal"
     RUGBY = "Rugby"
     PING_PONG = "Ping Pong"
-    BEACH_VOLLEYBALL = "Beach Volleyball"
+    BEACH_TENNIS = "Beach Tennis"
