@@ -8,14 +8,8 @@ class TestGetBookingController:
         repo = BookingRepositoryMock()
         usecase = GetBookingUseCase(repo=repo)
         controller = GetBookingController(usecase=usecase)
-        request = HttpRequest(body={
+        request = HttpRequest(query_params={
             'booking_id': 'b2d3bebf-dc0d-4fc1-861c-506a40cc2925',
-            'start_date': 1634563800000,
-            'end_date': 1634567400000,
-            'court_number': 2,
-            'sport': 'FOOTBALL',
-            'user_id': 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
-
         })
         response = controller(request)
 
@@ -32,13 +26,7 @@ class TestGetBookingController:
         repo = BookingRepositoryMock()
         usecase = GetBookingUseCase(repo=repo)
         controller = GetBookingController(usecase=usecase)
-        request = HttpRequest(body={
-            'start_date': 1634563800000,
-            'end_date': 1634567400000,
-            'court_number': 2,
-            'sport': 'Football',
-            'user_id': 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
-
+        request = HttpRequest(query_params={
         })
         response = controller(request)
 
@@ -50,14 +38,8 @@ class TestGetBookingController:
         repo = BookingRepositoryMock()
         usecase = GetBookingUseCase(repo=repo)
         controller = GetBookingController(usecase=usecase)
-        request = HttpRequest(body={
+        request = HttpRequest(query_params={
             'booking_id': 123,
-            'start_date': 1634563800000,
-            'end_date': 1634567400000,
-            'court_number': 2,
-            'sport': 'Football',
-            'user_id': 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
-
         })
         response = controller(request)
 
@@ -71,14 +53,8 @@ class TestGetBookingController:
         repo = BookingRepositoryMock()
         usecase = GetBookingUseCase(repo=repo)
         controller = GetBookingController(usecase=usecase)
-        request = HttpRequest(body={
+        request = HttpRequest(query_params={
             'booking_id': 'b2d3bebf-dc0d-4fc1-861c-506a40cc2943',
-            'start_date': 1634563800000,
-            'end_date': 1634567400000,
-            'court_number': 2,
-            'sport': 'Football',
-            'user_id': 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
-
         })
 
         response = controller(request)

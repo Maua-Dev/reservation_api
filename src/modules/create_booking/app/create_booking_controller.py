@@ -19,7 +19,6 @@ class CreateBookingController:
         court_number = request.data.get('court_number', None)
         sport = request.data.get('sport', None)
         user_id = request.data.get('user_id', None)
-        booking_id = request.data.get('booking_id', None)
         materials = request.data.get('materials', None)
 
         try:
@@ -59,13 +58,6 @@ class CreateBookingController:
                                          fieldTypeExpected='str',
                                          fieldTypeReceived=type(user_id).__name__)
 
-            if booking_id is None:
-                raise MissingParameters('booking_id')
-            if not isinstance(booking_id, str):
-                raise WrongTypeParameter(fieldName='booking_id',
-                                         fieldTypeExpected='str',
-                                         fieldTypeReceived=type(booking_id).__name__)
-
             if materials is None:
                 raise MissingParameters('materials')
             if not isinstance(materials, list):
@@ -79,7 +71,6 @@ class CreateBookingController:
                 court_number=court_number,
                 sport=sport,
                 user_id=user_id,
-                booking_id=booking_id,
                 materials=materials
             )
 

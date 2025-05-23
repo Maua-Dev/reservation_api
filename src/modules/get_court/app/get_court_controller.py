@@ -15,18 +15,21 @@ class GetCourtController:
         try:
             if request.data.get('number') is None:
                 raise MissingParameters('number')
-            
+
             number = request.data.get('number')
 
             if number is not None:
-                if type(number) is not int:
+
+                try:
+                    number = int(number)
+
+                except ValueError:
                     raise WrongTypeParameter('number', 'int', type(number).__name__)
 
-            
-            court  = self.usecase(
-                number= request.data.get('number')
-            )       
-            court_viewmodel = GetCourtViewmodel(court= court)
+            court = self.usecase(
+                number=number
+            )
+            court_viewmodel = GetCourtViewmodel(court=court)
 
             return OK(court_viewmodel.to_dict())
 
@@ -45,9 +48,3 @@ class GetCourtController:
 
         except Exception as err:
             return InternalServerError(body=err.args[0])
-
-
-
-        
-    
-    
