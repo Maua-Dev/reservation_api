@@ -32,7 +32,6 @@ class TestGetBookingController:
 
         assert response.status_code == 400
         assert response.body == 'Field booking_id is missing'
-
     
     def test_get_booking_controller_wrong_type_booking_id(self):
         repo = BookingRepositoryMock()
@@ -60,8 +59,3 @@ class TestGetBookingController:
         response = controller(request)
         assert response.status_code == 404
         assert response.body == 'No items found for booking_id'
-
-
-
-
-       

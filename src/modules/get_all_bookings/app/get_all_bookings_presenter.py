@@ -1,15 +1,14 @@
-from .delete_booking_controller import DeleteBookingController
-from .delete_booking_usecase import DeleteBookingUsecase
+from .get_all_bookings_controller import GetAllBookingsController
+from .get_all_bookings_usecase import GetAllBookingsUsecase
 from src.shared.environments import Environments
 from src.shared.helpers.external_interfaces.http_lambda_requests import LambdaHttpRequest, LambdaHttpResponse
 
 repo = Environments.get_booking_repo()()
-usecase = DeleteBookingUsecase(repo)
-controller = DeleteBookingController(usecase)
+usecase = GetAllBookingsUsecase(repo)
+controller = GetAllBookingsController(usecase)
 
 def lambda_handler(event, context):
     httpRequest = LambdaHttpRequest(data=event)
-    httpRequest.data['user_from_authorizer'] = event.get('requestContext', {}).get('authorizer', {}).get('user', {})
     response = controller(request=httpRequest)
     httpResponse = LambdaHttpResponse(status_code=response.status_code, body=response.body, headers=response.headers)
     

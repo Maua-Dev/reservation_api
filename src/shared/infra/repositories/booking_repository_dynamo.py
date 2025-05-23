@@ -57,7 +57,7 @@ class BookingRepositoryDynamo(IBookingRepository):
             "start_date": start_date if start_date is not None else booking_to_update.start_date,
             "end_date": end_date if end_date is not None else booking_to_update.end_date,
             "court_number": court_number if court_number is not None else booking_to_update.court_number,
-            "sport": sport if sport is not None else booking_to_update.sport,
+            "sport": sport.value if sport is not None else booking_to_update.sport.value,
             "materials": materials if materials is not None else booking_to_update.materials
         }
 
@@ -69,6 +69,40 @@ class BookingRepositoryDynamo(IBookingRepository):
             return None
 
         return BookingDynamoDTO.from_dynamo(resp['Attributes']).to_entity()
+
+    def get_bookings(self,
+                     booking_id: Optional[str] = None,
+                     user_id: Optional[str] = None,
+                     sport: Optional[SPORT] = None,
+                     court_number: Optional[int] = None,
+                     end_date: Optional[int] = None,
+                     start_date: Optional[int] = None) -> List[Optional[Booking]]:
+
+        filters = locals().copy()
+        filters.pop('self')
+        filters.pop('end_date')
+        filters.pop('start_date')
+
+        filters = {k: v for k, v in filters.items() if v is not None}
+
+        all_bookings = self.get_all_bookings()
+
+        bookings = []
+
+        for booking in all_bookings:
+            booking_dict = booking.__dict__
+            if start_date and end_date:
+                if all(
+                    booking_dict.get(key) == value for key, value in filters.items()
+                ) and booking.start_date >= start_date and booking.end_date <= end_date:
+                    bookings.append(booking)
+            else:
+                if all(
+                    booking_dict.get(key) == value for key, value in filters.items()
+                ):
+                    bookings.append(booking)
+
+        return bookings
 
     def get_booking(self, booking_id: str) -> Optional[Booking]:
 

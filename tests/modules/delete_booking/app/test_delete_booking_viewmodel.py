@@ -8,7 +8,8 @@ class Test_DeleteBookingViewModel:
     def test_delete_booking_viewmodel(self):
         repo = BookingRepositoryMock()
         usecase = DeleteBookingUsecase(repo=repo)
-        booking = usecase(booking_id=repo.bookings[0].booking_id)
+        booking = usecase(booking_id=repo.bookings[0].booking_id,
+                          user_id=repo.bookings[0].user_id)
         viewmodel = DeleteBookingViewModel(booking=booking).to_dict()
 
         expected = {

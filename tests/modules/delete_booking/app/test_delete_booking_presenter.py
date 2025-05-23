@@ -25,6 +25,11 @@ class TestDeleteBookingPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    'user': {
+                        'id': 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                        'displayName': 'John Doe',
+                        'mail': 'JD@maua.br'
+                    }
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -74,6 +79,11 @@ class TestDeleteBookingPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    'user': {
+                        'id': 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                        'displayName': 'John Doe',
+                        'mail': 'JD@maua.br'
+                    }
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -123,6 +133,11 @@ class TestDeleteBookingPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    'user': {
+                        'id': 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                        'displayName': 'John Doe',
+                        'mail': 'JD@maua.br'
+                    }
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -172,6 +187,11 @@ class TestDeleteBookingPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    'user': {
+                        'id': 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                        'displayName': 'John Doe',
+                        'mail': 'JD@maua.br'
+                    }
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",

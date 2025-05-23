@@ -3,6 +3,7 @@ import os
 from aws_cdk import (
     aws_lambda as lambda_,
     NestedStack, Duration,
+    aws_apigateway as apigw,
 )
 from constructs import Construct
 from aws_cdk.aws_apigateway import Resource, LambdaIntegration
@@ -79,11 +80,30 @@ class LambdaStack(Construct):
                                                  compatible_runtimes=[lambda_.Runtime.PYTHON_3_9]
                                                  )
 
+        self.graph_authorizer_lambda = lambda_.Function(
+            self, "GraphAuthorizerLambdaReservationStacksANDCourts",
+            code=lambda_.Code.from_asset("../src/functions/graph_authorizer"),
+            handler="graph_authorizer.lambda_handler",
+            runtime=lambda_.Runtime.PYTHON_3_9,
+            layers=[self.lambda_layer],
+            environment=environment_variables,
+            timeout=Duration.seconds(15),
+        )
+
+        self.token_authorizer_graph = apigw.TokenAuthorizer(
+            self, "TokenAuthorizerGraphReservationStacksANDCourts",
+            handler=self.graph_authorizer_lambda,
+            identity_source=apigw.IdentitySource.header("Authorization"),
+            authorizer_name="GraphAuthorizerReservationStacksANDCourts",
+            results_cache_ttl=Duration.seconds(0)
+        )
+
         self.create_booking = self.create_lambda_api_gateway_integration(
             module_name="create_booking",
             method="POST",
             api_resource=api_gateway_resource,
-            environment_variables=environment_variables
+            environment_variables=environment_variables,
+            authorizer=self.token_authorizer_graph
         )
 
         self.update_booking = self.create_lambda_api_gateway_integration(
@@ -100,11 +120,19 @@ class LambdaStack(Construct):
             environment_variables=environment_variables
         )
 
+        self.get_bookings = self.create_lambda_api_gateway_integration(
+            module_name="get_bookings",
+            method="GET",
+            api_resource=api_gateway_resource,
+            environment_variables=environment_variables,
+        )
+
         self.delete_booking = self.create_lambda_api_gateway_integration(
             module_name="delete_booking",
             method="DELETE",
             api_resource=api_gateway_resource,
-            environment_variables=environment_variables
+            environment_variables=environment_variables,
+            authorizer=self.token_authorizer_graph
         )
 
         self.get_all_bookings = self.create_lambda_api_gateway_integration(
@@ -172,7 +200,9 @@ class LambdaStack(Construct):
             self.get_booking,
             self.update_booking,
             self.delete_booking,
-            self.get_all_bookings
+            self.get_all_bookings,
+            self.get_bookings,
+            self.graph_authorizer_lambda
         ]
 
         self.functions_that_need_s3_permissions = [

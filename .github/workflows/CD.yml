@@ -55,3 +55,4 @@ jobs:
               AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
               STACK_NAME: ${{ env.STACK_NAME }}
               GITHUB_REF_NAME: ${{ github.ref_name }}
+              GRAPH_MICROSOFT_ENDPOINT: ${{ secrets.GRAPH_MICROSOFT_ENDPOINT }}
