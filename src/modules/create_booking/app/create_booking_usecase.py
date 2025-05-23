@@ -1,4 +1,3 @@
-import uuid
 from typing import List
 
 from src.shared.domain.entities.booking import Booking
@@ -25,10 +24,9 @@ class CreateBookingUsecase:
                  court_number: int,
                  sport: str,
                  user_id: str,
+                 booking_id: str,
                  materials: List[str]
                  ) -> Booking:
-
-        booking_id = str(uuid.uuid4())
 
         if self.repo.get_booking(booking_id):
             raise DuplicatedItem("Booking already exists")
@@ -42,13 +40,7 @@ class CreateBookingUsecase:
             if not isinstance(material, str):
                 raise ValueError("Invalid material type")
 
-        resp = self.repo.create_booking(Booking(start_date,
-                                                end_date,
-                                                court_number,
-                                                self.sport,
-                                                user_id,
-                                                booking_id,
-                                                materials))
+        resp = self.repo.create_booking(Booking(start_date, end_date, court_number, self.sport, user_id, booking_id, materials))
 
         return resp
 

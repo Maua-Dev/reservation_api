@@ -44,7 +44,7 @@ class TestCreateBookingPresenter:
                 "time": "12/Mar/2020:19:03:58 +0000",
                 "timeEpoch": 1583348638390
             },
-            "body": '{"start_date": 1610617200, "end_date": 1610620800, "court_number": 1, "sport": "Tennis", "user_id": "123e4567-e89b-12d3-a456-426614174000", "materials": ["ball", "racket"]}',
+            "body": '{"start_date": 1610617200, "end_date": 1610620800, "court_number": 1, "sport": "Tennis", "user_id": "123e4567-e89b-12d3-a456-426614174000", "booking_id": "123e4567-e89b-12d3-a456-426614174000", "materials": ["ball", "racket"]}',
             "pathParameters": None,
             "isBase64Encoded": None,
             "stageVariables": None

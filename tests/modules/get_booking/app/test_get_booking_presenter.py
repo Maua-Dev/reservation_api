@@ -19,7 +19,7 @@ class Test_GetBookingPresenter:
                 "header2": "value1,value2"
             },
             "queryStringParameters": {
-                "booking_id": "b1d3bebf-dc0d-4fc1-861c-506a40cc2925"
+                "parameter1": "1"
             },
             "requestContext": {
                 "accountId": "123456789012",
@@ -42,7 +42,7 @@ class Test_GetBookingPresenter:
                 "time": "12/Mar/2020:19:03:58 +0000",
                 "timeEpoch": 1583348638390
             },
-            "body": {},
+            "body": {"booking_id":'b1d3bebf-dc0d-4fc1-861c-506a40cc2925'},
             "pathParameters": None,
             "isBase64Encoded": None,
             "stageVariables": None
@@ -124,7 +124,7 @@ class Test_GetBookingPresenter:
                 "header2": "value1,value2"
             },
             "queryStringParameters": {
-                "booking_id":'teste'
+                "parameter1": "1"
             },
             "requestContext": {
                 "accountId": "123456789012",
@@ -147,7 +147,7 @@ class Test_GetBookingPresenter:
                 "time": "12/Mar/2020:19:03:58 +0000",
                 "timeEpoch": 1583348638390
             },
-            "body": {},
+            "body": {"booking_id":'teste'},
             "pathParameters": None,
             "isBase64Encoded": None,
             "stageVariables": None
@@ -174,7 +174,7 @@ class Test_GetBookingPresenter:
                 "header2": "value1,value2"
             },
             "queryStringParameters": {
-                "booking_id":10
+                "parameter1": "1"
             },
             "requestContext": {
                 "accountId": "123456789012",
@@ -197,7 +197,7 @@ class Test_GetBookingPresenter:
                 "time": "12/Mar/2020:19:03:58 +0000",
                 "timeEpoch": 1583348638390
             },
-            "body": {},
+            "body": {"booking_id":10},
             "pathParameters": None,
             "isBase64Encoded": None,
             "stageVariables": None
@@ -224,7 +224,7 @@ class Test_GetBookingPresenter:
                 "header2": "value1,value2"
             },
             "queryStringParameters": {
-                "booking_id": 'b1d3bebf-dc0d-4fc1-861c-506a40cc2989'
+                "parameter1": "1"
             },
             "requestContext": {
                 "accountId": "123456789012",
@@ -247,7 +247,7 @@ class Test_GetBookingPresenter:
                 "time": "12/Mar/2020:19:03:58 +0000",
                 "timeEpoch": 1583348638390
             },
-            "body": {},
+            "body": {"booking_id": 'b1d3bebf-dc0d-4fc1-861c-506a40cc2989'},
             "pathParameters": None,
             "isBase64Encoded": None,
             "stageVariables": None

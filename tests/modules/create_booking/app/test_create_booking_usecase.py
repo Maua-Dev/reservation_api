@@ -16,8 +16,8 @@ class TestCreateBookingUsecase:
             court_number=1,
             sport=SPORT.TENNIS,
             user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
-            materials=['Raquete', 'Bola', 'Rede', 'Tenis'],
-            booking_id='c8435c66-13a4-4641-9d54-773b4b8ccc98'
+            booking_id='e1d3bebf-dc0d-4fc1-861c-506a40cc2925',
+            materials=['Raquete', 'Bola', 'Rede', 'Tenis']
         )
 
         booking_repository = BookingRepositoryMock()
@@ -30,16 +30,11 @@ class TestCreateBookingUsecase:
             court_number=1,
             sport="Tennis",
             user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
+            booking_id='e1d3bebf-dc0d-4fc1-861c-506a40cc2925',
             materials=['Raquete', 'Bola', 'Rede', 'Tenis']
         )
 
-        assert response is not None
-        assert response.start_date == booking.start_date
-        assert response.end_date == booking.end_date
-        assert response.court_number == booking.court_number
-        assert response.sport == booking.sport
-        assert response.user_id == booking.user_id
-        assert response.booking_id != booking.booking_id
+        assert booking == response
 
     def test_create_booking_usecase_invalid_sport(self):
 
@@ -55,6 +50,7 @@ class TestCreateBookingUsecase:
                 court_number=1,
                 sport="Invalid sport but string",
                 user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                booking_id='e1d3bebf-dc0d-4fc1-861c-506a40cc2925',
                 materials=['Raquete', 'Bola', 'Rede', 'Tenis']
             )
 
@@ -72,6 +68,7 @@ class TestCreateBookingUsecase:
                 court_number=1,
                 sport="Tennis",
                 user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                booking_id='e1d3bebf-dc0d-4fc1-861c-506a40cc2925',
                 materials=[1, 2, 3]
             )
 

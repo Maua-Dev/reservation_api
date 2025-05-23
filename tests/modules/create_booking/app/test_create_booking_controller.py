@@ -18,6 +18,7 @@ class TestCreateBookingController:
             "court_number": 1,
             "sport": "Tennis",
             "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+            "booking_id": 'e1d3bebf-dc0d-4fc1-861c-506a40cc2925',
             "materials": ["racket", "balls"]
         })
 
@@ -36,6 +37,7 @@ class TestCreateBookingController:
             "court_number": 1,
             "sport": "Tennis",
             "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+            "booking_id": 'e1d3bebf-dc0d-4fc1-861c-506a40cc2925',
             "materials": ["racket", "balls"]
         })
 
@@ -56,6 +58,7 @@ class TestCreateBookingController:
                 "court_number": 1,
                 "sport": "Tennis",
                 "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                "booking_id": 'e1d3bebf-dc0d-4fc1-861c-506a40cc2925',
                 "materials": ["racket", "balls"]
             })
 
@@ -75,6 +78,7 @@ class TestCreateBookingController:
             "court_number": 1,
             "sport": "Tennis",
             "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+            "booking_id": 'e1d3bebf-dc0d-4fc1-861c-506a40cc2925',
             "materials": ["racket", "balls"]
         })
 
@@ -95,6 +99,7 @@ class TestCreateBookingController:
                 "court_number": 1,
                 "sport": "Tennis",
                 "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                "booking_id": 'e1d3bebf-dc0d-4fc1-861c-506a40cc2925',
                 "materials": ["racket", "balls"]
             })
 
@@ -115,6 +120,7 @@ class TestCreateBookingController:
                 "court_number": "1",
                 "sport": "Tennis",
                 "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                "booking_id": 'e1d3bebf-dc0d-4fc1-861c-506a40cc2925',
                 "materials": ["racket", "balls"]
             })
 
@@ -134,6 +140,7 @@ class TestCreateBookingController:
                 "end_date": 1630003600,
                 "sport": "Tennis",
                 "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                "booking_id": 'e1d3bebf-dc0d-4fc1-861c-506a40cc2925',
                 "materials": ["racket", "balls"]
             })
 
@@ -153,6 +160,7 @@ class TestCreateBookingController:
                 "end_date": 1630003600,
                 "court_number": 1,
                 "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                "booking_id": 'e1d3bebf-dc0d-4fc1-861c-506a40cc2925',
                 "materials": ["racket", "balls"]
             })
 
@@ -173,6 +181,7 @@ class TestCreateBookingController:
                 "court_number": 1,
                 "sport": 1,
                 "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                "booking_id": 'e1d3bebf-dc0d-4fc1-861c-506a40cc2925',
                 "materials": ["racket", "balls"]
             })
 
@@ -192,6 +201,7 @@ class TestCreateBookingController:
                 "end_date": 1630003600,
                 "court_number": 1,
                 "sport": "Tennis",
+                "booking_id": 'e1d3bebf-dc0d-4fc1-861c-506a40cc2925',
                 "materials": ["racket", "balls"]
             })
 
@@ -212,12 +222,54 @@ class TestCreateBookingController:
                 "court_number": 1,
                 "sport": "Tennis",
                 "user_id": 1,
+                "booking_id": 'e1d3bebf-dc0d-4fc1-861c-506a40cc2925',
                 "materials": ["racket", "balls"]
             })
 
             response = controller(request)
 
             assert response.body == "Field user_id isn't in the right type.\n Received: int.\n Expected: str"
+            assert response.status_code == 400
+
+    def test_create_booking_controller_missing_booking_id(self):
+
+            repo = BookingRepositoryMock()
+            usecase = CreateBookingUsecase(repo)
+            controller = CreateBookingController(usecase)
+
+            request = HttpRequest(body= {
+                "start_date": 1630000000,
+                "end_date": 1630003600,
+                "court_number": 1,
+                "sport": "Tennis",
+                "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                "materials": ["racket", "balls"]
+            })
+
+            response = controller(request)
+
+            assert response.body == "Field booking_id is missing"
+            assert response.status_code == 400
+
+    def test_create_booking_controller_wrong_type_booking_id(self):
+
+            repo = BookingRepositoryMock()
+            usecase = CreateBookingUsecase(repo)
+            controller = CreateBookingController(usecase)
+
+            request = HttpRequest(body= {
+                "start_date": 1630000000,
+                "end_date": 1630003600,
+                "court_number": 1,
+                "sport": "Tennis",
+                "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                "booking_id": 1,
+                "materials": ["racket", "balls"]
+            })
+
+            response = controller(request)
+
+            assert response.body == "Field booking_id isn't in the right type.\n Received: int.\n Expected: str"
             assert response.status_code == 400
 
     def test_create_booking_controller_missing_materials(self):
@@ -232,6 +284,7 @@ class TestCreateBookingController:
                 "court_number": 1,
                 "sport": "Tennis",
                 "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                "booking_id": 'e1d3bebf-dc0d-4fc1-861c-506a40cc2925',
             })
 
             response = controller(request)
@@ -251,6 +304,7 @@ class TestCreateBookingController:
                 "court_number": 1,
                 "sport": "Tennis",
                 "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                "booking_id": 'e1d3bebf-dc0d-4fc1-861c-506a40cc2925',
                 "materials": "racket"
             })
 
@@ -271,6 +325,7 @@ class TestCreateBookingController:
             "court_number": 1,
             "sport": "Tennis",
             "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+            "booking_id": 'e1d3bebf-dc0d-4fc1-861c-506a40cc2925',
             "materials": ["racket", 1]
         })
 
