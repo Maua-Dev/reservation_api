@@ -4,7 +4,7 @@ from .create_booking_usecase import CreateBookingUsecase
 from .create_booking_viewmodel import CreateBookingViewmodel
 from src.shared.helpers.errors.controller_errors import MissingParameters, WrongTypeParameter, AuthorizerError
 from src.shared.helpers.errors.domain_errors import EntityError
-from src.shared.helpers.errors.usecase_errors import DuplicatedItem
+from src.shared.helpers.errors.usecase_errors import DuplicatedItem, InvalidSchedule
 from src.shared.helpers.external_interfaces.external_interface import IRequest
 from src.shared.helpers.external_interfaces.http_codes import Created, BadRequest, InternalServerError
 
@@ -88,6 +88,9 @@ class CreateBookingController:
             viewmodel = CreateBookingViewmodel(booking=booking)
 
             return Created(viewmodel.to_dict())
+
+        except InvalidSchedule as err:
+            return BadRequest(body=err.message)
 
         except MissingParameters as err:
             return BadRequest(body=err.message)
