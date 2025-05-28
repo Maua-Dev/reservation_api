@@ -1,9 +1,10 @@
-import enum
 from enum import Enum
 import os
-from src.shared.domain.observability.observability_interface import IObservability
 
-from src.shared.domain.repositories.user_repository_interface import IUserRepository
+from src.shared.domain.repositories.reservation_repository_interface import IReservationRepository
+from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
+
+
 
 
 class STAGE(Enum):
@@ -28,7 +29,7 @@ class Environments:
     dynamo_table_name: str
     dynamo_partition_key: str
     dynamo_sort_key: str
-    cloud_frontget_user_presenter_distribution_domain: str
+    cloud_front_distribution_domain: str
     mss_name: str 
 
     def _configure_local(self):
@@ -47,7 +48,7 @@ class Environments:
             self.s3_bucket_name = "bucket-test"
             self.region = "sa-east-1"
             self.endpoint_url = "http://localhost:8000"
-            self.dynamo_table_name = "user_mss_template-table"
+            self.dynamo_table_name = "local_reservation_api_table"
             self.dynamo_partition_key = "PK"
             self.dynamo_sort_key = "SK"
             self.cloud_front_distribution_domain = "https://d3q9q9q9q9q9q9.cloudfront.net"
@@ -61,27 +62,40 @@ class Environments:
             self.dynamo_sort_key = os.environ.get("DYNAMO_SORT_KEY")
             self.cloud_front_distribution_domain = os.environ.get("CLOUD_FRONT_DISTRIBUTION_DOMAIN")
 
+    # @staticmethod
+    # def get_user_repo() -> IUserRepository:
+    #     if Environments.get_envs().stage == STAGE.TEST:
+    #         from src.shared.infra.repositories.user_repository_mock import UserRepositoryMock
+    #         return UserRepositoryMock
+    #     elif Environments.get_envs().stage in [STAGE.DEV, STAGE.HOMOLOG, STAGE.PROD]:
+    #         from src.shared.infra.repositories.user_repository_dynamo import UserRepositoryDynamo
+    #         return UserRepositoryDynamo
+    #     else:
+    #         raise Exception("No repository found for this stage")
+        
     @staticmethod
-    def get_user_repo() -> IUserRepository:
+    def get_reservation_repo() -> IReservationRepository:
         if Environments.get_envs().stage == STAGE.TEST:
-            from src.shared.infra.repositories.user_repository_mock import UserRepositoryMock
-            return UserRepositoryMock
+            from src.shared.infra.repositories.reservation_repository_mock import ReservationRepositoryMock
+            return ReservationRepositoryMock
         elif Environments.get_envs().stage in [STAGE.DEV, STAGE.HOMOLOG, STAGE.PROD]:
-            from src.shared.infra.repositories.user_repository_dynamo import UserRepositoryDynamo
-            return UserRepositoryDynamo
+            from src.shared.infra.repositories.reservation_repository_dynamo import ReservationRepositoryDynamo
+            return ReservationRepositoryDynamo
         else:
-            raise Exception("No repository found for this stage")
+            raise Exception("no repository found for this stage")
+        
+    @staticmethod
+    def get_booking_repo() -> IBookingRepository:
+        if Environments.get_envs().stage == STAGE.TEST:
+            from src.shared.infra.repositories.booking_repository_mock import BookingRepositoryMock
+            return BookingRepositoryMock
+        elif Environments.get_envs().stage in [STAGE.DEV, STAGE.HOMOLOG, STAGE.PROD]:
+            from src.shared.infra.repositories.booking_repository_dynamo import BookingRepositoryDynamo
+            return BookingRepositoryDynamo
+        else:
+            raise Exception("no repository found for this stage")
 
-    @staticmethod
-    def get_observability() -> IObservability:
-        if Environments.get_envs().stage == STAGE.TEST:
-            from src.shared.infra.external.observability.observability_mock import ObservabilityMock
-            return ObservabilityMock
-        elif Environments.get_envs().stage in [STAGE.DEV, STAGE.HOMOLOG, STAGE.PROD]:
-            from src.shared.infra.external.observability.observability_aws import ObservabilityAWS
-            return ObservabilityAWS
-        else:
-            raise Exception("No observability class found for this stage")
+    
     @staticmethod
     def get_envs() -> "Environments":
         """

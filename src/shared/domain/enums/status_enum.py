@@ -1,0 +1,6 @@
+from enum import Enum
+
+class STATUS(Enum):
+    AVAILABLE = "AVAILABLE"
+    MAINTENANCE = "MAINTENANCE"
+    UNAVAILABLE = "UNAVAILABLE"

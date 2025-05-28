@@ -31,7 +31,7 @@ Our folder structure was developed specially for our projects.
 
 ```bash
 .
-├── iac
+├── stacks
 ├── src
 │   ├── modules
 │   │   ├── create_user
