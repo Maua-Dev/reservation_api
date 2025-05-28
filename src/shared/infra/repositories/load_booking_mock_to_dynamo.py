@@ -8,6 +8,7 @@ def setup_dynamo_table():
     dynamo_client = boto3.client('dynamodb', endpoint_url='http://localhost:8000', region_name='sa-east-1')
     tables = dynamo_client.list_tables()['TableNames']
     table_name = "local_reservation_api_table"
+    gsi_name = "booking_id-index"
 
     if not table_name in tables:
         print("Creating table")
@@ -31,6 +32,24 @@ def setup_dynamo_table():
                 {
                     'AttributeName': 'SK',
                     'AttributeType': 'S'
+                },
+                {
+                    'AttributeName': 'booking_id',
+                    'AttributeType': 'S'
+                }
+            ],
+            GlobalSecondaryIndexes=[
+                {
+                    'IndexName': gsi_name,
+                    'KeySchema': [
+                        {
+                            'AttributeName': 'booking_id',
+                            'KeyType': 'HASH'
+                        }
+                    ],
+                    'Projection': {
+                        'ProjectionType': 'ALL'
+                    }
                 }
             ],
             BillingMode='PAY_PER_REQUEST',

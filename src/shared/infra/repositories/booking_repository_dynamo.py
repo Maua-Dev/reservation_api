@@ -1,5 +1,7 @@
 from typing import Optional, List
 
+from boto3.dynamodb.conditions import Key
+
 from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
 from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
@@ -15,8 +17,9 @@ class BookingRepositoryDynamo(IBookingRepository):
         return f'Booking'
 
     @staticmethod
-    def booking_sort_key_format(booking_id: str) -> str:
-        return f'booking#{booking_id}'
+    def booking_sort_key_format(booking_start_date: int) -> str:
+        #for better sorting and query with get methods
+        return f'start_date@{booking_start_date}'
 
     def __init__(self):
         self.dynamo = DynamoDatasource(
@@ -33,7 +36,7 @@ class BookingRepositoryDynamo(IBookingRepository):
 
         resp = self.dynamo.put_item(item,
                                     partition_key=self.booking_partition_key_format(),
-                                    sort_key=self.booking_sort_key_format(booking.booking_id))
+                                    sort_key=self.booking_sort_key_format(booking.start_date))
 
         if resp.get('ResponseMetadata').get('HTTPStatusCode') != 200:
             return None
@@ -58,12 +61,14 @@ class BookingRepositoryDynamo(IBookingRepository):
             "end_date": end_date if end_date is not None else booking_to_update.end_date,
             "court_number": court_number if court_number is not None else booking_to_update.court_number,
             "sport": sport.value if sport is not None else booking_to_update.sport.value,
-            "materials": materials if materials is not None else booking_to_update.materials
+            "materials": materials if materials is not None else booking_to_update.materials,
+            "user_id": booking_to_update.user_id,
+            "booking_id": booking_to_update.booking_id,
         }
 
         resp = self.dynamo.update_item(update_dict=update_dict,
                                        partition_key=self.booking_partition_key_format(),
-                                       sort_key=self.booking_sort_key_format(booking_id))
+                                       sort_key=self.booking_sort_key_format(start_date))
 
         if resp.get('ResponseMetadata').get('HTTPStatusCode') != 200:
             return None
@@ -106,22 +111,52 @@ class BookingRepositoryDynamo(IBookingRepository):
 
     def get_booking(self, booking_id: str) -> Optional[Booking]:
 
-        dynamo_object = self.dynamo.get_item(partition_key=self.booking_partition_key_format(),
-                                           sort_key=self.booking_sort_key_format(booking_id))
+        response = self.dynamo.query(
+            IndexName="booking_id-index", #hard coded for now, this should be a variable at somewhere, maybe at gh variables?
+            key_condition_expression=Key("booking_id").eq(booking_id),
+        )
 
-        if "Item" not in dynamo_object:
+        items = response.get('Items', [])
+
+        if not items:
             return None
 
-        return BookingDynamoDTO.from_dynamo(dynamo_object['Item']).to_entity()
+        booking_data_from_dynamo = items[0]
+
+        print(f"Item encontrado no GSI: {booking_data_from_dynamo}")
+
+        return BookingDynamoDTO.from_dynamo(booking_data_from_dynamo).to_entity()
+
 
     def delete_booking(self, booking_id: str) -> Optional[Booking]:
 
-        delete_booking = self.dynamo.delete_item(partition_key=self.booking_partition_key_format(),
-                                                 sort_key=self.booking_sort_key_format(booking_id))
-        if "Attributes" not in delete_booking:
+        gsi_response = self.dynamo.query(
+            IndexName="booking_id-index",
+            key_condition_expression=Key("booking_id").eq(booking_id),
+        )
+
+        print(gsi_response)
+
+        item_from_gsi = gsi_response.get('Items', [])
+
+        if not item_from_gsi:
             return None
 
-        return BookingDynamoDTO.from_dynamo(delete_booking['Attributes']).to_entity()
+        item_to_delete_info = item_from_gsi[0]
+
+        start_date_ts_ddb_value = item_to_delete_info.get("start_date", None)
+
+        actual_start_date_ts = int(start_date_ts_ddb_value)
+
+        delete_item_response = self.dynamo.delete_item(
+            partition_key=self.booking_partition_key_format(),
+            sort_key=self.booking_sort_key_format(actual_start_date_ts)
+        )
+
+        if "Attributes" not in delete_item_response:
+            return None
+
+        return BookingDynamoDTO.from_dynamo(delete_item_response['Attributes']).to_entity()
 
     def get_all_bookings(self) -> Optional[List[Booking]]:
 
