@@ -9,3 +9,4 @@ lambda_layer_out_temp/
 # CDK asset staging directory
 .cdk.staging
 cdk.out
+copied_shared
