@@ -6,9 +6,8 @@ from aws_cdk import (
 )
 from constructs import Construct
 from aws_cdk.aws_apigateway import Resource, LambdaIntegration
-from aws_cdk.aws_events import Rule, Schedule, EventField
-from aws_cdk.aws_events_targets import LambdaFunction, RuleTargetInput
-
+from aws_cdk.aws_events import Rule, Schedule, EventField, RuleTargetInput
+from aws_cdk.aws_events_targets import LambdaFunction 
 
 class LambdaStack(Construct):
     functions_that_need_dynamo_permissions = []
