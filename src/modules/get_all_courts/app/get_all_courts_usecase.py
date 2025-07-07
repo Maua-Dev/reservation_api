@@ -1,4 +1,6 @@
+from typing import Any
 from src.shared.domain.repositories.reservation_repository_interface import IReservationRepository
+from src.shared.domain.entities.court import Court
 
 class GetAllCourtsUsecase:
     def __init__(self, repo: IReservationRepository):

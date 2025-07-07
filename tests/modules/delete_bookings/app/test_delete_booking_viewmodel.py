@@ -8,8 +8,7 @@ class Test_DeleteBookingViewModel:
     def test_delete_booking_viewmodel(self):
         repo = BookingRepositoryMock()
         usecase = DeleteBookingUsecase(repo=repo)
-        booking = usecase(booking_id=repo.bookings[0].booking_id,
-                          user_id=repo.bookings[0].user_id)
+        booking = usecase(booking_id=repo.bookings[0].booking_id)
         viewmodel = DeleteBookingViewModel(booking=booking).to_dict()
 
         expected = {
@@ -18,7 +17,7 @@ class Test_DeleteBookingViewModel:
                 'end_date': 1634583365000,
                 'court_number': 1,
                 'sport': 'Tennis',
-                'user_id': 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
                 'booking_id': 'b1d3bebf-dc0d-4fc1-861c-506a40cc2925',
                 'materials': ['Raquete', 'Bola', 'Rede', 'Tenis']
             },

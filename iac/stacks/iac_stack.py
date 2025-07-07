@@ -55,7 +55,6 @@ class IacStack(Stack):
             "DYNAMO_PARTITION_KEY": "PK",
             "DYNAMO_SORT_KEY": "SK",
             "REGION": self.aws_region,
-            "GRAPH_MICROSOFT_ENDPOINT": os.getenv("GRAPH_MICROSOFT_ENDPOINT")
         }
 
 
