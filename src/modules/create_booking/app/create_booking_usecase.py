@@ -45,8 +45,13 @@ class CreateBookingUsecase:
         all_bookings = self.repo.get_all_bookings()
 
         for booking in all_bookings:
-            if (booking.start_date < end_date and booking.end_date > start_date
-                    and booking.court_number == court_number):
+            if (
+                (
+                    booking.start_date < end_date + (15 * 60 * 1000) #15 minutes in mseconds
+                    and booking.end_date > start_date - (15 * 60 * 1000) #15 minutes in mseconds
+                    and booking.court_number == court_number
+                ) 
+            ):
                 raise InvalidSchedule()
 
         resp = self.repo.create_booking(Booking(start_date,

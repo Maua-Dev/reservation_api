@@ -76,7 +76,7 @@ class TestCreateBookingUsecase:
                 materials=[1, 2, 3]
             )
 
-    def test_create_booking_usecase_invalid_schedule(self):
+    def test_create_booking_usecase_invalid_schedule_overlap(self):
 
         with pytest.raises(InvalidSchedule) as e:
 
@@ -91,4 +91,42 @@ class TestCreateBookingUsecase:
                 sport="Tennis",
                 user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
                 materials=["colete"]
+            )
+
+    def test_create_booking_usecase_invalid_schedule_15min(self):
+
+        with pytest.raises(InvalidSchedule) as e:
+
+            booking_repository = BookingRepositoryMock()
+
+            usecase = CreateBookingUsecase(repo=booking_repository)
+
+            booking_repository.create_booking(
+                booking=Booking(
+                    start_date=20000000,
+                    end_date=30000000,
+                    court_number=5,
+                    sport=SPORT.FUTSAL,
+                    user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                    materials=['Bola', 'Chuteira'],
+                    booking_id='ddd35c66-13a4-4641-9d54-773b4b8ccc98'
+                )
+            )
+
+            response = usecase(
+                start_date=10000000,
+                end_date=19100001, #15 minutos de intolerância na criação
+                court_number=5,
+                sport=SPORT.FUTSAL,
+                user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                materials=['Bola', 'Chuteira']
+            )
+
+            response = usecase(
+                start_date=30899999, #15 minutos de intolerância na criação
+                end_date=40000000, 
+                court_number=5,
+                sport=SPORT.FUTSAL,
+                user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                materials=['Bola', 'Chuteira']
             )
