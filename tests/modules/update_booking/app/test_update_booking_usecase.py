@@ -3,7 +3,7 @@ import pytest
 from src.modules.update_booking.app.update_booking_usecase import UpdateBookingUsecase
 from src.shared.domain.enums.sport import SPORT
 from src.shared.helpers.errors.domain_errors import EntityError, EntityParameterOrderDatesError, EntityParameterTimeError
-from src.shared.helpers.errors.usecase_errors import NoItemsFound
+from src.shared.helpers.errors.usecase_errors import InvalidSchedule
 from src.shared.infra.repositories.booking_repository_mock import BookingRepositoryMock
 
 
@@ -28,6 +28,44 @@ class Test_UpdateBookingUsecase:
         assert booking_repo.bookings[0].end_date == booking.end_date
         assert booking_repo.bookings[0].sport == booking.sport
         assert booking_repo.bookings[0].materials == booking.materials
+
+    def test_update_booking_usecase_invalid_schedule_overlap(self):
+            
+        with pytest.raises(InvalidSchedule) as e:
+
+            booking_repo = BookingRepositoryMock()
+            usecase = UpdateBookingUsecase(booking_repo=booking_repo)
+
+            booking_id = booking_repo.bookings[0].booking_id
+
+            booking = usecase(booking_id=booking_id, 
+                              court_number=3, 
+                              start_date=1634569200000,
+                              end_date=1634570000000, 
+                              sport=SPORT.TENNIS, 
+                              materials=['Raquete', 'Bola', 'Rede', 'Tenis']
+                              )
+            
+            assert e.value == "Court is already booked for the selected time slot or has to have 15 min tolerance"
+    
+    def test_update_booking_usecase_invalid_schedule_15min_intolerance(self):
+            
+        with pytest.raises(InvalidSchedule) as e:
+
+            booking_repo = BookingRepositoryMock()
+            usecase = UpdateBookingUsecase(booking_repo=booking_repo)
+
+            booking_id = booking_repo.bookings[0].booking_id
+
+            booking = usecase(booking_id=booking_id, 
+                              court_number=3, 
+                              start_date=1634571899999,
+                              end_date=1734571000000, 
+                              sport=SPORT.TENNIS, 
+                              materials=['Raquete', 'Bola', 'Rede', 'Tenis']
+                              )
+            
+            assert e.value == "Court is already booked for the selected time slot or has to have 15 min tolerance"
 
     def test_update_booking_usecase_invalid_booking_id(self):
         booking_repo = BookingRepositoryMock()
