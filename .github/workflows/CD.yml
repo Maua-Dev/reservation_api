@@ -55,3 +55,4 @@ jobs:
               AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
               STACK_NAME: ${{ env.STACK_NAME }}
               GITHUB_REF_NAME: ${{ github.ref_name }}
+              USER_API_URL: ${{ secrets.USER_API_URL }}
