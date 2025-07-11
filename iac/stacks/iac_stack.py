@@ -55,6 +55,7 @@ class IacStack(Stack):
             "DYNAMO_PARTITION_KEY": "PK",
             "DYNAMO_SORT_KEY": "SK",
             "REGION": self.aws_region,
+            "USER_API_URL": os.environ.get("USER_API_URL")
         }
 
 
