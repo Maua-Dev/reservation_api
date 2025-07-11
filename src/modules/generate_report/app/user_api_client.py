@@ -18,7 +18,7 @@ class UserAPIClient:
 
         api_url= os.environ.get("USER_API_URL")
         try:
-            response = requests.get(api_url)
+            response = requests.get(api_url + '/get-all-users')
             users = response.json().get("users")
             return users
         except:
