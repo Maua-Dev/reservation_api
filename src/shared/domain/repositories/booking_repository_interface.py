@@ -12,6 +12,9 @@ class IBookingRepository(ABC):
     def create_booking(self, booking: Booking) -> Optional[Booking]:
         '''
         If booking does not exist, creates it and returns it
+
+        !!!Must do time validations outside this method!!!!
+        Keep it simples, only appending or putting into repostitory
         '''
         pass
 
@@ -25,6 +28,8 @@ class IBookingRepository(ABC):
                        materials: List[str] = None) -> Optional[Booking]:
         '''
         If booking exists, updates it and returns it
+
+        !!!Must do time validations outside this method!!!!
         '''
         pass
 
@@ -47,5 +52,12 @@ class IBookingRepository(ABC):
     def get_all_bookings(self):
         '''
         Returns all bookings
+        '''
+        pass
+
+    @abstractmethod
+    def get_all_users(self) -> List[str]:
+        '''
+        Returns name users by user id
         '''
         pass

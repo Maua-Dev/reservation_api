@@ -6,9 +6,8 @@ from aws_cdk import (
 )
 from constructs import Construct
 from aws_cdk.aws_apigateway import Resource, LambdaIntegration
-from aws_cdk.aws_events import Rule, Schedule
-from aws_cdk.aws_events_targets import LambdaFunction
-
+from aws_cdk.aws_events import Rule, Schedule, EventField, RuleTargetInput
+from aws_cdk.aws_events_targets import LambdaFunction 
 
 class LambdaStack(Construct):
     functions_that_need_dynamo_permissions = []
@@ -48,11 +47,16 @@ class LambdaStack(Construct):
         )
 
         rule = Rule(
-            self, f"{module_name.title()}EventRule",
+            self, f"{module_name.title()}EventRuleForWeeklyUpload",
             schedule=cron_schedule
         )
 
-        rule.add_target(LambdaFunction(function))
+        input_transformer = RuleTargetInput.from_object({
+            "current_date": EventField.time,
+            "message": "weekly report trigger!"
+        })
+
+        rule.add_target(LambdaFunction(function, event=input_transformer))
 
         return function
 
@@ -153,7 +157,7 @@ class LambdaStack(Construct):
 
         self.generate_report = self.create_lambda_event_bridge_integration(
             module_name="generate_report",
-            cron_schedule=Schedule.cron(minute="0", hour="18", week_day="FRI"),
+            cron_schedule=Schedule.cron(week_day="FRI", hour="18"),
             environment_variables=environment_variables
         )
 

@@ -28,6 +28,11 @@ class TestCreateBookingPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    "user": {
+                        "displayName": 'Lebron James',
+                        "mail": 'lbj@maua.br',
+                        "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+                    }
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -44,7 +49,7 @@ class TestCreateBookingPresenter:
                 "time": "12/Mar/2020:19:03:58 +0000",
                 "timeEpoch": 1583348638390
             },
-            "body": '{"start_date": 1610617200, "end_date": 1610620800, "court_number": 1, "sport": "Tennis", "user_id": "123e4567-e89b-12d3-a456-426614174000", "booking_id": "123e4567-e89b-12d3-a456-426614174000", "materials": ["ball", "racket"]}',
+            "body": '{"start_date": 1610617200, "end_date": 1610620800, "court_number": 1, "sport": "Tennis", "materials": ["ball", "racket"]}',
             "pathParameters": None,
             "isBase64Encoded": None,
             "stageVariables": None

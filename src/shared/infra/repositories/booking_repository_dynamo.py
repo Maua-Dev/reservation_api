@@ -1,5 +1,7 @@
 from typing import Optional, List
 
+from boto3.dynamodb.conditions import Key
+
 from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
 from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
@@ -57,8 +59,10 @@ class BookingRepositoryDynamo(IBookingRepository):
             "start_date": start_date if start_date is not None else booking_to_update.start_date,
             "end_date": end_date if end_date is not None else booking_to_update.end_date,
             "court_number": court_number if court_number is not None else booking_to_update.court_number,
-            "sport": sport if sport is not None else booking_to_update.sport,
-            "materials": materials if materials is not None else booking_to_update.materials
+            "sport": sport.value if sport is not None else booking_to_update.sport.value,
+            "materials": materials if materials is not None else booking_to_update.materials,
+            "user_id": booking_to_update.user_id,
+            "booking_id": booking_to_update.booking_id
         }
 
         resp = self.dynamo.update_item(update_dict=update_dict,
@@ -98,5 +102,19 @@ class BookingRepositoryDynamo(IBookingRepository):
             if item.get('entity') == 'booking':
                 all_bookings.append(BookingDynamoDTO.from_dynamo(item).to_entity())
 
+    def get_all_bookings_by_date_range(self, initial_date: int, final_date: int) -> Optional[List[Booking]]:
+
+        all_bookings = []
+        all_items = self.dynamo.get_all_items().get('Items')
+
+        for item in all_items:
+            if item.get('entity') == 'booking':
+                booking = BookingDynamoDTO.from_dynamo(item).to_entity()
+                if initial_date <= booking.start_date/1000 <= final_date:
+                    all_bookings.append(booking)
+
         return all_bookings
+    
+    def get_all_users(self):
+        return super().get_all_users()
 
