@@ -80,4 +80,5 @@ jobs:
           AWS_REGION: ${{ vars.AWS_REGION }}
           AWS_ACCOUNT_ID: ${{ env.AWS_ACCOUNT_ID }}
           STACK_NAME: ${{ env.STACK_NAME }}
+          USER_API_URL: ${{ secrets.USER_API_URL }}
           GITHUB_REF_NAME: ${{ env.STAGE }}
