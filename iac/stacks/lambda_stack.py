@@ -3,13 +3,11 @@ import os
 from aws_cdk import (
     aws_lambda as lambda_,
     NestedStack, Duration,
-    aws_apigateway as apigw,
 )
 from constructs import Construct
 from aws_cdk.aws_apigateway import Resource, LambdaIntegration
-from aws_cdk.aws_events import Rule, Schedule
-from aws_cdk.aws_events_targets import LambdaFunction
-
+from aws_cdk.aws_events import Rule, Schedule, EventField, RuleTargetInput
+from aws_cdk.aws_events_targets import LambdaFunction 
 
 class LambdaStack(Construct):
     functions_that_need_dynamo_permissions = []
@@ -49,11 +47,16 @@ class LambdaStack(Construct):
         )
 
         rule = Rule(
-            self, f"{module_name.title()}EventRule",
+            self, f"{module_name.title()}EventRuleForWeeklyUpload",
             schedule=cron_schedule
         )
 
-        rule.add_target(LambdaFunction(function))
+        input_transformer = RuleTargetInput.from_object({
+            "current_date": EventField.time,
+            "message": "weekly report trigger!"
+        })
+
+        rule.add_target(LambdaFunction(function, event=input_transformer))
 
         return function
 
@@ -75,30 +78,11 @@ class LambdaStack(Construct):
                                                  compatible_runtimes=[lambda_.Runtime.PYTHON_3_9]
                                                  )
 
-        self.graph_authorizer_lambda = lambda_.Function(
-            self, "GraphAuthorizerLambdaReservationStacksANDCourts",
-            code=lambda_.Code.from_asset("../src/functions/graph_authorizer"),
-            handler="graph_authorizer.lambda_handler",
-            runtime=lambda_.Runtime.PYTHON_3_9,
-            layers=[self.lambda_layer],
-            environment=environment_variables,
-            timeout=Duration.seconds(15),
-        )
-
-        self.token_authorizer_graph = apigw.TokenAuthorizer(
-            self, "TokenAuthorizerGraphReservationStacksANDCourts",
-            handler=self.graph_authorizer_lambda,
-            identity_source=apigw.IdentitySource.header("Authorization"),
-            authorizer_name="GraphAuthorizerReservationStacksANDCourts",
-            results_cache_ttl=Duration.seconds(0)
-        )
-
         self.create_booking = self.create_lambda_api_gateway_integration(
             module_name="create_booking",
             method="POST",
             api_resource=api_gateway_resource,
-            environment_variables=environment_variables,
-            authorizer=self.token_authorizer_graph
+            environment_variables=environment_variables
         )
 
         self.update_booking = self.create_lambda_api_gateway_integration(
@@ -110,24 +94,16 @@ class LambdaStack(Construct):
 
         self.get_booking = self.create_lambda_api_gateway_integration(
             module_name="get_booking",
-            method="GET",
+            method="POST",
             api_resource=api_gateway_resource,
             environment_variables=environment_variables
-        )
-
-        self.get_bookings = self.create_lambda_api_gateway_integration(
-            module_name="get_bookings",
-            method="GET",
-            api_resource=api_gateway_resource,
-            environment_variables=environment_variables,
         )
 
         self.delete_booking = self.create_lambda_api_gateway_integration(
             module_name="delete_booking",
             method="DELETE",
             api_resource=api_gateway_resource,
-            environment_variables=environment_variables,
-            authorizer=self.token_authorizer_graph
+            environment_variables=environment_variables
         )
 
         self.get_all_bookings = self.create_lambda_api_gateway_integration(
@@ -146,7 +122,7 @@ class LambdaStack(Construct):
 
         self.get_court = self.create_lambda_api_gateway_integration(
             module_name="get_court",
-            method="GET",
+            method="POST",
             api_resource=api_gateway_resource,
             environment_variables=environment_variables
         )
@@ -181,7 +157,7 @@ class LambdaStack(Construct):
 
         self.generate_report = self.create_lambda_event_bridge_integration(
             module_name="generate_report",
-            cron_schedule=Schedule.cron(minute="0", hour="18", week_day="FRI"),
+            cron_schedule=Schedule.cron(week_day="FRI", hour="18"),
             environment_variables=environment_variables
         )
 
@@ -195,9 +171,7 @@ class LambdaStack(Construct):
             self.get_booking,
             self.update_booking,
             self.delete_booking,
-            self.get_all_bookings,
-            self.get_bookings,
-            self.graph_authorizer_lambda
+            self.get_all_bookings
         ]
 
         self.functions_that_need_s3_permissions = [

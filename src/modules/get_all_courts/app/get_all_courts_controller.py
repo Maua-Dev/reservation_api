@@ -17,7 +17,6 @@ class GetAllCourtsController:
             courts = self.usecase()
             viewmodel = GetAllCourtsViewModel(courts).to_dict()
             return OK(viewmodel)
-
         except EntityError as err:
             return BadRequest(body=err.message)
         

@@ -49,8 +49,7 @@ class ReservationRepositoryDynamo(IReservationRepository):
         all_items = self.dynamo.get_all_items().get('Items')
 
         for item in all_items:
-            if item.get("entity") == "Court":
-                all_courts.append(CourtDynamoDTO.from_dynamo(item).to_entity())
+            all_courts.append(CourtDynamoDTO.from_dynamo(item).to_entity())
 
         return all_courts
 

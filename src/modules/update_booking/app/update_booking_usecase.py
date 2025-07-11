@@ -1,9 +1,9 @@
-from typing import List, Optional
+from typing import List
 from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
 from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
 from src.shared.helpers.errors.domain_errors import EntityError, EntityParameterOrderDatesError
-from src.shared.helpers.errors.usecase_errors import NoItemsFound
+from src.shared.helpers.errors.usecase_errors import NoItemsFound, InvalidSchedule
 
 class UpdateBookingUsecase:
     def __init__(self, booking_repo: IBookingRepository):
@@ -47,6 +47,21 @@ class UpdateBookingUsecase:
             
         if Booking.validate_materials(materials) is False:
             raise EntityError("materials")
+        
+        all_bookings = self.booking_repo.get_all_bookings()
+
+        for booking in all_bookings:
+            if (
+                (booking.booking_id != booking_id)
+                and (
+                    (
+                        booking.start_date < end_date + (15 * 60 * 1000) #15 minutes in mseconds
+                        and booking.end_date > start_date - (15 * 60 * 1000) #15 minutes in mseconds
+                        and booking.court_number == court_number
+                    )
+                )
+            ):
+                raise InvalidSchedule()
 
         booking = self.booking_repo.update_booking(
             booking_id=booking_id,

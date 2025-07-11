@@ -10,7 +10,6 @@ from src.shared.infra.repositories.reservation_repository_mock import Reservatio
 
 
 class TestReservationRepositoryDynamo:
-
     @pytest.mark.skip("Can't run test in github actions")
     def test_dynamo_delete_court(self):
         dynamo_repo = ReservationRepositoryDynamo()
@@ -30,7 +29,7 @@ class TestReservationRepositoryDynamo:
     @pytest.mark.skip("Can't run test in github actions")
     def test_update_court(self):
         repo = ReservationRepositoryDynamo()
-        resp = repo.update_court(number=3, photo="https://www.linkedin.com/in/giovanna-albuquerque-16917a245/")
+        resp = repo.update_court(number=3, new_photo="https://www.linkedin.com/in/giovanna-albuquerque-16917a245/")
 
         assert resp.number == 3
         assert resp.photo == "https://www.linkedin.com/in/giovanna-albuquerque-16917a245/"
@@ -62,6 +61,6 @@ class TestReservationRepositoryDynamo:
         new_court = Court(number=6, status=STATUS.MAINTENANCE, is_field=False, photo=None)
         size = len(dynamo_repo.get_all_courts())
     
-        assert new_court.__dict__ == dynamo_repo.create_court(new_court).__dict__
-        assert dynamo_repo.get_court(6).__dict__ == new_court.__dict__
+        assert new_court == dynamo_repo.create_court(new_court)
+        assert dynamo_repo.get_court(6) == new_court
 
