@@ -292,3 +292,4 @@ class TestCreateBookingController:
 
         assert response.body == "Invalid material type"
         assert response.status_code == 400
+
