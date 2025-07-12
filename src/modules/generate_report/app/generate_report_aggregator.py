@@ -1,4 +1,4 @@
-from src.modules.generate_report.app.user_api_client import UserAPIClient
+from src.shared.clients.user_api_client import UserAPIClient
 from src.shared.domain.entities.booking import Booking
 from .generate_report_extractor import GenerateReportExtractor
 from typing import List
