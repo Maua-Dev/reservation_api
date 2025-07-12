@@ -7,6 +7,7 @@ class TestUserAPIClient:
     # to test this, you must declare in your .env the user mss endpoint as USER_API_URL without 
     # any route at the end (the user api client already adds the routing)
 
+    @pytest.mark.skip("Can't run test in github actions")
     def test_get_user(self):
 
         user_client = UserAPIClient()
@@ -14,6 +15,7 @@ class TestUserAPIClient:
 
         assert user_name == 'GUSTAVO ALVES GOMES'
         
+    @pytest.mark.skip("Can't run test in github actions")
     def test_auth_user(self):
         
         #this test will only pass if user is already created in db, as method checks for this
