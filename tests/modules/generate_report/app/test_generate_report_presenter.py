@@ -7,13 +7,12 @@ from src.modules.generate_report.app.generate_report_transformer import Generate
 from src.shared.infra.repositories.booking_repository_dynamo import BookingRepositoryDynamo
 
 
-class TestGenerateReportSender:
-
-    pytest.mark.skip("Can't run test in github actions")
+class TestGenerateReportPresenter:
 
     #WONT WORK WITH CURRENT MOCK, ALL DATES ARE OUTDATED AND DO NOT MATCH WITH CURRENT YEAR
 
-    def test_generate_report_sender(self):
+    @pytest.mark.skip("Can't run test in github actions")
+    def test_generate_report_presenter(self):
 
         event_from_event_bridge = {
             "version": "0",
