@@ -52,8 +52,8 @@ class Environments:
             self.dynamo_partition_key = "PK"
             self.dynamo_sort_key = "SK"
             self.cloud_front_distribution_domain = "https://d3q9q9q9q9q9q9.cloudfront.net"
-            self.client_id = "local_client_id"
-            self.client_secret = "local_client_secret"
+            self.client_id = "root" #change to what is inside minio compose
+            self.client_secret = "root1234" #change to what is inside minio compose
             self.bucket_endpoint_url = "http://localhost:9000"
 
         else:

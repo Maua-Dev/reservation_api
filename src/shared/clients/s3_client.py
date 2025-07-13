@@ -3,7 +3,7 @@ import boto3
 from src.shared.environments import Environments
 
 
-class S3Manager:
+class s3_client:
 
     def __init__(self):
         self.__envs = Environments.get_envs()
