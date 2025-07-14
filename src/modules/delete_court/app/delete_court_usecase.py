@@ -15,7 +15,7 @@ class DeleteCourtUsecase:
             raise EntityError('number')
         
         if role != "ADMIN":
-            raise ForbiddenAction()
+            raise ForbiddenAction("user, only admin can delete courts")
         
         court = self.repo.delete_court(number=number)
         

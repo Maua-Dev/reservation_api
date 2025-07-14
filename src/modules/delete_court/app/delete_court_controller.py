@@ -24,7 +24,7 @@ class DeleteCourtController:
                 raise MissingParameters('user')
             
             user = request.data.get("user_from_authorizer")
-            court = self.usecase(number=request.data.get('number'))
+            court = self.usecase(number=request.data.get('number'), role=user.get("role"))
             viewmodel = DeleteCourtViewModel(court)
             
             return OK(viewmodel.to_dict())

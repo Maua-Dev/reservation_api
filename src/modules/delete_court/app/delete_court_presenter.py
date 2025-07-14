@@ -3,7 +3,7 @@ from .delete_court_usecase import DeleteCourtUsecase
 from src.shared.helpers.external_interfaces.http_lambda_requests import LambdaHttpRequest, LambdaHttpResponse
 from src.shared.environments import Environments
 
-repo = Environments.get_user_repo()()
+repo = Environments.get_reservation_repo()()
 usecase = DeleteCourtUsecase(repo)
 controller = DeleteCourtController(usecase)
 
