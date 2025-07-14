@@ -25,6 +25,14 @@ class TestDeleteCourtPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    "user":
+                    {
+                        "id": "dummy_id",
+                        "email": "dumm_yemail",
+                        "name": "dummy_name",
+                        "ra": None,
+                        "role": "ADMIN",
+                    }
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -74,6 +82,14 @@ class TestDeleteCourtPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    "user":
+                    {
+                        "id": "dummy_id",
+                        "email": "dumm_yemail",
+                        "name": "dummy_name",
+                        "ra": None,
+                        "role": "ADMIN",
+                    }
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -123,6 +139,14 @@ class TestDeleteCourtPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    "user":
+                    {
+                        "id": "dummy_id",
+                        "email": "dumm_yemail",
+                        "name": "dummy_name",
+                        "ra": None,
+                        "role": "ADMIN",
+                    }
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -172,6 +196,14 @@ class TestDeleteCourtPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    "user":
+                    {
+                        "id": "dummy_id",
+                        "email": "dumm_yemail",
+                        "name": "dummy_name",
+                        "ra": None,
+                        "role": "ADMIN",
+                    }
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
