@@ -20,10 +20,11 @@ def lambda_handler(event, context):
     """
 
     try:
-        # Fetching the Microsoft Graph endpoint from the environment variables
-        GRAPH_MICROSOFT_ENDPOINT = os.environ.get("GRAPH_MICROSOFT_ENDPOINT", None)
-        if not GRAPH_MICROSOFT_ENDPOINT:
-            raise Exception("MS_GRAPH_ENDPOINT environment variable not set")
+        
+        # Fetch the User Mss enpoint from the environment variables
+        MSS_USER_API_ENDPOINT = os.environ.get("USER_API_URL")
+        if not MSS_USER_API_ENDPOINT:
+            raise Exception("MSS_USER_ENDPOINT environment variable not set")
 
         # Creating a HTTP client
         http = urllib3.PoolManager()
@@ -32,13 +33,11 @@ def lambda_handler(event, context):
         token = event["authorizationToken"].replace("Bearer ", "")
 
         print(f"token: {token}")
-        print(f"graph_endpoint: {GRAPH_MICROSOFT_ENDPOINT}")
 
         # Fetching the user information from the Microsoft Graph API
-        graph_endpoint = GRAPH_MICROSOFT_ENDPOINT
         methodArn = event["methodArn"]
         headers = {"Authorization": f"Bearer {token}"}
-        response = http.request("GET", graph_endpoint, headers=headers)
+        response = http.request("GET", MSS_USER_API_ENDPOINT + "/get-user", headers=headers)
 
         # Checking if the request was successful
         if response.status != 200:
@@ -49,22 +48,7 @@ def lambda_handler(event, context):
 
         print("CHECK BEFORE REGEX")
         print(user_data)
-
-        # Checking if the user is from Maua
-        email_regex = r"(^\d{2}\.\d{5}-\d@maua\.br$)|(^[a-zA-Z]+\.[a-zA-Z]+@maua\.br$)"  # Regex to match the Maua email
-        if not re.match(email_regex, user_data.get("mail", "")):
-            return generate_policy("user", "Deny", methodArn)
-
-
-        # TODO -> implementar o método de get user, pode ser pelo e-mail ou pelo user_id, usando o Repositorio
-
-        print("USER_ID: ", user_data.get("id", "did not find id"))
-
-        user_repo = Environments.get_user_repo()()
-        user = user_repo.get_user(user_id=user_data.get("id"))
-
-        print("CHECK PASSED REGEX AND GET USER")
-
+        
         policy = generate_policy(
             user_data.get("id", "user"), "Allow", methodArn, {"user": json.dumps(user_data)}
         )
