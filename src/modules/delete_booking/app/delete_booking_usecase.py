@@ -11,6 +11,8 @@ class DeleteBookingUsecase:
     
     def __call__(self, booking_id: int):    
         
+        # TODO: receber as infos do usuário e ver se tem "role" e "email". 
+
         if not Booking.validate_booking_id(booking_id):
             raise EntityError('booking_id')
         

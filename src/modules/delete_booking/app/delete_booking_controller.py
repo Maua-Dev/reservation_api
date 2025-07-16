@@ -15,6 +15,9 @@ class DeleteBookingController:
         self.usecase = usecase
         
     def __call__(self, request: IRequest) -> IResponse:
+
+        # TODO: Fazer a lógica de receber o token e buscar o usuário. Mandar as infos do usuário para o usecase 
+
         try:
             if request.data.get('booking_id') is None:
                 raise MissingParameters('booking_id')
