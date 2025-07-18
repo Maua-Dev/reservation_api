@@ -16,8 +16,6 @@ class DeleteBookingController:
         
     def __call__(self, request: IRequest) -> IResponse:
 
-        # TODO: Fazer a lógica de receber o token e buscar o usuário. Mandar as infos do usuário para o usecase 
-
         try:
 
             if request.data.get('user_from_authorizer') is None:

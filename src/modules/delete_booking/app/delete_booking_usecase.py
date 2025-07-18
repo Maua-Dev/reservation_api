@@ -10,9 +10,6 @@ class DeleteBookingUsecase:
         self.repo = repo
     
     def __call__(self, booking_id: int, user):    
-        
-        # TODO: receber as infos do usuário e ver se tem "role" e "email". 
-
         if user.get('user_id') is None:
             raise EntityError('user id')
 
