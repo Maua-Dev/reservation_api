@@ -58,9 +58,14 @@ class TestBookingRepositoryMock:
     def test_delete_booking(self):
         repo_mock = BookingRepositoryMock()
         booking_id = 'b1d3bebf-dc0d-4fc1-861c-506a40cc2925'
+        user = {
+            'user_id': 'd351a9b1-937f-423c-a9d1-9929b5795be1',
+            'email': 'user@email.com',
+            'role': 'ADMIN'
+        }
 
         len_before = len(repo_mock.bookings)
-        deleted_booking = repo_mock.delete_booking(booking_id)
+        deleted_booking = repo_mock.delete_booking(booking_id, user)
         len_after = len(repo_mock.bookings)
 
         assert deleted_booking is not None

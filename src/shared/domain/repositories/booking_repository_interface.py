@@ -37,7 +37,7 @@ class IBookingRepository(ABC):
 
     # TODO: arrumar a lógica para receber as infos do usuário, validar se ele pode realizar a operação + enviar e-mail
     @abstractmethod
-    def delete_booking(self, booking_id: int) -> Optional[Booking]:
+    def delete_booking(self, booking_id: int, user) -> Optional[Booking]:
         '''
         If booking exists, deletes it and returns it
         else returns None

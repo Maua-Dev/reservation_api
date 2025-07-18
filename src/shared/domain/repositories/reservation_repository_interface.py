@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+from typing import Optional
+from src.shared.domain.entities.booking import Booking
 from src.shared.domain.entities.court import Court
 from src.shared.domain.enums.status_enum import STATUS
 

@@ -2,6 +2,7 @@ from typing import List
 from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
 from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
+from src.shared.helpers.errors.usecase_errors import ForbiddenAction
 
 
 class BookingRepositoryMock(IBookingRepository):
@@ -127,11 +128,27 @@ class BookingRepositoryMock(IBookingRepository):
                 return booking
         return None
 
-    def delete_booking(self, booking_id: str):
+    def delete_booking(self, booking_id: str, user):
         booking = self.get_booking(booking_id)
+
+        user_role = user.get('role')
+
         if booking is not None:
-            self.bookings.remove(booking)
-            return booking
+
+            if user_role == 'ADMIN':
+                self.bookings.remove(booking)
+                return booking
+
+            elif user_role == 'STUDENT':
+
+                if booking.user_id == user.get('user_id'):
+
+                    self.bookings.remove(booking)
+                    return booking
+                
+                else:
+                    raise ForbiddenAction('user id')
+
         return None
 
     def get_all_bookings(self) -> List[Booking]:
