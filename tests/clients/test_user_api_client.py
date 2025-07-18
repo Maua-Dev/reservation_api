@@ -6,6 +6,7 @@ class TestUserAPIClient:
     
     # to test this, you must declare in your .env the user mss endpoint as USER_API_URL without 
     # any route at the end (the user api client already adds the routing)
+    # ex: https://api-url/reservation-mss-user
 
     @pytest.mark.skip("Can't run test in github actions")
     def test_get_user(self):
