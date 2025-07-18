@@ -2,7 +2,7 @@ from typing import Optional
 from src.shared.domain.entities.court import Court
 from src.shared.domain.enums.status_enum import STATUS
 from src.shared.helpers.errors.domain_errors import EntityError
-from src.shared.helpers.errors.usecase_errors import NoItemsFound
+from src.shared.helpers.errors.usecase_errors import NoItemsFound, ForbiddenAction
 from src.shared.domain.repositories.reservation_repository_interface import IReservationRepository
 
 
@@ -12,6 +12,7 @@ class UpdateCourtUsecase:
 
     def __call__(self,
                  number: int,
+                 role: str,
                  status: Optional[STATUS] = None,
                  photo: Optional[str] = None):
 
@@ -24,6 +25,9 @@ class UpdateCourtUsecase:
 
         if self.repo.get_court(number) is None:
             raise NoItemsFound(f'number: {number}')
+        
+        if role != "ADMIN":
+            raise ForbiddenAction("user, only admin can update courts")
 
         court = self.repo.update_court(number=number,
                                        status=status,

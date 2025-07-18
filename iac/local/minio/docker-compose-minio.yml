@@ -1,15 +1,16 @@
-version: '3'
+version: '3.8' # The top-level 'version' is obsolete but using a more modern one like 3.8 is fine
 
 services:
   minio:
     image: minio/minio:latest
     container_name: minio-reservation
-    ports:
-      - 9000:9000
-      - 9001:9001
+    # ✅ SET credentials for the MinIO server
     environment:
-      - MINIO_ROOT_USER=${CLIENT_ID}
-      - MINIO_ROOT_PASSWORD=${CLIENT_SECRET}
+      MINIO_ROOT_USER: root
+      MINIO_ROOT_PASSWORD: root1234
+    ports:
+      - "9000:9000"
+      - "9001:9001"
     volumes:
       - minio-data:/data
     command: server /data --console-address :9001
@@ -19,10 +20,21 @@ services:
     depends_on:
       - minio
     entrypoint: >
-      /bin/sh -c " 
-      /usr/bin/mc config host add --api s3v4 s3 http://minio:9000 ${CLIENT_ID} ${CLIENT_SECRET}; 
-      /usr/bin/mc mb s3/bucket-test; 
-      /usr/bin/mc policy set public s3/bucket-test; 
+      /bin/sh -c "
+      # ✅ Make the script exit on any error
+      set -e;
+      
+      # Wait for MinIO to be ready
+      # Use the more modern 'mc alias set' and provide the credentials
+      /usr/bin/mc alias set s3 http://minio:9000 root root1234;
+      
+      # Create the bucket
+      /usr/bin/mc mb s3/bucket-test;
+      
+      # Set the policy
+      /usr/bin/mc policy set public s3/bucket-test;
+      
+      echo '✅ Bucket created successfully!';
       "
 
 volumes:

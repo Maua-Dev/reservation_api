@@ -3,12 +3,12 @@ import os
 from aws_cdk import (
     aws_lambda as lambda_,
     NestedStack, Duration,
+    aws_apigateway as apigw
 )
 from constructs import Construct
 from aws_cdk.aws_apigateway import Resource, LambdaIntegration
-from aws_cdk.aws_events import Rule, Schedule, EventField
-from aws_cdk.aws_events_targets import LambdaFunction, RuleTargetInput
-
+from aws_cdk.aws_events import Rule, Schedule, EventField, RuleTargetInput
+from aws_cdk.aws_events_targets import LambdaFunction 
 
 class LambdaStack(Construct):
     functions_that_need_dynamo_permissions = []
@@ -78,6 +78,24 @@ class LambdaStack(Construct):
                                                  code=lambda_.Code.from_asset("./copied_shared"),
                                                  compatible_runtimes=[lambda_.Runtime.PYTHON_3_9]
                                                  )
+        
+        authorizer_lambda = lambda_.Function(
+            self, "AuthorizerUserMssReservationApiLambda",
+            code=lambda_.Code.from_asset("../src/shared/authorizer"),
+            handler="user_mss_authorizer.lambda_handler",
+            runtime=lambda_.Runtime.PYTHON_3_9,
+            layers=[self.lambda_layer, self.lambda_power_tools],
+            environment=environment_variables,
+            timeout=Duration.seconds(15)
+        )
+
+        token_authorizer_lambda = apigw.TokenAuthorizer(
+            self, "TokenAuthorizerReservationApi",
+            handler=authorizer_lambda,
+            identity_source=apigw.IdentitySource.header("Authorization"),
+            authorizer_name="AuthorizerUserMssReservationMssAlertLambda",
+            results_cache_ttl=Duration.seconds(0)
+        )
 
         self.create_booking = self.create_lambda_api_gateway_integration(
             module_name="create_booking",
@@ -118,7 +136,8 @@ class LambdaStack(Construct):
             module_name="create_court",
             method="POST",
             api_resource=api_gateway_resource,
-            environment_variables=environment_variables
+            environment_variables=environment_variables,
+            authorizer=token_authorizer_lambda
         )
 
         self.get_court = self.create_lambda_api_gateway_integration(
@@ -132,14 +151,16 @@ class LambdaStack(Construct):
             module_name="update_court",
             method="PUT",
             api_resource=api_gateway_resource,
-            environment_variables=environment_variables
+            environment_variables=environment_variables,
+            authorizer=token_authorizer_lambda
         )
 
         self.delete_court = self.create_lambda_api_gateway_integration(
             module_name="delete_court",
             method="DELETE",
             api_resource=api_gateway_resource,
-            environment_variables=environment_variables
+            environment_variables=environment_variables,
+            authorizer=token_authorizer_lambda
         )
 
         self.get_all_courts = self.create_lambda_api_gateway_integration(

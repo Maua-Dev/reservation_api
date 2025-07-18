@@ -2,18 +2,17 @@ import pytest
 
 from src.modules.generate_report.app.generate_report_aggregator import GenerateReportAggregator
 from src.modules.generate_report.app.generate_report_extractor import GenerateReportExtractor
-from src.modules.generate_report.app.generate_report_sender import lambda_handler
+from src.modules.generate_report.app.generate_report_presenter import lambda_handler
 from src.modules.generate_report.app.generate_report_transformer import GenerateReportTransformer
 from src.shared.infra.repositories.booking_repository_dynamo import BookingRepositoryDynamo
 
 
-class TestGenerateReportSender:
-
-    @pytest.mark.skip("Can't run test in gh actions")
+class TestGenerateReportPresenter:
 
     #WONT WORK WITH CURRENT MOCK, ALL DATES ARE OUTDATED AND DO NOT MATCH WITH CURRENT YEAR
 
-    def test_generate_report_sender(self):
+    @pytest.mark.skip("Can't run test in github actions")
+    def test_generate_report_presenter(self):
 
         event_from_event_bridge = {
             "version": "0",
