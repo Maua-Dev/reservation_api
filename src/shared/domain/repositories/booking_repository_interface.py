@@ -64,9 +64,9 @@ class IBookingRepository(ABC):
         pass
 
     # TODO: método para enviar e-mail para o usuário
-    @abstractmethod
-    def send_user_email(self, user):
-        '''
-        Send user an e-mail
-        '''
-        pass
+    # @abstractmethod
+    # def send_user_email(self, user):
+    #     '''
+    #     Send user an e-mail
+    #     '''
+    #     pass
