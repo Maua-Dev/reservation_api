@@ -15,7 +15,7 @@ class CreateCourtController:
 
 
     def __call__(self, request: IRequest):
-        try:
+        try:            
             if  request.data.get('number') is None:
                 raise MissingParameters('number')
             
@@ -39,11 +39,14 @@ class CreateCourtController:
             if request.data.get('photo') is not None and type(request.data.get('photo')) is not str:
                 raise WrongTypeParameter(fieldName= 'photo', fieldTypeExpected= str, fieldTypeReceived= type(request.data.get('photo')))
             
+            user = request.data.get("user_from_authorizer")
+            
             court = self.usecase(
                 number= request.data.get('number'),
                 status= status,
                 is_field= request.data.get('is_field'),
-                photo= request.data.get('photo')
+                photo= request.data.get('photo'),
+                role=user.get("role")
             )
 
             viewmodel = CreateCourtViewmodel(court= court)
