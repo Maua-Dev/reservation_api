@@ -1,7 +1,7 @@
 import pytest
 from src.modules.create_court.app.create_court_usecase import CreateCourtUsecase
 from src.shared.infra.repositories.reservation_repository_mock import ReservationRepositoryMock
-from src.shared.helpers.errors.usecase_errors import DuplicatedItem
+from src.shared.helpers.errors.usecase_errors import DuplicatedItem, ForbiddenAction
 from src.shared.domain.enums.status_enum import STATUS
 
 class TestCreateCourtUsecase:
@@ -45,6 +45,20 @@ class TestCreateCourtUsecase:
         assert court.photo is None
         assert repo.courts[-1] == court
         assert court.number == 7
+        
+    def test_create_court_usecase_not_admin(self):
+        
+        repo = ReservationRepositoryMock()
+        Usecase = CreateCourtUsecase(repo=repo)
+        
+        with pytest.raises(ForbiddenAction):
+            court = Usecase(
+                number= 7, 
+                status= STATUS.UNAVAILABLE, 
+                is_field = False, 
+                photo = None,
+                role="STUDENT"
+            )
         
         
         

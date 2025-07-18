@@ -2,7 +2,7 @@ from .create_court_usecase import CreateCourtUsecase
 from .create_court_viewmodel import CreateCourtViewmodel
 from src.shared.helpers.errors.controller_errors import MissingParameters, WrongTypeParameter
 from src.shared.helpers.errors.domain_errors import EntityError
-from src.shared.helpers.errors.usecase_errors import DuplicatedItem
+from src.shared.helpers.errors.usecase_errors import DuplicatedItem, ForbiddenAction
 from src.shared.helpers.external_interfaces.external_interface import IRequest, IResponse
 from src.shared.helpers.external_interfaces.http_codes import BadRequest, Created, InternalServerError
 from src.shared.domain.enums.status_enum import STATUS
@@ -63,6 +63,9 @@ class CreateCourtController:
             return BadRequest(body=err.message)
         
         except EntityError as err:
+            return BadRequest(body=err.message)
+        
+        except ForbiddenAction as err:
             return BadRequest(body=err.message)
         
         except Exception as err:

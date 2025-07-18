@@ -14,7 +14,10 @@ class TestUpdateCourtController:
         request = HttpRequest(body={
             "number": court_number,
             "status": "MAINTENANCE",
-            "photo": "https://www.linkedin.com/in/leonardo-iorio-b83360279/"
+            "photo": "https://www.linkedin.com/in/leonardo-iorio-b83360279/",
+            "user_from_authorizer": {
+                "role": "ADMIN"
+            }
         })
 
         response = controller(request)
@@ -34,6 +37,9 @@ class TestUpdateCourtController:
         request = HttpRequest(body={
             "number": court_number,
             "status": "MAINTENANCE",
+            "user_from_authorizer": {
+                "role": "ADMIN"
+            }
         })
 
         response = controller(request)
@@ -52,7 +58,10 @@ class TestUpdateCourtController:
 
         request = HttpRequest(body={
             "number": court_number,
-            "photo": "photostr"
+            "photo": "photostr",
+            "user_from_authorizer": {
+                "role": "ADMIN"
+            }
         })
 
         response = controller(request)
@@ -71,7 +80,10 @@ class TestUpdateCourtController:
         request = HttpRequest(body={
             "status": "AVAILABLE",
             "is_field": False,
-            "photo": "https://www.linkedin.com/in/vinicius-berti-a80354209/"
+            "photo": "https://www.linkedin.com/in/vinicius-berti-a80354209/",
+            "user_from_authorizer": {
+                "role": "ADMIN"
+            }
         })
 
         response = controller(request)
@@ -87,7 +99,10 @@ class TestUpdateCourtController:
             "number": "cavalo",
             "status": "AVAILABLE",
             "is_field": False,
-            "photo": "https://www.linkedin.com/in/vinicius-berti-a80354209/"
+            "photo": "https://www.linkedin.com/in/vinicius-berti-a80354209/",
+            "user_from_authorizer": {
+                "role": "ADMIN"
+            }
         })
 
         reponse = controller(request)
@@ -104,7 +119,10 @@ class TestUpdateCourtController:
             "number": 7,
             "status": 123,
             "is_field": False,
-            "photo": "https://www.linkedin.com/in/vinicius-berti-a80354209/"
+            "photo": "https://www.linkedin.com/in/vinicius-berti-a80354209/",
+            "user_from_authorizer": {
+                "role": "ADMIN"
+            }
         })
 
         response = controller(request)
@@ -120,7 +138,10 @@ class TestUpdateCourtController:
             "number": 7,
             "status": "INVALID",
             "is_field": False,
-            "photo": "https://www.linkedin.com/in/vinicius-berti-a80354209/"
+            "photo": "https://www.linkedin.com/in/vinicius-berti-a80354209/",
+            "user_from_authorizer": {
+                "role": "ADMIN"
+            }
         })
 
         response = controller(request)
@@ -136,7 +157,10 @@ class TestUpdateCourtController:
             "number": 7,
             "status": "AVAILABLE",
             "is_field": False,
-            "photo": 1337
+            "photo": 1337,
+            "user_from_authorizer": {
+                "role": "ADMIN"
+            }
         })
 
         response = controller(request)
@@ -152,7 +176,10 @@ class TestUpdateCourtController:
             "number": 9,
             "status": "AVAILABLE",
             "is_field": False,
-            "photo": "1234"
+            "photo": "1234",
+            "user_from_authorizer": {
+                "role": "ADMIN"
+            }
         })
 
         response = controller(request)
@@ -168,7 +195,10 @@ class TestUpdateCourtController:
             "number": -999,
             "status": "AVAILABLE",
             "is_field": False,
-            "photo": "1234"
+            "photo": "1234",
+            "user_from_authorizer": {
+                "role": "ADMIN"
+            }
         })
 
         response = controller(request)

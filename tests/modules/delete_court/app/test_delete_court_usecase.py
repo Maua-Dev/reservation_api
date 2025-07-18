@@ -41,5 +41,15 @@ class Test_DeleteCourtUsecase:
     
         with pytest.raises(EntityError):
             usecase(number=None, role="ADMIN")
+            
+    def test_delete_court_usecase_not_admin(self):
+        repo = ReservationRepositoryMock()
+        usecase = DeleteCourtUsecase(repo=repo)
+        
+        with pytest.raises(ForbiddenAction):
+            usecase(number=1, role="STUDENT")
+            
+        assert repo.get_court(1) != None
+            
 
     
