@@ -12,6 +12,9 @@ class DeleteBookingUsecase:
     def __call__(self, booking_id: int, user):    
         if user.get('user_id') is None:
             raise EntityError('user id')
+        
+        if user.get('name') is None:
+            raise EntityError('user id')
 
         if user.get('email') is None:
             raise EntityError('user email')

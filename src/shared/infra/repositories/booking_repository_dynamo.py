@@ -1,5 +1,7 @@
+import os
 from typing import Optional, List
 
+import boto3
 from boto3.dynamodb.conditions import Key
 
 from src.shared.domain.entities.booking import Booking
@@ -7,6 +9,7 @@ from src.shared.domain.enums.sport import SPORT
 from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
 from src.shared.environments import Environments
 from src.shared.helpers.errors.usecase_errors import ForbiddenAction
+from src.shared.helpers.functions.compose_delete_booking_email import compose_deleted_user_email
 from src.shared.infra.dto.booking_dynamo_dto import BookingDynamoDTO
 from src.shared.infra.external.dynamo.datasources.dynamo_datasource import DynamoDatasource
 
@@ -102,6 +105,9 @@ class BookingRepositoryDynamo(IBookingRepository):
                 partition_key=self.booking_partition_key_format(),
                 sort_key=self.booking_sort_key_format(booking_id)
             )
+
+            self.send_user_email(user)
+
             return BookingDynamoDTO.from_dynamo(deleted['Attributes']).to_entity()
 
         if user_role == 'STUDENT':
@@ -136,4 +142,45 @@ class BookingRepositoryDynamo(IBookingRepository):
     
     def get_all_users(self):
         return super().get_all_users()
+    
+
+    def send_user_email(self, user) -> bool:
+        try:
+
+            client_ses = boto3.client('ses', region_name=os.environ.get('AWS_REGION'))
+            email_to_send = compose_deleted_user_email(user)
+
+            response = client_ses.send_email(
+                Destination={
+                    'ToAddresses': [
+                        user.get('email'),
+                    ],
+                    'BccAddresses':
+                        [
+                            os.environ.get("HIDDEN_COPY")
+                        ]
+                },
+                Message={
+                    'Body': {
+                        'Html': {
+                            'Charset': "UTF-8",
+                            'Data': email_to_send,
+                        },
+                    },
+                    'Subject': {
+                        'Charset': "UTF-8",
+                        'Data': 'Mauá Reservation - Reserva Cancelada',
+                    },
+                },
+                Source=os.environ.get("FROM_EMAIL"),
+            )
+
+            print("ESSA É A MAGIA DO PRINT, AQUI ESTÁ A SUA RESPONSE -----> ", response)
+
+            return True
+        except Exception as err:
+            print(err)
+            return False
+
+
 

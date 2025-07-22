@@ -166,4 +166,8 @@ class BookingRepositoryMock(IBookingRepository):
     def get_all_users(self) -> List[str]:
         users_id = list(set([booking.user_id for booking in self.bookings]))
         return users_id
+    
+    def send_user_email(self, user) -> bool:
+        print('ENVIAR E-MAIL PARA O USUÁRIO')
 
+        return True

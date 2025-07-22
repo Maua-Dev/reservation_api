@@ -1,5 +1,6 @@
 def compose_deleted_user_email(user):
-    name = user.name.split(" ")[0]
+    name = user.get('name')
+    email = user.get('email')
 
     message = f"""
         <!DOCTYPE html>
