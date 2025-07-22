@@ -8,7 +8,13 @@ class Test_DeleteBookingViewModel:
     def test_delete_booking_viewmodel(self):
         repo = BookingRepositoryMock()
         usecase = DeleteBookingUsecase(repo=repo)
-        booking = usecase(booking_id=repo.bookings[0].booking_id)
+        user = {
+            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+            'name': 'Nome',
+            'email': 'user@email.com',
+            'role': 'STUDENT'
+        }
+        booking = usecase(booking_id=repo.bookings[0].booking_id, user=user)
         viewmodel = DeleteBookingViewModel(booking=booking).to_dict()
 
         expected = {

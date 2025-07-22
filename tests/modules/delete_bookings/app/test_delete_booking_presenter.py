@@ -25,6 +25,12 @@ class TestDeleteBookingPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    'user': {
+                        'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                        'name': 'Nome',
+                        'email': 'user@email.com',
+                        'role': 'STUDENT'
+                    }
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -41,13 +47,16 @@ class TestDeleteBookingPresenter:
                 "time": "12/Mar/2020:19:03:58 +0000",
                 "timeEpoch": 1583348638390
             },
-            "body": '{"booking_id": "b1d3bebf-dc0d-4fc1-861c-506a40cc2925"}',
+            "body": {
+                "booking_id": "b1d3bebf-dc0d-4fc1-861c-506a40cc2925"
+            },
             "pathParameters": None,
             "isBase64Encoded": None,
             "stageVariables": None
         }
          
         response = lambda_handler(event, None)
+
         print(response)
         assert response['statusCode'] == 200
         assert json.loads(response['body'])['message'] == 'the booking was deleted'
@@ -74,6 +83,12 @@ class TestDeleteBookingPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    'user': {
+                        'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                        'name': 'Nome',
+                        'email': 'user@email.com',
+                        'role': 'STUDENT'
+                    }
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -123,6 +138,12 @@ class TestDeleteBookingPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    'user': {
+                        'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                        'name': 'Nome',
+                        'email': 'user@email.com',
+                        'role': 'STUDENT'
+                    }
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -172,6 +193,12 @@ class TestDeleteBookingPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    'user': {
+                        'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                        'name': 'Nome',
+                        'email': 'user@email.com',
+                        'role': 'STUDENT'
+                    }
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",

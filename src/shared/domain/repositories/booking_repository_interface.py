@@ -40,8 +40,9 @@ class IBookingRepository(ABC):
         '''
         pass
 
+    # TODO: arrumar a lógica para receber as infos do usuário enviar e-mail
     @abstractmethod
-    def delete_booking(self, booking_id: int) -> Optional[Booking]:
+    def delete_booking(self, booking_id: int, user) -> Optional[Booking]:
         '''
         If booking exists, deletes it and returns it
         else returns None
@@ -59,5 +60,13 @@ class IBookingRepository(ABC):
     def get_all_users(self) -> List[str]:
         '''
         Returns name users by user id
+        '''
+        pass
+
+    # TODO: método para enviar e-mail para o usuário
+    @abstractmethod 
+    def send_user_email(self, user) -> bool:
+        '''
+        Send user an e-mail
         '''
         pass

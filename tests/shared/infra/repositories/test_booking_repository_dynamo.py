@@ -12,8 +12,14 @@ class TestBookingRepositoryDynamo:
         mock_repo = BookingRepositoryMock()
         dynamo_bookings = dynamo_repo.get_all_bookings()
         mock_bookings = mock_repo.get_all_bookings()
+        
+        print(  dynamo_bookings[0].start_date )
+
         assert len(dynamo_bookings) == len(mock_bookings)
         for d_booking, m_booking in zip(dynamo_bookings, mock_bookings):
+
+            
+
             assert d_booking.start_date == m_booking.start_date
             assert d_booking.end_date == m_booking.end_date
             assert d_booking.court_number == m_booking.court_number
@@ -25,8 +31,13 @@ class TestBookingRepositoryDynamo:
     def test_dynamo_delete_booking(self):
         dynamo_repo = BookingRepositoryDynamo()
         mock_repo = BookingRepositoryMock()
-        booking = mock_repo.get_booking('b5d3bebf-dc0d-4fc1-861c-506a40cc2925')
-        deleted_booking = dynamo_repo.delete_booking(booking.booking_id)
+        user = {
+            'user_id': 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+            'email': 'user@email.com',
+            'role': 'STUDENT'
+        }
+        booking = mock_repo.get_booking('b7d3bebf-dc0d-4fc1-861c-506a40cc2925')
+        deleted_booking = dynamo_repo.delete_booking(booking.booking_id, user)
         retrieved_booking = dynamo_repo.get_booking(booking.booking_id)
         assert retrieved_booking is None
         assert deleted_booking.booking_id == booking.booking_id
@@ -34,7 +45,12 @@ class TestBookingRepositoryDynamo:
     @pytest.mark.skip("Can't run test in github actions")
     def test_dynamo_delete_booking_not_found(self):
         dynamo_repo = BookingRepositoryDynamo()
-        deleted_booking = dynamo_repo.delete_booking('bau3bebf-dc0d-4fc1-861c-506a40cc2997')
+        user = {
+            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+            'email': 'user@email.com',
+            'role': 'STUDENT'
+        }
+        deleted_booking = dynamo_repo.delete_booking('b1d3bebf-dc0d-4fc1-861c-506a40cc2925', user)
         assert deleted_booking is None
 
     @pytest.mark.skip("Can't run test in github actions")

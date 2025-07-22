@@ -9,12 +9,23 @@ class DeleteBookingUsecase:
     def __init__(self, repo:IReservationRepository):
         self.repo = repo
     
-    def __call__(self, booking_id: int):    
+    def __call__(self, booking_id: int, user):    
+        if user.get('user_id') is None:
+            raise EntityError('user id')
         
+        if user.get('name') is None:
+            raise EntityError('user id')
+
+        if user.get('email') is None:
+            raise EntityError('user email')
+        
+        if user.get('role') is None: 
+            raise EntityError('user role')
+
         if not Booking.validate_booking_id(booking_id):
             raise EntityError('booking_id')
         
-        booking = self.repo.delete_booking(booking_id=booking_id)
+        booking = self.repo.delete_booking(booking_id=booking_id, user=user)
         
         if booking is None:
             raise NoItemsFound('booking')

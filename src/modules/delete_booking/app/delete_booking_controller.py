@@ -15,10 +15,17 @@ class DeleteBookingController:
         self.usecase = usecase
         
     def __call__(self, request: IRequest) -> IResponse:
+
         try:
+
+            if request.data.get('user_from_authorizer') is None:
+                raise MissingParameters('user authorizer')
+            
+            user = request.data.get('user_from_authorizer')
+
             if request.data.get('booking_id') is None:
                 raise MissingParameters('booking_id')
-            booking = self.usecase(booking_id=request.data.get('booking_id'))
+            booking = self.usecase(booking_id=request.data.get('booking_id'),  user=user)
             viewmodel = DeleteBookingViewModel(booking)
             
             return OK(viewmodel.to_dict())
