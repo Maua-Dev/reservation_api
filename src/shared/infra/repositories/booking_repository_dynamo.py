@@ -6,6 +6,7 @@ from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
 from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
 from src.shared.environments import Environments
+from src.shared.helpers.errors.usecase_errors import ForbiddenAction
 from src.shared.infra.dto.booking_dynamo_dto import BookingDynamoDTO
 from src.shared.infra.external.dynamo.datasources.dynamo_datasource import DynamoDatasource
 
@@ -84,14 +85,30 @@ class BookingRepositoryDynamo(IBookingRepository):
 
         return BookingDynamoDTO.from_dynamo(dynamo_object['Item']).to_entity()
 
-    def delete_booking(self, booking_id: str) -> Optional[Booking]:
+    def delete_booking(self, booking_id: str, user) -> Optional[Booking]:
 
-        delete_booking = self.dynamo.delete_item(partition_key=self.booking_partition_key_format(),
-                                                 sort_key=self.booking_sort_key_format(booking_id))
-        if "Attributes" not in delete_booking:
+        booking = self.get_booking(booking_id)
+        user_role = user.get('role')
+        user_id = user.get('user_id')
+
+        if not booking:
             return None
 
-        return BookingDynamoDTO.from_dynamo(delete_booking['Attributes']).to_entity()
+        is_admin = user_role == 'ADMIN'
+        is_owner = user_role == 'STUDENT' and booking.user_id == user_id
+
+        if is_admin or is_owner:
+            deleted = self.dynamo.delete_item(
+                partition_key=self.booking_partition_key_format(),
+                sort_key=self.booking_sort_key_format(booking_id)
+            )
+            return BookingDynamoDTO.from_dynamo(deleted['Attributes']).to_entity()
+
+        if user_role == 'STUDENT':
+            raise ForbiddenAction('user id')
+
+        return None
+ 
 
     def get_all_bookings(self) -> Optional[List[Booking]]:
 
@@ -101,6 +118,8 @@ class BookingRepositoryDynamo(IBookingRepository):
         for item in all_items:
             if item.get('entity') == 'booking':
                 all_bookings.append(BookingDynamoDTO.from_dynamo(item).to_entity())
+
+        return all_bookings
 
     def get_all_bookings_by_date_range(self, initial_date: int, final_date: int) -> Optional[List[Booking]]:
 
