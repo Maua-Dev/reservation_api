@@ -27,8 +27,9 @@ class TestDeleteBookingPresenter:
                 "authorizer": {
                     'user': {
                         'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                        'name': 'Nome',
                         'email': 'user@email.com',
-                        'role': 'ADMIN'
+                        'role': 'STUDENT'
                     }
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
@@ -84,8 +85,9 @@ class TestDeleteBookingPresenter:
                 "authorizer": {
                     'user': {
                         'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                        'name': 'Nome',
                         'email': 'user@email.com',
-                        'role': 'ADMIN'
+                        'role': 'STUDENT'
                     }
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
@@ -138,8 +140,9 @@ class TestDeleteBookingPresenter:
                 "authorizer": {
                     'user': {
                         'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                        'name': 'Nome',
                         'email': 'user@email.com',
-                        'role': 'ADMIN'
+                        'role': 'STUDENT'
                     }
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
@@ -192,8 +195,9 @@ class TestDeleteBookingPresenter:
                 "authorizer": {
                     'user': {
                         'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                        'name': 'Nome',
                         'email': 'user@email.com',
-                        'role': 'ADMIN'
+                        'role': 'STUDENT'
                     }
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",

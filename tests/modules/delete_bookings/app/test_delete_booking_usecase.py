@@ -16,6 +16,7 @@ class Test_DeleteBookingUsecase:
         len_before = len(repo.bookings)
         user = {
             'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+            'name': 'Nome',
             'email': 'user@email.com',
             'role': 'STUDENT'
         }
@@ -28,9 +29,10 @@ class Test_DeleteBookingUsecase:
         usecase = DeleteBookingUsecase(repo=repo)
         len_before = len(repo.bookings)
         user = {
-            'user_id': 'd351a9b1-937f-423c-a9d1-9929b5795be1',
+            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+            'name': 'Nome',
             'email': 'user@email.com',
-            'role': 'ADMIN'
+            'role': 'STUDENT'
         }
         
         booking = usecase(booking_id='b1d3bebf-dc0d-4fc1-861c-506a40cc2925', user=user)
@@ -40,21 +42,23 @@ class Test_DeleteBookingUsecase:
         repo = BookingRepositoryMock()
         usecase = DeleteBookingUsecase(repo=repo)
         user = {
-            'user_id': 'd351a9b1-937f-423c-a9d1-9929b5795be1',
+            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+            'name': 'Nome',
             'email': 'user@email.com',
             'role': 'STUDENT'
         }
         
         with pytest.raises(ForbiddenAction):
-            usecase(booking_id='b1d3bebf-dc0d-4fc1-861c-506a40cc2925', user=user)
+            usecase(booking_id='b2d3bebf-dc0d-4fc1-861c-506a40cc2925', user=user)
 
     def test_delete_booking_usecase_no_items_found(self):
         repo = BookingRepositoryMock()
         usecase = DeleteBookingUsecase(repo=repo)
         user = {
-            'user_id': 'd351a9b1-937f-423c-a9d1-9929b5795be1',
+            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+            'name': 'Nome',
             'email': 'user@email.com',
-            'role': 'ADMIN'
+            'role': 'STUDENT'
         }
         with pytest.raises(NoItemsFound):
             booking = usecase(booking_id='b1d3bebf-dc0d-4fc1-861c-506a40cc2926', user = user)
@@ -63,9 +67,10 @@ class Test_DeleteBookingUsecase:
         repo = BookingRepositoryMock()
         usecase = DeleteBookingUsecase(repo=repo)
         user = {
-            'user_id': 'd351a9b1-937f-423c-a9d1-9929b5795be1',
+            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+            'name': 'Nome',
             'email': 'user@email.com',
-            'role': 'ADMIN'
+            'role': 'STUDENT'
         }
     
         with pytest.raises(EntityError):

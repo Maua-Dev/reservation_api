@@ -10,6 +10,7 @@ class Test_DeleteBookingViewModel:
         usecase = DeleteBookingUsecase(repo=repo)
         user = {
             'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+            'name': 'Nome',
             'email': 'user@email.com',
             'role': 'STUDENT'
         }

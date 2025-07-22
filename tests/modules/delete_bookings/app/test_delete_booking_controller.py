@@ -11,9 +11,10 @@ class TestDeleteBookingController:
         request = HttpRequest(body= {
             "booking_id": 'b1d3bebf-dc0d-4fc1-861c-506a40cc2925',
             "user_from_authorizer": {
-                'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
-                'email': 'user@email.com',
-                'role': 'STUDENT'
+                    'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                    'name': 'Nome',
+                    'email': 'user@email.com',
+                    'role': 'STUDENT'
             }
         })
 
@@ -45,9 +46,10 @@ class TestDeleteBookingController:
         request = HttpRequest(body={
             "booking_id": 0,
             "user_from_authorizer": {
-                'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
-                'email': 'user@email.com',
-                'role': 'STUDENT'
+                    'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                    'name': 'Nome',
+                    'email': 'user@email.com',
+                    'role': 'STUDENT'
             }
         })
         
@@ -62,10 +64,11 @@ class TestDeleteBookingController:
         request = HttpRequest(body={
             "booking_id": "wrong_type",
             "user_from_authorizer": {
-                'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
-                'email': 'user@email.com',
-                'role': 'STUDENT'
-            }  
+                    'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                    'name': 'Nome',
+                    'email': 'user@email.com',
+                    'role': 'STUDENT'
+            }
         })
 
         response = controller(request)
@@ -79,9 +82,10 @@ class TestDeleteBookingController:
         request = HttpRequest(body={
             "booking_id": 'b1d3bebf-dc0d-4fc1-861c-506a40cc2926',
             "user_from_authorizer": {
-                'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
-                'email': 'user@email.com',
-                'role': 'STUDENT'
+                    'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                    'name': 'Nome',
+                    'email': 'user@email.com',
+                    'role': 'STUDENT'
             }
         })
 
