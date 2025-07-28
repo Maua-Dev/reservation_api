@@ -84,7 +84,7 @@ class LambdaStack(Construct):
             code=lambda_.Code.from_asset("../src/shared/authorizer"),
             handler="user_mss_authorizer.lambda_handler",
             runtime=lambda_.Runtime.PYTHON_3_9,
-            layers=[self.lambda_layer, self.lambda_power_tools],
+            layers=[self.lambda_layer],
             environment=environment_variables,
             timeout=Duration.seconds(15)
         )
