@@ -88,3 +88,4 @@ jobs:
           HIDDEN_COPY: ${{ vars.HIDDEN_COPY }}
           REPLY_TO_EMAIL: ${{ vars.REPLY_TO_EMAIL }}
           GRAPH_MICROSOFT_ENDPOINT: ${{ secrets.GRAPH_MICROSOFT_ENDPOINT }}
+          USER_API_URL: ${{ secrets.USER_API_URL }}
