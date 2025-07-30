@@ -8,6 +8,9 @@ usecase = CreateCourtUsecase(repo)
 controller = CreateCourtController(usecase)
 
 def lambda_handler(event, context):
+    
+    print(event)
+    
     httpRequest = LambdaHttpRequest(data=event)
     httpRequest.data['user_from_authorizer'] = event.get('requestContext', {}).get('authorizer', {}).get('user', None)
     response = controller(request=httpRequest)
