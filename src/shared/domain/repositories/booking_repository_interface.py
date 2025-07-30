@@ -40,6 +40,19 @@ class IBookingRepository(ABC):
         '''
         pass
 
+    @abstractmethod
+    def get_bookings(self,
+                     booking_id: Optional[str] = None,
+                     user_id: Optional[str] = None,
+                     sport: Optional[SPORT] = None,
+                     court_number: Optional[int] = None,
+                     end_date: Optional[int] = None,
+                     start_date: Optional[int] = None) -> List[Optional[Booking]]:
+        '''
+        If the booking exists, returns it, else returns None
+        '''
+        pass
+
     # TODO: arrumar a lógica para receber as infos do usuário enviar e-mail
     @abstractmethod
     def delete_booking(self, booking_id: int, user) -> Optional[Booking]:

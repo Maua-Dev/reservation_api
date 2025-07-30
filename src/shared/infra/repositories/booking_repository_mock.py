@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
 from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
@@ -127,6 +127,38 @@ class BookingRepositoryMock(IBookingRepository):
             if booking.booking_id == booking_id:
                 return booking
         return None
+    
+    def get_bookings(self,
+                     booking_id: Optional[str] = None,
+                     user_id: Optional[str] = None,
+                     sport: Optional[str] = None,
+                     court_number: Optional[int] = None,
+                     end_date: Optional[int] = None,
+                     start_date: Optional[int] = None) -> List[Optional[Booking]]:
+
+        filters = locals().copy()
+        filters.pop('self')
+        filters.pop('end_date')
+        filters.pop('start_date')
+
+        filters = {k: v for k, v in filters.items() if v is not None}
+
+        bookings = []
+
+        for booking in self.bookings:
+            booking_dict = booking.__dict__
+            if start_date and end_date:
+                if all(
+                    booking_dict.get(key) == value for key, value in filters.items()
+                ) and booking.start_date >= start_date and booking.end_date <= end_date:
+                    bookings.append(booking)
+            else:
+                if all(
+                    booking_dict.get(key) == value for key, value in filters.items()
+                ):
+                    bookings.append(booking)
+
+        return bookings
 
     def delete_booking(self, booking_id: str, user):
         booking = self.get_booking(booking_id)
