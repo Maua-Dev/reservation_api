@@ -31,7 +31,7 @@ class TestCreateBookingPresenter:
                     "user": {
                         "displayName": 'Lebron James',
                         "mail": 'lbj@maua.br',
-                        "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+                        "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
                     }
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",

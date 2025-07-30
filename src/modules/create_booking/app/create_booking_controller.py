@@ -29,7 +29,7 @@ class CreateBookingController:
         end_date = request.data.get('end_date', None)
         court_number = request.data.get('court_number', None)
         sport = request.data.get('sport', None)
-        user_id = user_from_authorizer.get('id', None)
+        user_id = user_from_authorizer.get('user_id', None)
         materials = request.data.get('materials', None)
 
         try:

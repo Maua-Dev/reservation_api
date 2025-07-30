@@ -23,7 +23,7 @@ class TestCreateBookingController:
                 "user_from_authorizer": {
                     "displayName": 'Lebron James',
                     "mail": 'lbj@maua.br',
-                    "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+                    "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
                 }
             }
         )
@@ -48,7 +48,7 @@ class TestCreateBookingController:
                 "user_from_authorizer": {
                     "displayName": 'Lebron James',
                     "mail": 'lbj@maua.br',
-                    "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+                    "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
                 }
             })
 
@@ -72,7 +72,7 @@ class TestCreateBookingController:
             "user_from_authorizer": {
                 "displayName": 'Lebron James',
                 "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+                "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
             }
         })
 
@@ -95,7 +95,7 @@ class TestCreateBookingController:
             "user_from_authorizer": {
                 "displayName": 'Lebron James',
                 "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+                "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
             }
         })
 
@@ -119,7 +119,7 @@ class TestCreateBookingController:
             "user_from_authorizer": {
                 "displayName": 'Lebron James',
                 "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+                "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
             }
         })
 
@@ -143,7 +143,7 @@ class TestCreateBookingController:
             "user_from_authorizer": {
                 "displayName": 'Lebron James',
                 "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+                "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
             }
         })
 
@@ -166,7 +166,7 @@ class TestCreateBookingController:
             "user_from_authorizer": {
                 "displayName": 'Lebron James',
                 "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+                "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
             }
         })
 
@@ -189,7 +189,7 @@ class TestCreateBookingController:
             "user_from_authorizer": {
                 "displayName": 'Lebron James',
                 "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+                "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
             }
         })
 
@@ -213,7 +213,7 @@ class TestCreateBookingController:
             "user_from_authorizer": {
                 "displayName": 'Lebron James',
                 "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+                "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
             }
         })
 
@@ -236,7 +236,7 @@ class TestCreateBookingController:
             "user_from_authorizer": {
                 "displayName": 'Lebron James',
                 "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+                "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
             }
         })
 
@@ -260,7 +260,7 @@ class TestCreateBookingController:
             "user_from_authorizer": {
                 "displayName": 'Lebron James',
                 "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+                "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
             }
         })
 
@@ -284,7 +284,7 @@ class TestCreateBookingController:
             "user_from_authorizer": {
                 "displayName": 'Lebron James',
                 "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+                "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
             }
         })
 
