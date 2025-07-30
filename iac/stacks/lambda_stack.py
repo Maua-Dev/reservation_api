@@ -97,13 +97,16 @@ class LambdaStack(Construct):
             results_cache_ttl=Duration.seconds(0)
         )
 
+        #ready for auth
         self.create_booking = self.create_lambda_api_gateway_integration(
             module_name="create_booking",
             method="POST",
             api_resource=api_gateway_resource,
-            environment_variables=environment_variables
+            environment_variables=environment_variables,
+            authorizer=token_authorizer_lambda
         )
 
+        #not ready for auth
         self.update_booking = self.create_lambda_api_gateway_integration(
             module_name="update_booking",
             method="PUT",
@@ -111,6 +114,7 @@ class LambdaStack(Construct):
             environment_variables=environment_variables
         )
 
+        #not ready for auth AND not used?
         self.get_booking = self.create_lambda_api_gateway_integration(
             module_name="get_booking",
             method="POST",
@@ -118,6 +122,7 @@ class LambdaStack(Construct):
             environment_variables=environment_variables
         )
 
+        #not ready for auth?? TODO Gasperi
         self.delete_booking = self.create_lambda_api_gateway_integration(
             module_name="delete_booking",
             method="DELETE",
@@ -125,6 +130,7 @@ class LambdaStack(Construct):
             environment_variables=environment_variables
         )
 
+        #not ready and unused
         self.get_all_bookings = self.create_lambda_api_gateway_integration(
             module_name="get_all_bookings",
             method="GET",
@@ -132,6 +138,7 @@ class LambdaStack(Construct):
             environment_variables=environment_variables
         )
 
+        #ready for auth
         self.create_court = self.create_lambda_api_gateway_integration(
             module_name="create_court",
             method="POST",
@@ -140,6 +147,7 @@ class LambdaStack(Construct):
             authorizer=token_authorizer_lambda
         )
 
+        #not ready TODO
         self.get_court = self.create_lambda_api_gateway_integration(
             module_name="get_court",
             method="POST",
@@ -147,6 +155,7 @@ class LambdaStack(Construct):
             environment_variables=environment_variables
         )
 
+        #ready
         self.update_court = self.create_lambda_api_gateway_integration(
             module_name="update_court",
             method="PUT",
@@ -155,6 +164,7 @@ class LambdaStack(Construct):
             authorizer=token_authorizer_lambda
         )
 
+        #ready
         self.delete_court = self.create_lambda_api_gateway_integration(
             module_name="delete_court",
             method="DELETE",
@@ -163,6 +173,7 @@ class LambdaStack(Construct):
             authorizer=token_authorizer_lambda
         )
 
+        #not ready? needed?
         self.get_all_courts = self.create_lambda_api_gateway_integration(
             module_name="get_all_courts",
             method="GET",
@@ -170,6 +181,7 @@ class LambdaStack(Construct):
             environment_variables=environment_variables
         )
 
+        #yes
         self.health_check = self.create_lambda_api_gateway_integration(
             module_name="health_check",
             method="GET",
@@ -177,6 +189,7 @@ class LambdaStack(Construct):
             environment_variables=environment_variables
         )
 
+        #does not need auth / not a route
         self.generate_report = self.create_lambda_event_bridge_integration(
             module_name="generate_report",
             cron_schedule=Schedule.cron(week_day="FRI", hour="18"),
