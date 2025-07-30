@@ -2,6 +2,7 @@ from .create_court_controller import CreateCourtController
 from .create_court_usecase import CreateCourtUsecase
 from src.shared.environments import Environments
 from src.shared.helpers.external_interfaces.http_lambda_requests import LambdaHttpRequest, LambdaHttpResponse
+import json
 
 repo = Environments.get_reservation_repo()()
 usecase = CreateCourtUsecase(repo)
@@ -9,11 +10,16 @@ controller = CreateCourtController(usecase)
 
 def lambda_handler(event, context):
     
-    print(event)
-    
     httpRequest = LambdaHttpRequest(data=event)
-    httpRequest.data['user_from_authorizer'] = event.get('requestContext', {}).get('authorizer', {}).get('user', None)
+    
+    user_info_string = event.get('requestContext', {}).get('authorizer', {}).get('user')
+    
+    if user_info_string:
+        httpRequest.data['user_from_authorizer'] = json.loads(user_info_string).get('user')
+    else:
+        httpRequest.data['user_from_authorizer'] = None
+
     response = controller(request=httpRequest)
     httpResponse = LambdaHttpResponse(status_code=response.status_code, body=response.body, headers=response.headers)
-    
+
     return httpResponse.toDict()

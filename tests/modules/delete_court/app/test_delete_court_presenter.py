@@ -25,14 +25,15 @@ class TestDeleteCourtPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
-                    "user":
-                    {
-                        "id": "dummy_id",
-                        "email": "dumm_yemail",
-                        "name": "dummy_name",
-                        "ra": None,
-                        "role": "ADMIN",
-                    }
+                    "user": json.dumps({
+                        "user": {
+                            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                            'name': 'Nome',
+                            'email': 'user@email.com',
+                            'role': 'ADMIN'
+                        },
+                        "message": "the user was retrieved"
+                    })
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -82,14 +83,15 @@ class TestDeleteCourtPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
-                    "user":
-                    {
-                        "id": "dummy_id",
-                        "email": "dumm_yemail",
-                        "name": "dummy_name",
-                        "ra": None,
-                        "role": "ADMIN",
-                    }
+                    "user": json.dumps({
+                        "user": {
+                            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                            'name': 'Nome',
+                            'email': 'user@email.com',
+                            'role': 'ADMIN'
+                        },
+                        "message": "the user was retrieved"
+                    })
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -139,14 +141,15 @@ class TestDeleteCourtPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
-                    "user":
-                    {
-                        "id": "dummy_id",
-                        "email": "dumm_yemail",
-                        "name": "dummy_name",
-                        "ra": None,
-                        "role": "ADMIN",
-                    }
+                    "user": json.dumps({
+                        "user": {
+                            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                            'name': 'Nome',
+                            'email': 'user@email.com',
+                            'role': 'ADMIN'
+                        },
+                        "message": "the user was retrieved"
+                    })
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -196,14 +199,15 @@ class TestDeleteCourtPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
-                    "user":
-                    {
-                        "id": "dummy_id",
-                        "email": "dumm_yemail",
-                        "name": "dummy_name",
-                        "ra": None,
-                        "role": "ADMIN",
-                    }
+                    "user": json.dumps({
+                        "user": {
+                            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                            'name': 'Nome',
+                            'email': 'user@email.com',
+                            'role': 'ADMIN'
+                        },
+                        "message": "the user was retrieved"
+                    })
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
