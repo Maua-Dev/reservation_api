@@ -6,6 +6,7 @@ from aws_cdk import (
 )
 from constructs import Construct
 import os
+import uuid
 
 class BucketStack(Construct):
 
@@ -25,7 +26,8 @@ class BucketStack(Construct):
 
         self.bucket = s3.Bucket(
             self, f"BACK_S3_REPORT_BUCKET_{stage}",
-            bucket_name=f"{self.stack_name}-report-bucket{stage}".lower(),
+            # TODO remover isso quando voltar pra conta nova ou tentar deletar o bucket criado la com power user
+            bucket_name=f"{self.stack_name}-report-bucket{stage}-{uuid.uuid4()}".lower(),
             versioned=True,
             removal_policy=RemovalPolicy.DESTROY if not (stage == 'PROD') else RemovalPolicy.RETAIN,
         )
