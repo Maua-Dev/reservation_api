@@ -132,7 +132,7 @@ class LambdaStack(Construct):
 
         #not ready and unused
         self.get_all_bookings = self.create_lambda_api_gateway_integration(
-            module_name="get_all_booking",
+            module_name="get_all_bookings",
             method="GET",
             api_resource=api_gateway_resource,
             environment_variables=environment_variables
