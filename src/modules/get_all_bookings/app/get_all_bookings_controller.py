@@ -1,6 +1,6 @@
 from typing import Any
-from .get_all_booking_usecase import GetAllBookingsUsecase
-from .get_all_booking_viewmodel import GetAllBookingViewModel
+from .get_all_bookings_usecase import GetAllBookingsUsecase
+from .get_all_bookings_viewmodel import GetAllBookingViewModel
 from src.shared.helpers.errors.controller_errors import MissingParameters, WrongTypeParameter
 from src.shared.helpers.errors.domain_errors import EntityError
 from src.shared.helpers.external_interfaces.external_interface import IRequest

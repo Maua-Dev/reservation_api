@@ -6,6 +6,7 @@ from src.shared.helpers.errors.usecase_errors import DuplicatedItem, ForbiddenAc
 from src.shared.helpers.external_interfaces.external_interface import IRequest, IResponse
 from src.shared.helpers.external_interfaces.http_codes import BadRequest, Created, InternalServerError
 from src.shared.domain.enums.status_enum import STATUS
+import json
 
 
 class CreateCourtController:
@@ -40,6 +41,10 @@ class CreateCourtController:
                 raise WrongTypeParameter(fieldName= 'photo', fieldTypeExpected= str, fieldTypeReceived= type(request.data.get('photo')))
             
             user = request.data.get("user_from_authorizer")
+            
+            if not isinstance(user, dict):
+                
+                user = json.loads(user)
             
             court = self.usecase(
                 number= request.data.get('number'),

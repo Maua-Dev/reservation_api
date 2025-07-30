@@ -23,23 +23,13 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Determine AWS Account ID
-        run: |
-          if [[ "${{ github.ref_name }}" == "dev" ]]; then
-            echo "AWS_ACCOUNT_ID=${{ secrets.AWS_ACCOUNT_ID_DEV }}" >> $GITHUB_ENV
-          elif [[ "${{ github.ref_name }}" == "fix/githubActions" ]]; then
-            echo "AWS_ACCOUNT_ID=${{ secrets.AWS_ACCOUNT_ID_DEV }}" >> $GITHUB_ENV
-          elif [[ "${{ github.ref_name }}" == "homolog" ]]; then
-            echo "AWS_ACCOUNT_ID=${{ secrets.AWS_ACCOUNT_ID_HOML }}" >> $GITHUB_ENV
-          elif [[ "${{ github.ref_name }}" == "prod" ]]; then
-            echo "AWS_ACCOUNT_ID=${{ secrets.AWS_ACCOUNT_ID_PROD }}" >> $GITHUB_ENV
-          else
-            echo "Invalid branch name!" && exit 1
-          fi
+        run: echo "AWS_ACCOUNT_ID=${{ secrets.AWS_ACCOUNT_ID }}" >> $GITHUB_ENV
+
 
       - name: Setup AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-region: ${{ vars.AWS_REGION }}
+          aws-region: sa-east-1
           role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/GithubActionsRole
           role-session-name: github-action
 
@@ -77,8 +67,15 @@ jobs:
           cdk deploy --require-approval never
 
         env:
-          AWS_REGION: ${{ vars.AWS_REGION }}
+          AWS_REGION: sa-east-1
           AWS_ACCOUNT_ID: ${{ env.AWS_ACCOUNT_ID }}
           STACK_NAME: ${{ env.STACK_NAME }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          MSS_NAME: ${{ github.event.repository.name }}
+          S3_ASSETS_CDN: ${{ vars.S3_ASSETS_CDN }}
+          AUTH_DEV_SYSTEM_USERPOOL_ARN_DEV: ${{ secrets.AUTH_DEV_SYSTEM_USERPOOL_ARN_DEV }}
+          FROM_EMAIL: ${{ vars.FROM_EMAIL }}
+          HIDDEN_COPY: ${{ vars.HIDDEN_COPY }}
+          REPLY_TO_EMAIL: ${{ vars.REPLY_TO_EMAIL }}
+          GRAPH_MICROSOFT_ENDPOINT: ${{ secrets.GRAPH_MICROSOFT_ENDPOINT }}
           USER_API_URL: ${{ secrets.USER_API_URL }}
-          GITHUB_REF_NAME: ${{ env.STAGE }}

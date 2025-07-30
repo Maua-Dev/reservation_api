@@ -28,11 +28,12 @@ class TestCreateBookingPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
-                    "user": {
-                        "displayName": 'Lebron James',
-                        "mail": 'lbj@maua.br',
-                        "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
-                    }
+                    "user": json.dumps({
+                        "user": {
+                            "user_id": "c8435c66-13a4-4641-9d54-773b4b8ccc98",
+                        },
+                        "message": "the user was retrieved"
+                    })
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
