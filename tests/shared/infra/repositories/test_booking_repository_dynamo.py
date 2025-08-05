@@ -5,7 +5,7 @@ from src.shared.domain.enums.sport import SPORT
 from src.shared.domain.entities.booking import Booking
 
 class TestBookingRepositoryDynamo:
-
+     
     @pytest.mark.skip("Can't run test in github actions")
     def test_dynamo_get_all_bookings(self):
         dynamo_repo = BookingRepositoryDynamo()

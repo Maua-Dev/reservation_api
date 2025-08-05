@@ -1,5 +1,5 @@
 from src.modules.get_all_bookings.app.get_all_bookings_usecase import GetAllBookingsUsecase
-from src.modules.get_all_bookings.app.get_all_bookings_viewmodel import GetAllBookingViewModel
+from src.modules.get_all_bookings.app.get_all_bookings_viewmodel import GetAllBookingsViewModel
 from src.shared.infra.repositories.booking_repository_mock import BookingRepositoryMock
 from src.shared.domain.entities.booking import Booking
 
@@ -8,7 +8,7 @@ class Test_GetAllBookingsViewmodel:
         repo = BookingRepositoryMock()
         usecase = GetAllBookingsUsecase(repo = repo)
         courts = usecase()
-        viewmodel = GetAllBookingViewModel(courts).to_dict()
+        viewmodel = GetAllBookingsViewModel(courts).to_dict()
         
         excepted = {
             'courts': [

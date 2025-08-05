@@ -6,7 +6,7 @@ services:
     container_name: minio-reservation
     # ✅ SET credentials for the MinIO server
     environment:
-      MINIO_ROOT_USER: root
+      MINIO_ROOT_USER: root         # If you change any credentials, you have to match it in environments
       MINIO_ROOT_PASSWORD: root1234
     ports:
       - "9000:9000"

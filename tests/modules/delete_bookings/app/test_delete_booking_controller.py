@@ -3,7 +3,6 @@ from src.modules.delete_booking.app.delete_booking_usecase import DeleteBookingU
 from src.shared.helpers.external_interfaces.http_models import HttpRequest
 from src.shared.infra.repositories.booking_repository_mock import BookingRepositoryMock
 
-
 class TestDeleteBookingController:
     def test_delete_booking_controller(self):
         repo = BookingRepositoryMock()
@@ -25,7 +24,7 @@ class TestDeleteBookingController:
 
     def test_delete_booking_controller_missing_booking_id(self):
         repo = BookingRepositoryMock()
-        usecase = DeleteBookingUsecase(repo=repo)
+        usecase = DeleteBookingUsecase(repo= repo)
         controller = DeleteBookingController(usecase=usecase)
         request = HttpRequest(body={
             "booking_id": None
@@ -43,7 +42,7 @@ class TestDeleteBookingController:
 
     def test_delete_booking_controller_booking_id_entity_error(self):
         repo = BookingRepositoryMock()
-        usecase = DeleteBookingUsecase(repo=repo)
+        usecase = DeleteBookingUsecase(repo= repo)
         controller = DeleteBookingController(usecase=usecase)
         request = HttpRequest(body={
             "booking_id": 0
@@ -55,7 +54,7 @@ class TestDeleteBookingController:
                 'role': 'STUDENT'
             }
         })
-
+        
         reponse = controller(request)
         assert reponse.status_code == 400
         assert reponse.body == "Field booking_id is not valid"

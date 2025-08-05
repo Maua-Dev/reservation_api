@@ -40,7 +40,7 @@ class TestBookingRepositoryMock:
 
         assert booking is not None
         assert booking.booking_id == booking_id
-        assert booking.user_id == 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+        assert booking.user_id == '1f25448b-3429-4c19-8287-d9e64f17bc3a'
         assert booking.sport == SPORT.TENNIS
         assert booking.court_number == 1
         assert booking.start_date == 1634576165000

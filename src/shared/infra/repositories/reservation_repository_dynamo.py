@@ -5,7 +5,6 @@ from src.shared.infra.dto.court_dynamo_dto import CourtDynamoDTO
 from typing import List, Optional
 from src.shared.infra.external.dynamo.datasources.dynamo_datasource import DynamoDatasource
 from src.shared.domain.enums.status_enum import STATUS
-from boto3.dynamodb.conditions import Key
 
 
 class ReservationRepositoryDynamo(IReservationRepository):

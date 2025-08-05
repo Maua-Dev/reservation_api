@@ -19,7 +19,7 @@ class TestGetBookingController:
         assert response.body['booking']['end_date'] == 1634567400000
         assert response.body['booking']['court_number'] == 2
         assert response.body['booking']['sport'] == 'Football'
-        assert response.body['booking']['user_id'] == 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+        assert response.body['booking']['user_id'] == 'c07e0862-3c07-4227-ab0f-511a267cb7ff'
         assert response.body['booking']['materials'] == ['Bola', 'Chuteira']
 
     def test_get_booking_controller_missing_booking_id(self):
@@ -32,6 +32,7 @@ class TestGetBookingController:
 
         assert response.status_code == 400
         assert response.body == 'Field booking_id is missing'
+
     
     def test_get_booking_controller_wrong_type_booking_id(self):
         repo = BookingRepositoryMock()
@@ -59,3 +60,4 @@ class TestGetBookingController:
         response = controller(request)
         assert response.status_code == 404
         assert response.body == 'No items found for booking_id'
+        

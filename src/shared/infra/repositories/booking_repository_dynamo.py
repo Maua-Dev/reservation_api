@@ -66,7 +66,7 @@ class BookingRepositoryDynamo(IBookingRepository):
             "sport": sport.value if sport is not None else booking_to_update.sport.value,
             "materials": materials if materials is not None else booking_to_update.materials,
             "user_id": booking_to_update.user_id,
-            "booking_id": booking_to_update.booking_id,
+            "booking_id": booking_to_update.booking_id
         }
 
         resp = self.dynamo.update_item(update_dict=update_dict,
@@ -158,8 +158,6 @@ class BookingRepositoryDynamo(IBookingRepository):
         for item in all_items:
             if item.get('entity') == 'booking':
                 all_bookings.append(BookingDynamoDTO.from_dynamo(item).to_entity())
-
-        return all_bookings
 
     def get_all_bookings_by_date_range(self, initial_date: int, final_date: int) -> Optional[List[Booking]]:
 

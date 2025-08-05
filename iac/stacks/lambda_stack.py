@@ -48,11 +48,16 @@ class LambdaStack(Construct):
         )
 
         rule = Rule(
-            self, f"{module_name.title()}EventRule",
+            self, f"{module_name.title()}EventRuleForWeeklyUpload",
             schedule=cron_schedule
         )
 
-        rule.add_target(LambdaFunction(function))
+        input_transformer = RuleTargetInput.from_object({
+            "current_date": EventField.time,
+            "message": "weekly report trigger!"
+        })
+
+        rule.add_target(LambdaFunction(function, event=input_transformer))
 
         return function
 
@@ -75,8 +80,8 @@ class LambdaStack(Construct):
                                                  )
         
         authorizer_lambda = lambda_.Function(
-            self, "GetUserAuthroizer",
-            code=lambda_.Code.from_asset("../src/shared/authorizer"), # TODO check if this matches current merge
+            self, "AuthorizerUserMssReservationApiLambda",
+            code=lambda_.Code.from_asset("../src/shared/authorizer"),
             handler="user_mss_authorizer.lambda_handler",
             runtime=lambda_.Runtime.PYTHON_3_9,
             layers=[self.lambda_layer],
@@ -85,10 +90,10 @@ class LambdaStack(Construct):
         )
 
         token_authorizer_lambda = apigw.TokenAuthorizer(
-            self, "TokenAuthorizerReservationAlerts",
+            self, "TokenAuthorizerReservationApi",
             handler=authorizer_lambda,
             identity_source=apigw.IdentitySource.header("Authorization"),
-            authorizer_name="GetUserAuthorizerForAlertsMss",
+            authorizer_name="AuthorizerUserMssReservationMssAlertLambda",
             results_cache_ttl=Duration.seconds(0)
         )
 
@@ -124,16 +129,15 @@ class LambdaStack(Construct):
             environment_variables=environment_variables,
         )
 
-        #not ready for auth?? TODO Gasperi
+        #not ready for auth??TODO
         self.delete_booking = self.create_lambda_api_gateway_integration(
             module_name="delete_booking",
             method="DELETE",
             api_resource=api_gateway_resource,
-            environment_variables=environment_variables,
-            authorizer=self.token_authorizer_graph
+            environment_variables=environment_variables
         )
 
-        #not ready and unused
+        #not auth and unused
         self.get_all_bookings = self.create_lambda_api_gateway_integration(
             module_name="get_all_bookings",
             method="GET",
