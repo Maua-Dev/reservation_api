@@ -19,7 +19,7 @@ class Test_GetBookingPresenter:
                 "header2": "value1,value2"
             },
             "queryStringParameters": {
-                "parameter1": "1"
+                "booking_id": "b1d3bebf-dc0d-4fc1-861c-506a40cc2925"
             },
             "requestContext": {
                 "accountId": "123456789012",
@@ -42,7 +42,7 @@ class Test_GetBookingPresenter:
                 "time": "12/Mar/2020:19:03:58 +0000",
                 "timeEpoch": 1583348638390
             },
-            "body": {"booking_id":'b1d3bebf-dc0d-4fc1-861c-506a40cc2925'},
+            "body": {},
             "pathParameters": None,
             "isBase64Encoded": None,
             "stageVariables": None
@@ -57,7 +57,7 @@ class Test_GetBookingPresenter:
         assert json.loads(response['body'])['booking']['end_date'] == 1634583365000
         assert json.loads(response['body'])['booking']['court_number'] == 1
         assert json.loads(response['body'])['booking']['sport'] == 'Tennis'
-        assert json.loads(response['body'])['booking']['user_id'] == '1f25448b-3429-4c19-8287-d9e64f17bc3a'
+        assert json.loads(response['body'])['booking']['user_id'] == 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
         assert json.loads(response['body'])['booking']['materials'] == ['Raquete', 'Bola', 'Rede', 'Tenis']
 
 
@@ -107,7 +107,7 @@ class Test_GetBookingPresenter:
         
         response = lambda_handler(event, None)
         assert response['statusCode'] == 400
-        assert json.loads(response['body']) == 'Field booking_id is missing'
+        assert json.loads(response['body']) == "Field booking_id is missing"
 
     def test_get_booking_presenter_entity_error(self):
         event = {
@@ -124,7 +124,7 @@ class Test_GetBookingPresenter:
                 "header2": "value1,value2"
             },
             "queryStringParameters": {
-                "parameter1": "1"
+                "booking_id":'teste'
             },
             "requestContext": {
                 "accountId": "123456789012",
@@ -147,7 +147,7 @@ class Test_GetBookingPresenter:
                 "time": "12/Mar/2020:19:03:58 +0000",
                 "timeEpoch": 1583348638390
             },
-            "body": {"booking_id":'teste'},
+            "body": {},
             "pathParameters": None,
             "isBase64Encoded": None,
             "stageVariables": None
@@ -174,7 +174,7 @@ class Test_GetBookingPresenter:
                 "header2": "value1,value2"
             },
             "queryStringParameters": {
-                "parameter1": "1"
+                "booking_id":10
             },
             "requestContext": {
                 "accountId": "123456789012",
@@ -197,7 +197,7 @@ class Test_GetBookingPresenter:
                 "time": "12/Mar/2020:19:03:58 +0000",
                 "timeEpoch": 1583348638390
             },
-            "body": {"booking_id":10},
+            "body": {},
             "pathParameters": None,
             "isBase64Encoded": None,
             "stageVariables": None
@@ -224,7 +224,7 @@ class Test_GetBookingPresenter:
                 "header2": "value1,value2"
             },
             "queryStringParameters": {
-                "parameter1": "1"
+                "booking_id": 'b1d3bebf-dc0d-4fc1-861c-506a40cc2989'
             },
             "requestContext": {
                 "accountId": "123456789012",
@@ -247,7 +247,7 @@ class Test_GetBookingPresenter:
                 "time": "12/Mar/2020:19:03:58 +0000",
                 "timeEpoch": 1583348638390
             },
-            "body": {"booking_id": 'b1d3bebf-dc0d-4fc1-861c-506a40cc2989'},
+            "body": {},
             "pathParameters": None,
             "isBase64Encoded": None,
             "stageVariables": None

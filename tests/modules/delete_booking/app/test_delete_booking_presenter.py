@@ -25,6 +25,7 @@ class TestDeleteBookingPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+<<<<<<< HEAD:tests/modules/delete_bookings/app/test_delete_booking_presenter.py
                     "user": json.dumps({
                         "user": {
                             'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
@@ -34,6 +35,13 @@ class TestDeleteBookingPresenter:
                         },
                         "message": "the user was retrieved"
                     })
+=======
+                    'user': {
+                        'id': 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                        'displayName': 'John Doe',
+                        'mail': 'JD@maua.br'
+                    }
+>>>>>>> parent of 86c13e0 (Merge pull request #20 from Maua-Dev/user-on-generate-report):tests/modules/delete_booking/app/test_delete_booking_presenter.py
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -86,6 +94,7 @@ class TestDeleteBookingPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+<<<<<<< HEAD:tests/modules/delete_bookings/app/test_delete_booking_presenter.py
                     "user": json.dumps({
                         "user": {
                             'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
@@ -95,6 +104,13 @@ class TestDeleteBookingPresenter:
                         },
                         "message": "the user was retrieved"
                     })
+=======
+                    'user': {
+                        'id': 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                        'displayName': 'John Doe',
+                        'mail': 'JD@maua.br'
+                    }
+>>>>>>> parent of 86c13e0 (Merge pull request #20 from Maua-Dev/user-on-generate-report):tests/modules/delete_booking/app/test_delete_booking_presenter.py
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -144,6 +160,7 @@ class TestDeleteBookingPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+<<<<<<< HEAD:tests/modules/delete_bookings/app/test_delete_booking_presenter.py
                     "user": json.dumps({
                         "user": {
                             'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
@@ -153,6 +170,13 @@ class TestDeleteBookingPresenter:
                         },
                         "message": "the user was retrieved"
                     })
+=======
+                    'user': {
+                        'id': 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                        'displayName': 'John Doe',
+                        'mail': 'JD@maua.br'
+                    }
+>>>>>>> parent of 86c13e0 (Merge pull request #20 from Maua-Dev/user-on-generate-report):tests/modules/delete_booking/app/test_delete_booking_presenter.py
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -202,6 +226,7 @@ class TestDeleteBookingPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+<<<<<<< HEAD:tests/modules/delete_bookings/app/test_delete_booking_presenter.py
                     "user": json.dumps({
                         "user": {
                             'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
@@ -211,6 +236,13 @@ class TestDeleteBookingPresenter:
                         },
                         "message": "the user was retrieved"
                     })
+=======
+                    'user': {
+                        'id': 'c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                        'displayName': 'John Doe',
+                        'mail': 'JD@maua.br'
+                    }
+>>>>>>> parent of 86c13e0 (Merge pull request #20 from Maua-Dev/user-on-generate-report):tests/modules/delete_booking/app/test_delete_booking_presenter.py
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",

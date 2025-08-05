@@ -30,3 +30,4 @@ class EntityParameterError(EntityError):
 class EntityParameterTimeError(BaseError):
     def __init__(self, start_Date: int, end_date: int):
         super().__init__(f'Initial time {start_Date} must be less than or equal to end time {end_date}')
+

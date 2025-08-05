@@ -34,7 +34,8 @@ class IBookingRepository(ABC):
         pass
 
     @abstractmethod
-    def get_booking(self, booking_id: str) -> Optional[Booking]:
+    def get_booking(self,
+                    booking_id: str) -> Optional[Booking]:
         '''
         If the booking exists, returns it, else returns None
         '''

@@ -48,16 +48,11 @@ class LambdaStack(Construct):
         )
 
         rule = Rule(
-            self, f"{module_name.title()}EventRuleForWeeklyUpload",
+            self, f"{module_name.title()}EventRule",
             schedule=cron_schedule
         )
 
-        input_transformer = RuleTargetInput.from_object({
-            "current_date": EventField.time,
-            "message": "weekly report trigger!"
-        })
-
-        rule.add_target(LambdaFunction(function, event=input_transformer))
+        rule.add_target(LambdaFunction(function))
 
         return function
 
@@ -80,8 +75,8 @@ class LambdaStack(Construct):
                                                  )
         
         authorizer_lambda = lambda_.Function(
-            self, "AuthorizerUserMssReservationApiLambda",
-            code=lambda_.Code.from_asset("../src/shared/authorizer"),
+            self, "GetUserAuthroizer",
+            code=lambda_.Code.from_asset("../src/shared/authorizer"), # TODO check if this matches current merge
             handler="user_mss_authorizer.lambda_handler",
             runtime=lambda_.Runtime.PYTHON_3_9,
             layers=[self.lambda_layer],
@@ -90,10 +85,10 @@ class LambdaStack(Construct):
         )
 
         token_authorizer_lambda = apigw.TokenAuthorizer(
-            self, "TokenAuthorizerReservationApi",
+            self, "TokenAuthorizerReservationAlerts",
             handler=authorizer_lambda,
             identity_source=apigw.IdentitySource.header("Authorization"),
-            authorizer_name="AuthorizerUserMssReservationMssAlertLambda",
+            authorizer_name="GetUserAuthorizerForAlertsMss",
             results_cache_ttl=Duration.seconds(0)
         )
 
@@ -117,11 +112,10 @@ class LambdaStack(Construct):
         #not ready for auth AND not used?
         self.get_booking = self.create_lambda_api_gateway_integration(
             module_name="get_booking",
-            method="POST",
+            method="GET",
             api_resource=api_gateway_resource,
             environment_variables=environment_variables
         )
-
 
         self.get_bookings = self.create_lambda_api_gateway_integration(
             module_name="get_bookings",
@@ -135,7 +129,8 @@ class LambdaStack(Construct):
             module_name="delete_booking",
             method="DELETE",
             api_resource=api_gateway_resource,
-            environment_variables=environment_variables
+            environment_variables=environment_variables,
+            authorizer=self.token_authorizer_graph
         )
 
         #not ready and unused
@@ -158,7 +153,7 @@ class LambdaStack(Construct):
         #not ready TODO
         self.get_court = self.create_lambda_api_gateway_integration(
             module_name="get_court",
-            method="POST",
+            method="GET",
             api_resource=api_gateway_resource,
             environment_variables=environment_variables
         )
@@ -200,7 +195,7 @@ class LambdaStack(Construct):
         #does not need auth / not a route
         self.generate_report = self.create_lambda_event_bridge_integration(
             module_name="generate_report",
-            cron_schedule=Schedule.cron(week_day="FRI", hour="18"),
+            cron_schedule=Schedule.cron(minute="0", hour="18", week_day="FRI"),
             environment_variables=environment_variables
         )
 

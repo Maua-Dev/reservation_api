@@ -21,7 +21,7 @@ class UserAPIClient:
 
         api_url= os.environ.get("USER_API_URL")
         try:
-            response = requests.get(api_url + '/get-all-users')
+            response = requests.get(api_url + '/reservation-mss-user/get-all-users')
             users = response.json().get("users")
             return users
         except:
@@ -32,7 +32,13 @@ class UserAPIClient:
     @staticmethod
     def _auth_user(token):
         
+        '''
+        UNUSED AND DEPRECATED DO NOT USE
+        '''
+        
         #this will only get the user info if the user is already created in db, else it will delete the user shortly after
+        
+        #UNUSED DO NOT USE THIS, ITS DEPRECATED 
         
         api_url = os.environ.get("USER_API_URL")
         
@@ -45,7 +51,7 @@ class UserAPIClient:
                     "Authorization": f"Bearer{token}"
                 }
                 
-                response = requests.delete(api_url + '/delete-user', headers=headers)
+                response = requests.delete(api_url + 'reservation-mss-user/delete-user', headers=headers)
                 
                 return response.json().get("message")
                 
@@ -59,7 +65,7 @@ class UserAPIClient:
                 "Authorization": f"Bearer {token}"
             }
             
-            response = requests.get(api_url + '/auth-user', headers=headers)
+            response = requests.get(api_url + 'reservation-mss-user/auth-user', headers=headers)
             
             user = response.json().get("user")
             

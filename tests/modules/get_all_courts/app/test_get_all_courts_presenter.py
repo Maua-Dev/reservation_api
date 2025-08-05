@@ -40,7 +40,7 @@ class TestGetAllCourtsPresenter:
                 "time": "12/Mar/2020:19:03:58 +0000",
                 "timeEpoch": 1583348638390
             },
-            "body": '{"number": 7, "status": "AVAILABLE", "is_field": false, "photo": "photo"}',
+            "body": None,
             "pathParameters": None,
             "isBase64Encoded": None,
             "stageVariables": None
