@@ -105,7 +105,7 @@ class TestDeleteBookingController:
             "booking_id": 'b1d3bebf-dc0d-4fc1-861c-506a40cc2925'
         }, headers={
             'user_from_authorizer': {
-                'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                'user_id': '2f25448b-3429-4c19-8287-d9e64f17bc3a',
                 'name': 'Nome',
                 'email': 'user@email.com',
                 'role': 'STUDENT'
