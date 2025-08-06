@@ -10,9 +10,8 @@ class GenerateReportExtractor:
     def __call__(self, initial_date, final_date):
 
         try:
-            #TODO fazer chamada get_all_users
-            #retornar booking, users
 
+            #TODO Add method to interface
             bookings = self.booking_repository.get_all_bookings_by_date_range(initial_date, final_date)
 
         except:

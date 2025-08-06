@@ -4,7 +4,7 @@ from src.shared.domain.enums.sport import SPORT
 from src.shared.domain.entities.booking import Booking
 import pytest
 
-class Test_GetAllBookingsUsecase:
+class TestGetAllBookingsUsecase:
     def test_get_all_bookings_usecase(self):
         repo = BookingRepositoryMock()
         usecase = GetAllBookingsUsecase(repo = repo)

@@ -10,6 +10,7 @@ from src.shared.infra.repositories.reservation_repository_mock import Reservatio
 
 
 class TestReservationRepositoryDynamo:
+    
     @pytest.mark.skip("Can't run test in github actions")
     def test_dynamo_delete_court(self):
         dynamo_repo = ReservationRepositoryDynamo()

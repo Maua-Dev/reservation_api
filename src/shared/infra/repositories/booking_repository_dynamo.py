@@ -78,6 +78,40 @@ class BookingRepositoryDynamo(IBookingRepository):
 
         return BookingDynamoDTO.from_dynamo(resp['Attributes']).to_entity()
 
+    def get_bookings(self,
+                     booking_id: Optional[str] = None,
+                     user_id: Optional[str] = None,
+                     sport: Optional[SPORT] = None,
+                     court_number: Optional[int] = None,
+                     end_date: Optional[int] = None,
+                     start_date: Optional[int] = None) -> List[Optional[Booking]]:
+
+        filters = locals().copy()
+        filters.pop('self')
+        filters.pop('end_date')
+        filters.pop('start_date')
+
+        filters = {k: v for k, v in filters.items() if v is not None}
+
+        all_bookings = self.get_all_bookings()
+
+        bookings = []
+
+        for booking in all_bookings:
+            booking_dict = booking.__dict__
+            if start_date and end_date:
+                if all(
+                    booking_dict.get(key) == value for key, value in filters.items()
+                ) and booking.start_date >= start_date and booking.end_date <= end_date:
+                    bookings.append(booking)
+            else:
+                if all(
+                    booking_dict.get(key) == value for key, value in filters.items()
+                ):
+                    bookings.append(booking)
+
+        return bookings
+
     def get_booking(self, booking_id: str) -> Optional[Booking]:
 
         dynamo_object = self.dynamo.get_item(partition_key=self.booking_partition_key_format(),
@@ -124,8 +158,6 @@ class BookingRepositoryDynamo(IBookingRepository):
         for item in all_items:
             if item.get('entity') == 'booking':
                 all_bookings.append(BookingDynamoDTO.from_dynamo(item).to_entity())
-
-        return all_bookings
 
     def get_all_bookings_by_date_range(self, initial_date: int, final_date: int) -> Optional[List[Booking]]:
 

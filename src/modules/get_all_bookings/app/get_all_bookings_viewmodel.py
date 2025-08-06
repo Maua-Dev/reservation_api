@@ -41,7 +41,7 @@ class GetBookingViewModel:
             'booking' : self.booking_viewmodel.to_dict()
         }
 
-class GetAllBookingViewModel:
+class GetAllBookingsViewModel:
     bookings: List[GetBookingViewModel]
 
     def __init__(self, bookings: list):

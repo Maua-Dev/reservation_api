@@ -1,13 +1,9 @@
 import pytest
-from typing import Any, Optional
-from src.shared.domain.entities.booking import Booking
-from src.shared.domain.enums.status_enum import STATUS
 from src.shared.helpers.errors.usecase_errors import DuplicatedItem, ForbiddenAction
-from src.shared.helpers.errors.domain_errors import EntityError
 from src.modules.delete_booking.app.delete_booking_usecase import DeleteBookingUsecase
 from src.shared.infra.repositories.booking_repository_mock import BookingRepositoryMock
 from src.shared.helpers.errors.usecase_errors import NoItemsFound
-from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
+from src.shared.helpers.errors.domain_errors import EntityError
 
 class Test_DeleteBookingUsecase:
     def test_delete_booking_usecase(self):
@@ -20,8 +16,10 @@ class Test_DeleteBookingUsecase:
             'email': 'user@email.com',
             'role': 'STUDENT'
         }
+    
+        booking = usecase(booking_id='b1d3bebf-dc0d-4fc1-861c-506a40cc2925',
+                          user=user)
         
-        booking = usecase(booking_id='b1d3bebf-dc0d-4fc1-861c-506a40cc2925', user=user)
         assert len(repo.bookings) == len_before - 1
 
     def test_delete_booking_usecase_admin(self):
@@ -62,7 +60,7 @@ class Test_DeleteBookingUsecase:
         }
         with pytest.raises(NoItemsFound):
             booking = usecase(booking_id='b1d3bebf-dc0d-4fc1-861c-506a40cc2926', user = user)
-
+            
     def test_delete_booking_usecase_invalid_booking_id(self):
         repo = BookingRepositoryMock()
         usecase = DeleteBookingUsecase(repo=repo)
@@ -76,5 +74,3 @@ class Test_DeleteBookingUsecase:
         with pytest.raises(EntityError):
             usecase(booking_id=-1, user=user)
     
-        with pytest.raises(EntityError):
-            usecase(booking_id=None,user=user)

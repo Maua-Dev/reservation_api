@@ -117,12 +117,19 @@ class LambdaStack(Construct):
         #not ready for auth AND not used?
         self.get_booking = self.create_lambda_api_gateway_integration(
             module_name="get_booking",
-            method="POST",
+            method="GET",
             api_resource=api_gateway_resource,
             environment_variables=environment_variables
         )
 
-        #not ready for auth?? TODO Gasperi
+        self.get_bookings = self.create_lambda_api_gateway_integration(
+            module_name="get_bookings",
+            method="GET",
+            api_resource=api_gateway_resource,
+            environment_variables=environment_variables,
+        )
+
+        #not ready for auth??TODO
         self.delete_booking = self.create_lambda_api_gateway_integration(
             module_name="delete_booking",
             method="DELETE",
@@ -130,7 +137,7 @@ class LambdaStack(Construct):
             environment_variables=environment_variables
         )
 
-        #not ready and unused
+        #not auth and unused
         self.get_all_bookings = self.create_lambda_api_gateway_integration(
             module_name="get_all_bookings",
             method="GET",
@@ -150,7 +157,7 @@ class LambdaStack(Construct):
         #not ready TODO
         self.get_court = self.create_lambda_api_gateway_integration(
             module_name="get_court",
-            method="POST",
+            method="GET",
             api_resource=api_gateway_resource,
             environment_variables=environment_variables
         )
@@ -192,7 +199,7 @@ class LambdaStack(Construct):
         #does not need auth / not a route
         self.generate_report = self.create_lambda_event_bridge_integration(
             module_name="generate_report",
-            cron_schedule=Schedule.cron(week_day="FRI", hour="18"),
+            cron_schedule=Schedule.cron(minute="0", hour="18", week_day="FRI"),
             environment_variables=environment_variables
         )
 
@@ -206,7 +213,8 @@ class LambdaStack(Construct):
             self.get_booking,
             self.update_booking,
             self.delete_booking,
-            self.get_all_bookings
+            self.get_all_bookings,
+            self.get_bookings
         ]
 
         self.functions_that_need_s3_permissions = [

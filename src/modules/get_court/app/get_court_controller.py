@@ -19,12 +19,14 @@ class GetCourtController:
             number = request.data.get('number')
 
             if number is not None:
-                if type(number) is not int:
+                try:
+                    number = int(number)
+                except ValueError:
                     raise WrongTypeParameter('number', 'int', type(number).__name__)
 
             
             court  = self.usecase(
-                number= request.data.get('number')
+                number=number
             )       
             court_viewmodel = GetCourtViewmodel(court= court)
 

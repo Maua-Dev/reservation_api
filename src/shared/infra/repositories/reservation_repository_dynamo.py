@@ -5,7 +5,6 @@ from src.shared.infra.dto.court_dynamo_dto import CourtDynamoDTO
 from typing import List, Optional
 from src.shared.infra.external.dynamo.datasources.dynamo_datasource import DynamoDatasource
 from src.shared.domain.enums.status_enum import STATUS
-from boto3.dynamodb.conditions import Key
 
 
 class ReservationRepositoryDynamo(IReservationRepository):
@@ -49,7 +48,8 @@ class ReservationRepositoryDynamo(IReservationRepository):
         all_items = self.dynamo.get_all_items().get('Items')
 
         for item in all_items:
-            all_courts.append(CourtDynamoDTO.from_dynamo(item).to_entity())
+            if item.get("entity") == "Court":
+                all_courts.append(CourtDynamoDTO.from_dynamo(item).to_entity())
 
         return all_courts
 

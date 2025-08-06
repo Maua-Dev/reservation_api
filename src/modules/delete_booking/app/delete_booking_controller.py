@@ -4,9 +4,9 @@ from .delete_booking_usecase import DeleteBookingUsecase
 from .delete_booking_viewmodel import DeleteBookingViewModel
 from src.shared.helpers.errors.controller_errors import MissingParameters, WrongTypeParameter
 from src.shared.helpers.errors.domain_errors import EntityError
-from src.shared.helpers.errors.usecase_errors import NoItemsFound
+from src.shared.helpers.errors.usecase_errors import NoItemsFound, ForbiddenAction
 from src.shared.helpers.external_interfaces.external_interface import IRequest, IResponse
-from src.shared.helpers.external_interfaces.http_codes import OK, BadRequest, Created, InternalServerError, NotFound
+from src.shared.helpers.external_interfaces.http_codes import OK, BadRequest, Created, InternalServerError, NotFound, Forbidden
 from src.shared.domain.enums.sport import SPORT
 
 class DeleteBookingController:
@@ -41,6 +41,9 @@ class DeleteBookingController:
         
         except EntityError as err:
             return BadRequest(body=err.message)
+        
+        except ForbiddenAction as err:
+            return Forbidden(body=err.message)
         
         except Exception as err:
             return InternalServerError(body=err.args[0])

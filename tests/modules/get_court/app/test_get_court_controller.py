@@ -10,8 +10,8 @@ class TestGetCourtController:
         repo = ReservationRepositoryMock()
         usecase = GetCourtUsecase(repo=repo)
         controller = GetCourtController(usecase=usecase)
-        request = HttpRequest(body={
-            "number": 2
+        request = HttpRequest(query_params={
+            "number": "2"
         })
 
         response = controller(request)
@@ -27,7 +27,7 @@ class TestGetCourtController:
         repo = ReservationRepositoryMock()
         usecase = GetCourtUsecase(repo=repo)
         controller = GetCourtController(usecase=usecase)
-        request = HttpRequest(body={
+        request = HttpRequest(query_params={
             "status": "AVAILABLE",
             "is_field": False,
             "photo": "https://www.linkedin.com/in/giovanna-albuquerque-16917a245/"
@@ -43,11 +43,8 @@ class TestGetCourtController:
         repo = ReservationRepositoryMock()
         usecase = GetCourtUsecase(repo=repo)
         controller = GetCourtController(usecase=usecase)
-        request = HttpRequest(body={
+        request = HttpRequest(query_params={
             "number": "cavalo",
-            "status": "AVAILABLE",
-            "is_field": False,
-            "photo": "https://www.linkedin.com/in/giovanna-albuquerque-16917a245/"
         })
 
         response = controller(request)
@@ -61,11 +58,8 @@ class TestGetCourtController:
         repo = ReservationRepositoryMock()
         usecase = GetCourtUsecase(repo=repo)
         controller = GetCourtController(usecase=usecase)
-        request = HttpRequest(body={
+        request = HttpRequest(query_params={
             "number": 10,
-            "status": "AVAILABLE",
-            "is_field": False,
-            "photo": "https://www.linkedin.com/in/giovanna-albuquerque-16917a245/"
         })
 
         response = controller(request)
