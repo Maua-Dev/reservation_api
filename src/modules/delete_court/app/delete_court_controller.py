@@ -1,14 +1,10 @@
-from typing import Any
-from src.shared.domain.entities.court import Court
 from .delete_court_usecase import DeleteCourtUsecase
 from .delete_court_viewmodel import DeleteCourtViewModel
 from src.shared.helpers.errors.controller_errors import MissingParameters, WrongTypeParameter
 from src.shared.helpers.errors.domain_errors import EntityError
 from src.shared.helpers.errors.usecase_errors import NoItemsFound, ForbiddenAction
 from src.shared.helpers.external_interfaces.external_interface import IRequest, IResponse
-from src.shared.helpers.external_interfaces.http_codes import OK, BadRequest, Created, InternalServerError, NotFound
-from src.shared.domain.enums.status_enum import STATUS
-from src.shared.clients.user_api_client import UserAPIClient
+from src.shared.helpers.external_interfaces.http_codes import OK, BadRequest, InternalServerError, NotFound
 
 class DeleteCourtController:
     

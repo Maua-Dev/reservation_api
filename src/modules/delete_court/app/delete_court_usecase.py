@@ -1,6 +1,4 @@
 from src.shared.domain.entities.court import Court
-from src.shared.domain.enums.status_enum import STATUS
-from src.shared.helpers.errors.usecase_errors import DuplicatedItem
 from src.shared.helpers.errors.domain_errors import EntityError
 from src.shared.helpers.errors.usecase_errors import NoItemsFound, ForbiddenAction
 from src.shared.domain.repositories.reservation_repository_interface import IReservationRepository
