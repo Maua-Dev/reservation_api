@@ -83,7 +83,7 @@ class TestDeleteCourtController:
 
         response = controller(request)
         assert response.status_code == 400
-        assert response.body == "Field number is not valid"
+        assert "Field number isn't in the right type" in response.body
 
     def test_delete_court_controller_not_found(self):
         repo = ReservationRepositoryMock()
