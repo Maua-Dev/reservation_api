@@ -1,3 +1,7 @@
+#boto3 compatibility
+urllib3<1.27
+
+#lambda needs
 pandas==2.2.3
 XlsxWriter==3.2.2
 requests==2.32.3
