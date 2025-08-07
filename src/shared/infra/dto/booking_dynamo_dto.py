@@ -49,7 +49,7 @@ class BookingDynamoDTO:
             "sport": self.sport.value,
             "user_id": self.user_id,
             "booking_id": self.booking_id,
-            "materials": self.materials
+            "materials": self.materials or []
         }
 
         booking_without_none_values = {k: v for k, v in data.items() if v is not None}
@@ -68,7 +68,7 @@ class BookingDynamoDTO:
             sport = SPORT(booking_data["sport"]),
             user_id = booking_data["user_id"],
             booking_id = booking_data["booking_id"],
-            materials = booking_data["materials"]
+            materials = booking_data.get("materials") or []
         )
     
     def to_entity(self) -> Booking:
