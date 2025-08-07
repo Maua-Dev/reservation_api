@@ -1,37 +1,47 @@
 import os
 import shutil
-from pathlib import Path
-import sys
+import subprocess
 
-IAC_DIRECTORY_NAME = "iac"
-SOURCE_DIRECTORY_NAME = "src"
-LAMBDA_LAYER_PREFIX = os.path.join("python", "src")
+# --- Configurações ---
+# Define os nomes e caminhos principais que o script vai usar.
+# Isso facilita a manutenção se um dia os nomes das pastas mudarem.
+BUILD_DIRECTORY = "build"
+PYTHON_TOP_LEVEL_DIR = os.path.join(BUILD_DIRECTORY, "python")
+SHARED_CODE_SOURCE = "src/shared"
+REQUIREMENTS_FILE = "requirements-layer.txt"
 
+def adjust_layer_directory():
+    """
+    Prepara um diretório 'build' para uma Lambda Layer do AWS CDK.
+    
+    A função junta o código local compartilhado e as dependências externas (pip)
+    na estrutura de pastas que a Lambda espera (/python).
+    """
 
-def adjust_layer_directory(shared_dir_name: str, destination: str):
-    # Get the root directory of the source directory
-    root_directory = Path(__file__).parent.parent
-    iac_directory = os.path.join(root_directory, IAC_DIRECTORY_NAME)
+    # Garante que o build seja sempre limpo, removendo qualquer artefato antigo.
+    if os.path.exists(BUILD_DIRECTORY):
+        shutil.rmtree(BUILD_DIRECTORY)
+    
+    # Cria a estrutura de pastas 'build/python/src/'.
+    # Isso é necessário para que os imports 'from src.shared...' funcionem na Lambda.
+    shared_code_intermediate_dir = os.path.join(PYTHON_TOP_LEVEL_DIR, "src")
+    os.makedirs(shared_code_intermediate_dir)
 
-    print(f"Root directory: {root_directory}")
-    print(f"Root direcotry files: {os.listdir(root_directory)}")
-    print(f"IaC directory: {iac_directory}")
-    print(f"IaC directory files: {os.listdir(iac_directory)}")
+    # Copia o código compartilhado (de 'src/shared') para dentro da estrutura da Layer.
+    # O resultado final será 'build/python/src/shared'.
+    shared_code_dest = os.path.join(shared_code_intermediate_dir, os.path.basename(SHARED_CODE_SOURCE))
+    shutil.copytree(SHARED_CODE_SOURCE, shared_code_dest)
 
-
-    # Get the destination and source directory
-    destination_directory = os.path.join(root_directory, IAC_DIRECTORY_NAME, destination)
-    source_directory = os.path.join(root_directory, SOURCE_DIRECTORY_NAME, shared_dir_name)
-
-    # Delete the destination directory if it exists
-    if os.path.exists(destination_directory):
-        shutil.rmtree(destination_directory)
-
-    # Copy the source directory to the destination directory
-    shutil.copytree(source_directory, os.path.join(destination_directory, LAMBDA_LAYER_PREFIX, shared_dir_name))
-    print(
-        f"Copying files from {source_directory} to {os.path.join(destination_directory, LAMBDA_LAYER_PREFIX, shared_dir_name)}")
-
+    # Se o arquivo de dependências existir, instala todas as bibliotecas.
+    if os.path.exists(REQUIREMENTS_FILE):
+        # Instala os pacotes diretamente na pasta 'build/python'.
+        # Isso permite que a Lambda importe as bibliotecas de forma padrão (ex: import requests).
+        subprocess.check_call(
+            ["pip", "install", "-r", REQUIREMENTS_FILE, "-t", PYTHON_TOP_LEVEL_DIR, "--no-cache-dir"]
+        )
+    else:
+        # Apenas um aviso caso o arquivo não seja encontrado.
+        print(f"Aviso: Arquivo '{REQUIREMENTS_FILE}' não encontrado. Nenhuma dependência externa será instalada.")
 
 if __name__ == '__main__':
-    adjust_layer_directory(shared_dir_name="shared", destination="copied_shared")
+    adjust_layer_directory()

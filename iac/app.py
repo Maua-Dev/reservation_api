@@ -10,7 +10,7 @@ from stacks.iac_stack import IacStack
 print("Starting the CDK")
 
 print("Adjusting the layer directory")
-adjust_layer_directory(shared_dir_name="shared", destination="copied_shared")
+adjust_layer_directory()
 print("Finished adjusting the layer directory")
 
 

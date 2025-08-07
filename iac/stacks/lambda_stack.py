@@ -75,7 +75,7 @@ class LambdaStack(Construct):
         super().__init__(scope, f"{self.stack_name}_LambdaStack_{stage}")
 
         self.lambda_layer = lambda_.LayerVersion(self, f"{self.stack_name}_Lambda_Layer_{stage}",
-                                                 code=lambda_.Code.from_asset("./copied_shared"),
+                                                 code=lambda_.Code.from_asset("./build"),
                                                  compatible_runtimes=[lambda_.Runtime.PYTHON_3_9]
                                                  )
         
