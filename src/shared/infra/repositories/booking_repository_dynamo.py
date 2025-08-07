@@ -153,16 +153,18 @@ class BookingRepositoryDynamo(IBookingRepository):
     def get_all_bookings(self) -> Optional[List[Booking]]:
 
         all_bookings = []
-        all_items = self.dynamo.get_all_items().get('Items')
+        all_items = self.dynamo.get_all_items().get('Items') or []
 
         for item in all_items:
             if item.get('entity') == 'booking':
                 all_bookings.append(BookingDynamoDTO.from_dynamo(item).to_entity())
+        
+        return all_bookings
 
     def get_all_bookings_by_date_range(self, initial_date: int, final_date: int) -> Optional[List[Booking]]:
 
         all_bookings = []
-        all_items = self.dynamo.get_all_items().get('Items')
+        all_items = self.dynamo.get_all_items().get('Items') or []
 
         for item in all_items:
             if item.get('entity') == 'booking':
