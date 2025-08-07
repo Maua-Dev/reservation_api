@@ -134,7 +134,8 @@ class LambdaStack(Construct):
             module_name="delete_booking",
             method="DELETE",
             api_resource=api_gateway_resource,
-            environment_variables=environment_variables
+            environment_variables=environment_variables,
+            authorizer=token_authorizer_lambda
         )
 
         #not auth and unused
