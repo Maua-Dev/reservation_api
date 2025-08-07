@@ -1,14 +1,19 @@
 import os
 import shutil
 import subprocess
+from pathlib import Path # Importe a biblioteca pathlib
 
 # --- Configurações ---
-# Define os nomes e caminhos principais que o script vai usar.
-# Isso facilita a manutenção se um dia os nomes das pastas mudarem.
 BUILD_DIRECTORY = "build"
 PYTHON_TOP_LEVEL_DIR = os.path.join(BUILD_DIRECTORY, "python")
-SHARED_CODE_SOURCE = "src/shared"
-REQUIREMENTS_FILE = "requirements-layer.txt"
+REQUIREMENTS_FILE = "requirements-layers.txt"
+
+# --- CONSTRUÇÃO CORRETA DO CAMINHO ---
+# Pega o diretório do projeto (a raiz 'reservation_api') subindo um nível a partir do script atual.
+PROJECT_ROOT = Path(__file__).parent.parent 
+# Agora, constrói o caminho para 'src/shared' a partir da raiz do projeto.
+SHARED_CODE_SOURCE = os.path.join(PROJECT_ROOT, "src", "shared")
+
 
 def adjust_layer_directory():
     """
@@ -29,19 +34,24 @@ def adjust_layer_directory():
 
     # Copia o código compartilhado (de 'src/shared') para dentro da estrutura da Layer.
     # O resultado final será 'build/python/src/shared'.
+    print(f"Copiando código de: {SHARED_CODE_SOURCE}") # Adicionado para debug
     shared_code_dest = os.path.join(shared_code_intermediate_dir, os.path.basename(SHARED_CODE_SOURCE))
     shutil.copytree(SHARED_CODE_SOURCE, shared_code_dest)
 
     # Se o arquivo de dependências existir, instala todas as bibliotecas.
-    if os.path.exists(REQUIREMENTS_FILE):
+    # O arquivo de requirements também precisa ser lido a partir da raiz.
+    requirements_path = os.path.join(PROJECT_ROOT, REQUIREMENTS_FILE)
+    if os.path.exists(requirements_path):
         # Instala os pacotes diretamente na pasta 'build/python'.
         # Isso permite que a Lambda importe as bibliotecas de forma padrão (ex: import requests).
         subprocess.check_call(
-            ["pip", "install", "-r", REQUIREMENTS_FILE, "-t", PYTHON_TOP_LEVEL_DIR, "--no-cache-dir"]
+            ["pip", "install", "-r", requirements_path, "-t", PYTHON_TOP_LEVEL_DIR, "--no-cache-dir"]
         )
     else:
         # Apenas um aviso caso o arquivo não seja encontrado.
-        print(f"Aviso: Arquivo '{REQUIREMENTS_FILE}' não encontrado. Nenhuma dependência externa será instalada.")
+        print(f"Aviso: Arquivo '{requirements_path}' não encontrado. Nenhuma dependência externa será instalada.")
 
+
+# Ponto de entrada do script.
 if __name__ == '__main__':
     adjust_layer_directory()
