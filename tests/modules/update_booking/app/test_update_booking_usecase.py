@@ -3,7 +3,7 @@ import pytest
 from src.modules.update_booking.app.update_booking_usecase import UpdateBookingUsecase
 from src.shared.domain.enums.sport import SPORT
 from src.shared.helpers.errors.domain_errors import EntityError, EntityParameterOrderDatesError, EntityParameterTimeError
-from src.shared.helpers.errors.usecase_errors import InvalidSchedule
+from src.shared.helpers.errors.usecase_errors import ForbiddenAction, InvalidSchedule
 from src.shared.infra.repositories.booking_repository_mock import BookingRepositoryMock
 
 
@@ -14,7 +14,15 @@ class Test_UpdateBookingUsecase:
 
         booking_id = booking_repo.bookings[0].booking_id
 
+        user = {
+            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+            'name': 'Nome',
+            'email': 'user@email.com',
+            'role': 'STUDENT'
+        }
+
         booking = usecase(booking_id=booking_id, 
+                          user=user,
                           court_number=2, 
                           start_date=1634576165000, 
                           end_date=1634583365000, 
@@ -29,6 +37,29 @@ class Test_UpdateBookingUsecase:
         assert booking_repo.bookings[0].sport == booking.sport
         assert booking_repo.bookings[0].materials == booking.materials
 
+    def test_update_booking_usecase_with_invalid_user_id(self):
+        booking_repo = BookingRepositoryMock()
+        usecase = UpdateBookingUsecase(booking_repo=booking_repo)
+
+        booking_id = booking_repo.bookings[0].booking_id
+
+        user = {
+            'user_id': 'c07e0862-3c07-4227-ab0f-511a267cb7ff',
+            'name': 'Nome',
+            'email': 'user@email.com',
+            'role': 'STUDENT'
+        }
+
+        with pytest.raises(ForbiddenAction):
+            usecase(booking_id=booking_id, 
+                          user=user,
+                          court_number=2, 
+                          start_date=1634576165000, 
+                          end_date=1634583365000, 
+                          sport=SPORT.TENNIS, 
+                          materials=['Raquete', 'Bola', 'Rede', 'Tenis']
+                        )
+
     def test_update_booking_usecase_invalid_schedule_overlap(self):
             
         with pytest.raises(InvalidSchedule) as e:
@@ -38,7 +69,15 @@ class Test_UpdateBookingUsecase:
 
             booking_id = booking_repo.bookings[0].booking_id
 
+            user = {
+                'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                'name': 'Nome',
+                'email': 'user@email.com',
+                'role': 'STUDENT'
+            }   
+
             booking = usecase(booking_id=booking_id, 
+                              user=user,
                               court_number=3, 
                               start_date=1634569200000,
                               end_date=1634570000000, 
@@ -57,7 +96,15 @@ class Test_UpdateBookingUsecase:
 
             booking_id = booking_repo.bookings[0].booking_id
 
+            user = {
+                'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                'name': 'Nome',
+                'email': 'user@email.com',
+                'role': 'STUDENT'
+            }   
+
             booking = usecase(booking_id=booking_id, 
+                              user=user,
                               court_number=3, 
                               start_date=1634571899999,
                               end_date=1734571000000, 
@@ -71,8 +118,16 @@ class Test_UpdateBookingUsecase:
         booking_repo = BookingRepositoryMock()
         usecase = UpdateBookingUsecase(booking_repo=booking_repo)
 
+        user = {
+            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+            'name': 'Nome',
+            'email': 'user@email.com',
+            'role': 'STUDENT'
+        }   
+
         with pytest.raises(EntityError):
             booking = usecase(booking_id=111, 
+                              user=user,
                               court_number=2, 
                               start_date=1634576165000, 
                               end_date=1634583365000, 
@@ -84,8 +139,16 @@ class Test_UpdateBookingUsecase:
         booking_repo = BookingRepositoryMock()
         usecase = UpdateBookingUsecase(booking_repo=booking_repo)
 
+        user = {
+            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+            'name': 'Nome',
+            'email': 'user@email.com',
+            'role': 'STUDENT'
+        }   
+
         with pytest.raises(EntityError):
             booking = usecase(booking_id=booking_repo.bookings[0].booking_id, 
+                              user=user,
                               court_number=2, 
                               start_date="1634583365000", 
                               end_date="1634576165000", 
@@ -97,8 +160,16 @@ class Test_UpdateBookingUsecase:
         booking_repo = BookingRepositoryMock()
         usecase = UpdateBookingUsecase(booking_repo=booking_repo)
 
+        user = {
+            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+            'name': 'Nome',
+            'email': 'user@email.com',
+            'role': 'STUDENT'
+        }   
+
         with pytest.raises(EntityError):
-            booking = usecase(booking_id=booking_repo.bookings[0].booking_id, 
+            booking = usecase(booking_id=booking_repo.bookings[0].booking_id,
+                              user=user, 
                               court_number=2, 
                               start_date=1634576165000, 
                               end_date=1634583365000, 
@@ -110,8 +181,16 @@ class Test_UpdateBookingUsecase:
         booking_repo = BookingRepositoryMock()
         usecase = UpdateBookingUsecase(booking_repo=booking_repo)
 
+        user = {
+            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+            'name': 'Nome',
+            'email': 'user@email.com',
+            'role': 'STUDENT'
+        }   
+
         with pytest.raises(EntityError):
-            booking = usecase(booking_id=booking_repo.bookings[0].booking_id, 
+            booking = usecase(booking_id=booking_repo.bookings[0].booking_id,
+                              user=user, 
                               court_number=2, 
                               start_date=1634576165000, 
                               end_date=1634583365000, 
@@ -123,8 +202,16 @@ class Test_UpdateBookingUsecase:
         booking_repo = BookingRepositoryMock()
         usecase = UpdateBookingUsecase(booking_repo=booking_repo)
 
+        user = {
+            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+            'name': 'Nome',
+            'email': 'user@email.com',
+            'role': 'STUDENT'
+        }   
+
         with pytest.raises(EntityError):
-            booking = usecase(booking_id=None, 
+            booking = usecase(booking_id=None,
+                              user=user, 
                               court_number=2, 
                               start_date=1634576165000, 
                               end_date=1634583365000, 
@@ -135,12 +222,20 @@ class Test_UpdateBookingUsecase:
     def test_update_booking_usecase_none_court_number(self):
         booking_repo = BookingRepositoryMock()
         usecase = UpdateBookingUsecase(booking_repo=booking_repo)
-        
+
+        user = {
+            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+            'name': 'Nome',
+            'email': 'user@email.com',
+            'role': 'STUDENT'
+        }   
+
         original_booking = booking_repo.bookings[0]
         original_court_number = original_booking.court_number
         
         booking = usecase(
-            booking_id=original_booking.booking_id, 
+            booking_id=original_booking.booking_id,
+                              user=user, 
             court_number=None,
             start_date=1634576165000, 
             end_date=1634583365000, 
@@ -156,9 +251,17 @@ class Test_UpdateBookingUsecase:
         
         original_booking = booking_repo.bookings[0]
         original_start_date = original_booking.start_date
-        
+
+        user = {
+            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+            'name': 'Nome',
+            'email': 'user@email.com',
+            'role': 'STUDENT'
+        }   
+
         booking = usecase(
-            booking_id=original_booking.booking_id, 
+            booking_id=original_booking.booking_id,
+                              user=user, 
             court_number=2,
             start_date=None, 
             end_date=1634583365000, 
@@ -171,12 +274,20 @@ class Test_UpdateBookingUsecase:
     def test_update_booking_usecase_none_end_date(self):
         booking_repo = BookingRepositoryMock()
         usecase = UpdateBookingUsecase(booking_repo=booking_repo)
-        
+
+        user = {
+            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+            'name': 'Nome',
+            'email': 'user@email.com',
+            'role': 'STUDENT'
+        }   
+
         original_booking = booking_repo.bookings[0]
         original_end_date = original_booking.end_date
         
         booking = usecase(
-            booking_id=original_booking.booking_id, 
+            booking_id=original_booking.booking_id,
+                              user=user, 
             court_number=2,
             start_date=1634576165000, 
             end_date=None, 
@@ -190,8 +301,16 @@ class Test_UpdateBookingUsecase:
         booking_repo = BookingRepositoryMock()
         usecase = UpdateBookingUsecase(booking_repo=booking_repo)
 
+        user = {
+            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+            'name': 'Nome',
+            'email': 'user@email.com',
+            'role': 'STUDENT'
+        }   
+
         with pytest.raises(EntityParameterOrderDatesError):
-            booking = usecase(booking_id=booking_repo.bookings[0].booking_id, 
+            booking = usecase(booking_id=booking_repo.bookings[0].booking_id,
+                              user=user, 
                               court_number=2, 
                               start_date=1634583365000, 
                               end_date=1634576165000, 
@@ -202,12 +321,20 @@ class Test_UpdateBookingUsecase:
     def test_update_booking_usecase_none_sport(self):
         booking_repo = BookingRepositoryMock()
         usecase = UpdateBookingUsecase(booking_repo=booking_repo)
-        
+
+        user = {
+            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+            'name': 'Nome',
+            'email': 'user@email.com',
+            'role': 'STUDENT'
+        }   
+
         original_booking = booking_repo.bookings[0]
         original_sport = original_booking.sport
         
         booking = usecase(
-            booking_id=original_booking.booking_id, 
+            booking_id=original_booking.booking_id,
+                              user=user, 
             court_number=2,
             start_date=1634576165000, 
             end_date=1634583365000, 
@@ -220,12 +347,20 @@ class Test_UpdateBookingUsecase:
     def test_update_booking_usecase_none_materials(self):
         booking_repo = BookingRepositoryMock()
         usecase = UpdateBookingUsecase(booking_repo=booking_repo)
-        
+
+        user = {
+            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+            'name': 'Nome',
+            'email': 'user@email.com',
+            'role': 'STUDENT'
+        }   
+
         original_booking = booking_repo.bookings[0]
         original_materials = original_booking.materials
         
         booking = usecase(
-            booking_id=original_booking.booking_id, 
+            booking_id=original_booking.booking_id,
+                              user=user, 
             court_number=2,
             start_date=1634576165000, 
             end_date=1634583365000, 
@@ -239,18 +374,26 @@ class Test_UpdateBookingUsecase:
         booking_repo = BookingRepositoryMock()
         usecase = UpdateBookingUsecase(booking_repo=booking_repo)
 
+        user = {
+            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+            'name': 'Nome',
+            'email': 'user@email.com',
+            'role': 'STUDENT'
+        }   
+
         original_booking = booking_repo.bookings[0]
         booking_id = original_booking.booking_id
         original_user_id = original_booking.user_id
   
         booking = usecase(
-            booking_id=booking_id, 
+            booking_id=booking_id,
+            user=user, 
             court_number=2, 
             start_date=1634576165000, 
             end_date=1634583365000, 
             sport=SPORT.TENNIS, 
             materials=['Raquete', 'Bola', 'Rede', 'Tenis'],
-            user_id="novo-user-id-que-nao-deve-ser-usado" 
+            new_user_id="novo-user-id-que-nao-deve-ser-usado" 
         )
    
         assert booking.user_id == original_user_id
