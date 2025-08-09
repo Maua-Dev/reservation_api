@@ -14,12 +14,18 @@ class Test_UpdateBookingController:
        controller = UpdateBookingController(update_booking_use_case=usecase)
 
        request = HttpRequest(body={
-           "booking_id":  booking_repo.bookings[0].booking_id,
-           "start_date": booking_repo.bookings[0].start_date,
-           "end_date": booking_repo.bookings[0].end_date,
-           "court_number": 1,
-           "sport": "Tennis",
-           "materials": ['Raquete', 'Bola', 'Rede', 'Tenis']
+            "booking_id":  booking_repo.bookings[0].booking_id,
+            "start_date": booking_repo.bookings[0].start_date,
+            "end_date": booking_repo.bookings[0].end_date,
+            "court_number": 1,
+            "sport": "Tennis",
+            "materials": ['Raquete', 'Bola', 'Rede', 'Tenis'],
+            "user_from_authorizer": {
+                'user_id': 'qualquer-id',
+                'name': 'Nome',
+                'email': 'user@email.com',
+                'role': 'ADMIN'
+             }
        })
 
        response = controller(request)
@@ -27,17 +33,51 @@ class Test_UpdateBookingController:
        assert response.status_code == 200
        assert response.body['message'] == "the booking was retrieved"
 
+
+    def test_update_booking_controller_with_invalid_user_id(self):
+       booking_repo = BookingRepositoryMock()
+       usecase = UpdateBookingUsecase(booking_repo=booking_repo)
+       controller = UpdateBookingController(update_booking_use_case=usecase)
+
+       request = HttpRequest(body={
+            "booking_id":  booking_repo.bookings[0].booking_id,
+            "start_date": booking_repo.bookings[0].start_date,
+            "end_date": booking_repo.bookings[0].end_date,
+            "court_number": 1,
+            "sport": "Tennis",
+            "materials": ['Raquete', 'Bola', 'Rede', 'Tenis'],
+            "user_from_authorizer": {
+                'user_id': 'invalid',
+                'name': 'Nome',
+                'email': 'user@email.com',
+                'role': 'STUDENT'
+             }
+       })
+
+       response = controller(request)
+
+       assert response.status_code == 403
+       assert response.body == "That action is forbidden for this user id"
+
+
     def test_update_booking_controller_booking_id_missing(self):
        booking_repo = BookingRepositoryMock()
        usecase = UpdateBookingUsecase(booking_repo=booking_repo)
        controller = UpdateBookingController(update_booking_use_case=usecase)
 
        request = HttpRequest(body={
-           "start_date": booking_repo.bookings[0].start_date,
-           "end_date": booking_repo.bookings[0].end_date,
-           "court_number": 1,
-           "sport": "Tennis",
-           "materials": ['Raquete', 'Bola', 'Rede', 'Tenis']
+            "start_date": booking_repo.bookings[0].start_date,
+            "end_date": booking_repo.bookings[0].end_date,
+            "court_number": 1,
+            "sport": "Tennis",
+            "materials": ['Raquete', 'Bola', 'Rede', 'Tenis'],
+            "user_from_authorizer": {
+                'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                'name': 'Nome',
+                'email': 'user@email.com',
+                'role': 'STUDENT'
+             }
+           
        })        
 
        response = controller(request)
@@ -51,12 +91,19 @@ class Test_UpdateBookingController:
        controller = UpdateBookingController(update_booking_use_case=usecase)
 
        request = HttpRequest(body={
-           "booking_id": 123,
-           "start_date": booking_repo.bookings[0].start_date,
-           "end_date": booking_repo.bookings[0].end_date,
-           "court_number": 1,
-           "sport": "Tennis",
-           "materials": ['Raquete', 'Bola', 'Rede', 'Tenis']
+            "booking_id": 123,
+            "start_date": booking_repo.bookings[0].start_date,
+            "end_date": booking_repo.bookings[0].end_date,
+            "court_number": 1,
+            "sport": "Tennis",
+            "materials": ['Raquete', 'Bola', 'Rede', 'Tenis'],
+            "user_from_authorizer": {
+                'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                'name': 'Nome',
+                'email': 'user@email.com',
+                'role': 'STUDENT'
+             }
+
        })
 
        response = controller(request)
@@ -71,12 +118,18 @@ class Test_UpdateBookingController:
        controller = UpdateBookingController(update_booking_use_case=usecase)
 
        request = HttpRequest(body={
-           "booking_id": booking_repo.bookings[0].booking_id,
-           "start_date": "123",
-           "end_date": booking_repo.bookings[0].end_date,
-           "court_number": 1,
-           "sport": "Tennis",
-           "materials": ['Raquete', 'Bola', 'Rede', 'Tenis']
+            "booking_id": booking_repo.bookings[0].booking_id,
+            "start_date": "123",
+            "end_date": booking_repo.bookings[0].end_date,
+            "court_number": 1,
+            "sport": "Tennis",
+            "materials": ['Raquete', 'Bola', 'Rede', 'Tenis'],
+            "user_from_authorizer": {
+                'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                'name': 'Nome',
+                'email': 'user@email.com',
+                'role': 'STUDENT'
+             }
        })
 
        response = controller(request)
@@ -91,12 +144,18 @@ class Test_UpdateBookingController:
        controller = UpdateBookingController(update_booking_use_case=usecase)
 
        request = HttpRequest(body={
-           "booking_id": booking_repo.bookings[0].booking_id,
-           "start_date": booking_repo.bookings[0].start_date,
-           "end_date": "123",
-           "court_number": 1,
-           "sport": "Tennis",
-           "materials": ['Raquete', 'Bola', 'Rede', 'Tenis']
+            "booking_id": booking_repo.bookings[0].booking_id,
+            "start_date": booking_repo.bookings[0].start_date,
+            "end_date": "123",
+            "court_number": 1,
+            "sport": "Tennis",
+            "materials": ['Raquete', 'Bola', 'Rede', 'Tenis'],
+            "user_from_authorizer": {
+                'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                'name': 'Nome',
+                'email': 'user@email.com',
+                'role': 'STUDENT'
+             }
        })
 
        response = controller(request)
@@ -111,12 +170,18 @@ class Test_UpdateBookingController:
        controller = UpdateBookingController(update_booking_use_case=usecase)
 
        request = HttpRequest(body={
-           "booking_id": booking_repo.bookings[0].booking_id,
-           "start_date": booking_repo.bookings[0].start_date,
-           "end_date": booking_repo.bookings[0].end_date,
-           "court_number": "1",
-           "sport": "Tennis",
-           "materials": ['Raquete', 'Bola', 'Rede', 'Tenis']
+            "booking_id": booking_repo.bookings[0].booking_id,
+            "start_date": booking_repo.bookings[0].start_date,
+            "end_date": booking_repo.bookings[0].end_date,
+            "court_number": "1",
+            "sport": "Tennis",
+            "materials": ['Raquete', 'Bola', 'Rede', 'Tenis'],
+            "user_from_authorizer": {
+                'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                'name': 'Nome',
+                'email': 'user@email.com',
+                'role': 'STUDENT'
+             }
        })
 
        response = controller(request)
@@ -131,12 +196,18 @@ class Test_UpdateBookingController:
        controller = UpdateBookingController(update_booking_use_case=usecase)
 
        request = HttpRequest(body={
-           "booking_id": booking_repo.bookings[0].booking_id,
-           "start_date": booking_repo.bookings[0].start_date,
-           "end_date": booking_repo.bookings[0].end_date,
-           "court_number": 1,
-           "sport": 123,
-           "materials": ['Raquete', 'Bola', 'Rede', 'Tenis']
+            "booking_id": booking_repo.bookings[0].booking_id,
+            "start_date": booking_repo.bookings[0].start_date,
+            "end_date": booking_repo.bookings[0].end_date,
+            "court_number": 1,
+            "sport": 123,
+            "materials": ['Raquete', 'Bola', 'Rede', 'Tenis'],
+            "user_from_authorizer": {
+                'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                'name': 'Nome',
+                'email': 'user@email.com',
+                'role': 'STUDENT'
+             }
        })
 
        response = controller(request)
@@ -151,12 +222,18 @@ class Test_UpdateBookingController:
        controller = UpdateBookingController(update_booking_use_case=usecase)
 
        request = HttpRequest(body={
-           "booking_id": booking_repo.bookings[0].booking_id,
-           "start_date": booking_repo.bookings[0].start_date,
-           "end_date": booking_repo.bookings[0].end_date,
-           "court_number": 1,
-           "sport": "Tennis",
-           "materials": "Raquete, Bola, Rede, Tenis"
+            "booking_id": booking_repo.bookings[0].booking_id,
+            "start_date": booking_repo.bookings[0].start_date,
+            "end_date": booking_repo.bookings[0].end_date,
+            "court_number": 1,
+            "sport": "Tennis",
+            "materials": "Raquete, Bola, Rede, Tenis",
+            "user_from_authorizer": {
+                'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                'name': 'Nome',
+                'email': 'user@email.com',
+                'role': 'STUDENT'
+             }
        })
 
        response = controller(request)
@@ -174,7 +251,13 @@ class Test_UpdateBookingController:
        booking_id = original_booking.booking_id
        
        request = HttpRequest(body={
-           "booking_id": booking_id
+            "booking_id": booking_id,
+            "user_from_authorizer": {
+                'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                'name': 'Nome',
+                'email': 'user@email.com',
+                'role': 'STUDENT'
+             }
        })
        
        response = controller(request)
@@ -192,13 +275,19 @@ class Test_UpdateBookingController:
        new_user_id = "novo-user-id-que-nao-deve-ser-usado"
        
        request = HttpRequest(body={
-           "booking_id": original_booking.booking_id,
-           "start_date": original_booking.start_date,
-           "end_date": original_booking.end_date,
-           "court_number": 1,
-           "sport": "Tennis",
-           "materials": ['Raquete', 'Bola', 'Rede', 'Tenis'],
-           "user_id": new_user_id  
+            "booking_id": original_booking.booking_id,
+            "start_date": original_booking.start_date,
+            "end_date": original_booking.end_date,
+            "court_number": 1,
+            "sport": "Tennis",
+            "materials": ['Raquete', 'Bola', 'Rede', 'Tenis'],
+            "user_id": new_user_id,
+            "user_from_authorizer": {
+                'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                'name': 'Nome',
+                'email': 'user@email.com',
+                'role': 'STUDENT'
+             }
        })
        
        response = controller(request)
@@ -224,12 +313,18 @@ class Test_UpdateBookingController:
        booking_repo.get_booking = get_booking_mock
        
        request = HttpRequest(body={
-           "booking_id": non_existent_booking_id,
-           "start_date": 1634576165000,
-           "end_date": 1634583365000,
-           "court_number": 1,
-           "sport": "Tennis",
-           "materials": ['Raquete', 'Bola', 'Rede', 'Tenis']
+            "booking_id": non_existent_booking_id,
+            "start_date": 1634576165000,
+            "end_date": 1634583365000,
+            "court_number": 1,
+            "sport": "Tennis",
+            "materials": ['Raquete', 'Bola', 'Rede', 'Tenis'],
+            "user_from_authorizer": {
+                'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                'name': 'Nome',
+                'email': 'user@email.com',
+                'role': 'STUDENT'
+             }
        })
        
        response = controller(request)
@@ -251,7 +346,13 @@ class Test_UpdateBookingController:
         
         request = HttpRequest(body={
             "booking_id": booking_id,
-            "court_number": new_court_number
+            "court_number": new_court_number,
+            "user_from_authorizer": {
+                'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                'name': 'Nome',
+                'email': 'user@email.com',
+                'role': 'STUDENT'
+             }
         })
         
         response = controller(request)
