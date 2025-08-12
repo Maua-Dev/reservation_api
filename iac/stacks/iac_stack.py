@@ -55,7 +55,8 @@ class IacStack(Stack):
             "DYNAMO_PARTITION_KEY": "PK",
             "DYNAMO_SORT_KEY": "SK",
             "REGION": self.aws_region,
-            "USER_API_URL": os.environ.get("USER_API_URL")
+            "USER_API_URL": os.environ.get("USER_API_URL"),
+            "S3_BUCKET_NAME": self.s3_bucket.bucket.bucket_name,
         }
 
 
