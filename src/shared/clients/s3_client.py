@@ -21,18 +21,40 @@ class s3_client:
             self.s3 = boto3.client("s3")
 
     def upload_file(self, key, file_type, decode_string):
-
-        response = self.s3.put_object(
-            Bucket=self.__envs.s3_bucket_name,
-            Key=key,
-            Body=decode_string,
-            ContentType=file_type.replace(".", ""),
-        )
-
-        return {
-            's3_response': response,
-            'key': key
+        print(f"DEBUG upload_file - key: {key}")
+        print(f"DEBUG upload_file - file_type: {file_type}")
+        print(f"DEBUG upload_file - decode_string type: {type(decode_string)}")
+        print(f"DEBUG upload_file - decode_string length: {len(decode_string)}")
+        
+        # Content type correto para Excel
+        content_types = {
+            '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            '.xls': 'application/vnd.ms-excel',
         }
+        
+        content_type = content_types.get(file_type, 'application/octet-stream')
+        print(f"DEBUG upload_file - content_type: {content_type}")
+        
+        try:
+            print("DEBUG upload_file - Chamando s3.put_object...")
+            response = self.s3.put_object(
+                Bucket=self.__envs.s3_bucket_name,
+                Key=key,
+                Body=decode_string,  # Este deve ser bytes
+                ContentType=content_type,
+            )
+            print("DEBUG upload_file - put_object executado com sucesso")
+            
+            return {
+                's3_response': response,
+                'key': key
+            }
+            
+        except Exception as e:
+            print(f"DEBUG upload_file - ERRO no put_object: {str(e)}")
+            print(f"DEBUG upload_file - Tipo do erro: {type(e)}")
+            print(f"DEBUG upload_file - Bucket: {self.__envs.s3_bucket_name}")
+            raise e
 
     def delete_file(self):
         pass
