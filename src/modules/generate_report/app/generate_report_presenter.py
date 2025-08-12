@@ -37,6 +37,8 @@ def lambda_handler(event, context):
         bucket_manager = s3_client()
 
         try:
+            
+            report = report.getvalue()
 
             response = bucket_manager.upload_file(key=file_path + file_name,
                                                   file_type=".xlsx",
