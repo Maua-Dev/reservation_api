@@ -215,7 +215,8 @@ class LambdaStack(Construct):
             self.update_booking,
             self.delete_booking,
             self.get_all_bookings,
-            self.get_bookings
+            self.get_bookings,
+            self.generate_report
         ]
 
         self.functions_that_need_s3_permissions = [
