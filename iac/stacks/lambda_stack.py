@@ -203,6 +203,13 @@ class LambdaStack(Construct):
             cron_schedule=Schedule.cron(minute="0", hour="18", week_day="FRI"),
             environment_variables=environment_variables
         )
+        
+        self.get_all_admin_bookings = self.create_lambda_api_gateway_integration(
+            module_name="get_all_admin_bookings",
+            method="GET",
+            api_resource=api_gateway_resource,
+            environment_variables=environment_variables
+        )
 
         self.functions_that_need_dynamo_permissions = [
             self.create_court,
@@ -216,7 +223,8 @@ class LambdaStack(Construct):
             self.delete_booking,
             self.get_all_bookings,
             self.get_bookings,
-            self.generate_report
+            self.generate_report,
+            self.get_all_admin_bookings
         ]
 
         self.functions_that_need_s3_permissions = [
