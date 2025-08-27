@@ -31,8 +31,6 @@ def lambda_handler(event, context):
         # Extracting the token from the event data
         token = event["authorizationToken"].replace("Bearer ", "")
 
-        print(f"token: {token}")
-
         # Fetching the user information from the user mss
         methodArn = event["methodArn"]
         headers = {"Authorization": f"Bearer {token}"}
