@@ -106,12 +106,13 @@ class LambdaStack(Construct):
             authorizer=token_authorizer_lambda
         )
 
-        #not ready for auth
+        #ready for auth
         self.update_booking = self.create_lambda_api_gateway_integration(
             module_name="update_booking",
             method="PUT",
             api_resource=api_gateway_resource,
-            environment_variables=environment_variables
+            environment_variables=environment_variables,
+            authorizer=token_authorizer_lambda
         )
 
         #not ready for auth AND not used?
