@@ -31,7 +31,11 @@ class GetAllBookingsGroupedByRoleUsecase:
                 if user_role not in all_bookings_by_role:
                     all_bookings_by_role[user_role] = []
 
-            user_bookings = [booking for booking in all_bookings if booking.user_id == user_id]
+            user_bookings = [
+                {k: v for k, v in booking.to_dict().items() if k != 'user_id'}
+                for booking in all_bookings
+                if booking.user_id == user_id
+            ]
 
             all_bookings_by_role[user_role if user_role is not None else 'UNKNOWN'].extend(user_bookings)
 
