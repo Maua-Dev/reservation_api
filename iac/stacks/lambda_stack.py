@@ -212,6 +212,13 @@ class LambdaStack(Construct):
             environment_variables=environment_variables
         )
 
+        self.get_all_bookings_grouped_by_role = self.create_lambda_api_gateway_integration(
+            module_name="get_all_bookings_grouped_by_role",
+            method="GET",
+            api_resource=api_gateway_resource,
+            environment_variables=environment_variables
+        )
+
         self.functions_that_need_dynamo_permissions = [
             self.create_court,
             self.get_court,
@@ -225,7 +232,8 @@ class LambdaStack(Construct):
             self.get_all_bookings,
             self.get_bookings,
             self.generate_report,
-            self.get_all_admin_bookings
+            self.get_all_admin_bookings,
+            self.get_all_bookings_grouped_by_role
         ]
 
         self.functions_that_need_s3_permissions = [
