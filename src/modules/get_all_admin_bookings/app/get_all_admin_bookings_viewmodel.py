@@ -14,7 +14,7 @@ class GetAllAdminBookingsViewmodel:
                 
         return {
             "bookings": [
-                {k: v for k, v in booking.to_dict().items() if k != 'user_id'}
+                {k: v for k, v in booking.to_dict().items() if k != 'user_id' or k != 'booking_id'}
                 for booking in self.bookings
             ],
             "message": "Admin bookings retreived"
