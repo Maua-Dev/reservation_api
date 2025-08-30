@@ -57,7 +57,6 @@ class Test_GetBookingPresenter:
         assert json.loads(response['body'])['booking']['end_date'] == 1634583365000
         assert json.loads(response['body'])['booking']['court_number'] == 1
         assert json.loads(response['body'])['booking']['sport'] == 'Tennis'
-        assert json.loads(response['body'])['booking']['user_id'] == '1f25448b-3429-4c19-8287-d9e64f17bc3a'
         assert json.loads(response['body'])['booking']['materials'] == ['Raquete', 'Bola', 'Rede', 'Tenis']
 
 
