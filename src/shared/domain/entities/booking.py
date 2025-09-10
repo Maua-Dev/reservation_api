@@ -3,6 +3,7 @@ import uuid
 from typing import Optional, List
 from src.shared.domain.entities.court import Court
 from src.shared.domain.enums.sport import SPORT
+from src.shared.domain.enums.type import TYPE
 from src.shared.helpers.errors.domain_errors import EntityError, EntityParameterOrderDatesError
 
 class Booking(abc.ABC):
@@ -13,9 +14,10 @@ class Booking(abc.ABC):
     user_id: str
     booking_id: str
     materials: List[str]
+    booking_type: TYPE
 
 
-    def __init__(self, start_date: int, end_date: int, court_number: int, sport: SPORT, user_id: str, booking_id: str, materials: List[str]):
+    def __init__(self, start_date: int, end_date: int, court_number: int, sport: SPORT, user_id: str, booking_id: str, materials: List[str], booking_type: TYPE):
         if not Booking.validate_dates(start_date, end_date):
             raise EntityError("dates")
         self.start_date = start_date
@@ -43,6 +45,10 @@ class Booking(abc.ABC):
         if not Booking.validate_materials(materials):
             raise EntityError("materials")
         self.materials = materials
+
+        if not Booking.validate_type(booking_type):
+            raise EntityError("type")
+        self.booking_type = booking_type
 
 
     @staticmethod
@@ -95,6 +101,12 @@ class Booking(abc.ABC):
             return False
         return True
     
+    @staticmethod
+    def validate_type(booking_type: TYPE) -> bool:
+        if not isinstance(booking_type, TYPE):
+            return False
+        return True
+    
     def to_dict(self):
         return {
             "start_date": self.start_date,
@@ -103,7 +115,8 @@ class Booking(abc.ABC):
             "sport": self.sport.value,
             "user_id": self.user_id,
             "booking_id": self.booking_id,
-            "materials": self.materials
+            "materials": self.materials,
+            "type": self.booking_type.value
         }
 
     def __eq__(self, other):
