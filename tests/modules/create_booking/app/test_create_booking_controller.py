@@ -17,7 +17,8 @@ class TestCreateBookingController:
                 "end_date": 1630003600,
                 "court_number": 1,
                 "sport": "Tennis",
-                "materials": ["racket", "balls"]
+                "materials": ["racket", "balls"],
+                "type": "Training"
             },
             headers={
                 "user_from_authorizer": {
@@ -279,7 +280,8 @@ class TestCreateBookingController:
             "end_date": 1630003600,
             "court_number": 1,
             "sport": "Tennis",
-            "materials": ["racket", 1]
+            "materials": ["racket", 1],
+            "type": 'Common'
         }, headers={
             "user_from_authorizer": {
                 "displayName": 'Lebron James',
