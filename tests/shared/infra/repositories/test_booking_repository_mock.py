@@ -1,3 +1,4 @@
+from src.shared.domain.enums.type import TYPE
 from src.shared.infra.repositories.booking_repository_mock import BookingRepositoryMock
 from src.shared.domain.enums.sport import SPORT
 from src.shared.domain.entities.booking import Booking
@@ -6,7 +7,7 @@ from src.shared.domain.entities.booking import Booking
 class TestBookingRepositoryMock:
     def test_create_booking(self):
         repo_mock = BookingRepositoryMock()
-        new_booking = Booking(start_date=1634576165000, end_date=1634583365000, court_number=1,sport=SPORT.TENNIS, user_id='c8435c66-13a4-4641-9d54-773b4b8ccd09', booking_id='c2d3bebf-dc0d-4fc1-861c-506a40cc2036', materials=['Raquete', 'Bola', 'Rede', 'Tenis'])
+        new_booking = Booking(start_date=1634576165000, end_date=1634583365000, court_number=1,sport=SPORT.TENNIS, user_id='c8435c66-13a4-4641-9d54-773b4b8ccd09', booking_id='c2d3bebf-dc0d-4fc1-861c-506a40cc2036', materials=['Raquete', 'Bola', 'Rede', 'Tenis'], booking_type=TYPE.TRAINING)
         len_before = len(repo_mock.bookings)
 
         response = repo_mock.create_booking(new_booking)
