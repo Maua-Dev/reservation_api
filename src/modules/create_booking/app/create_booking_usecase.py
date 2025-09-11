@@ -3,6 +3,7 @@ from typing import List
 
 from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
+from src.shared.domain.enums.type import TYPE
 from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
 from src.shared.helpers.errors.usecase_errors import DuplicatedItem, InvalidSchedule
 
@@ -15,6 +16,7 @@ class CreateBookingUsecase:
     user_id: str
     booking_id: str
     materials: List[str]
+    booking_type: TYPE
 
     def __init__(self, repo: IBookingRepository):
         self.repo = repo
@@ -25,7 +27,8 @@ class CreateBookingUsecase:
                  court_number: int,
                  sport: str,
                  user_id: str,
-                 materials: List[str]
+                 materials: List[str],
+                 booking_type: TYPE
                  ) -> Booking:
 
         booking_id = str(uuid.uuid4())
@@ -60,7 +63,8 @@ class CreateBookingUsecase:
                                                 self.sport,
                                                 user_id,
                                                 booking_id,
-                                                materials))
+                                                materials,
+                                                booking_type))
 
         return resp
 
