@@ -10,3 +10,4 @@ class SPORT(Enum):
     RUGBY = "Rugby"
     PING_PONG = "Ping Pong"
     BEACH_TENNIS = "Beach Tennis"
+    NA = "NA"

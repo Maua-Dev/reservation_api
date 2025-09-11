@@ -48,6 +48,10 @@ class Booking(abc.ABC):
 
         if not Booking.validate_type(booking_type):
             raise EntityError("type")
+        
+        if booking_type == TYPE.MAINTENCE and self.sport != SPORT.NA:
+            raise EntityError("sport")
+
         self.booking_type = booking_type
 
 

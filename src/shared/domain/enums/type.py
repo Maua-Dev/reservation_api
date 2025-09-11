@@ -1,6 +1,6 @@
 from enum import Enum
 
 class TYPE(Enum):
-    MAINTENCE = 'maintence'
-    TRAINING = 'training'
-    COMMON = 'common'
+    MAINTENCE = 'Maintence'
+    TRAINING = 'Training'
+    COMMON = 'Common'
