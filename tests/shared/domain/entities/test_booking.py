@@ -29,7 +29,7 @@ class TestBooking:
         assert booking.user_id == "d3b07384-d9a1-4e8a-b3ef-4f1d2a87c6f5"
         assert booking.booking_id == "a1f5e2c3-7d8b-4c9e-b012-34f6a789d0e1"
         assert booking.materials == ["ball"]
-        assert booking.booking_type.value == 'training' 
+        assert booking.booking_type.value == 'Training' 
 
     def test_order_dates_incorrect(self):
         with pytest.raises(EntityParameterOrderDatesError):
@@ -239,6 +239,20 @@ class TestBooking:
                 materials= ["ball"],
                 booking_type='invalid'
         )
+            
+    def test_booking_with_maintance_invalid_sport(self):
+
+        with pytest.raises(EntityError):
+            Booking(
+                start_date= 1738940138,
+                end_date= 1838940138,
+                court_number= 1,
+                sport= SPORT.TENNIS,
+                user_id= "d3b07384-d9a1-4e8a-b3ef-4f1d2a87c6f5",
+                booking_id= "a1f5e2c3-7d8b-4c9e-b012-34f6a789d0e1",
+                materials= ["ball"],
+                booking_type=TYPE.MAINTENCE
+        )
 
     def test_booking_to_dict(self):
 
@@ -246,7 +260,7 @@ class TestBooking:
             start_date= 1738940138,
             end_date= 1838940138,
             court_number= 1,
-            sport= SPORT.FOOTBALL,
+            sport= SPORT.NA,
             user_id= "d3b07384-d9a1-4e8a-b3ef-4f1d2a87c6f5",
             booking_id= "a1f5e2c3-7d8b-4c9e-b012-34f6a789d0e1",
             materials= ["ball"],
@@ -257,7 +271,7 @@ class TestBooking:
             "start_date": 1738940138,
             "end_date": 1838940138,
             "court_number": 1,
-            "sport": "Football",
+            "sport": "NA",
             "user_id": "d3b07384-d9a1-4e8a-b3ef-4f1d2a87c6f5",
             "booking_id": "a1f5e2c3-7d8b-4c9e-b012-34f6a789d0e1",
             "materials": ["ball"],
