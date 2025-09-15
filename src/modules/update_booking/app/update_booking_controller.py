@@ -1,3 +1,4 @@
+from src.shared.domain.enums.type import BOOKING_TYPE
 from .update_booking_usecase import UpdateBookingUsecase
 from .update_booking_viewmodel import UpdateBookingViewmodel
 from src.shared.domain.enums.sport import SPORT
@@ -25,6 +26,7 @@ class UpdateBookingController:
             court_number = request.data.get('court_number')
             sport_value = request.data.get('sport')
             materials = request.data.get('materials')
+            booking_type = request.data.get('type')
             user = request.data.get('user_from_authorizer')
 
             if not isinstance(booking_id, str):
@@ -48,7 +50,15 @@ class UpdateBookingController:
                     raise EntityError('sport')
                 
                 sport = SPORT(sport_value)
-            
+
+            if booking_type is not None:
+                if not isinstance(booking_type, str):
+                    raise WrongTypeParameter('type', 'str', type(booking_type).__name__)
+                if booking_type not in [type.value for type in BOOKING_TYPE]:
+                    raise EntityError('type')
+                
+                booking_type = BOOKING_TYPE(booking_type)
+
             
             if materials is not None and not isinstance(materials, list):
                 raise WrongTypeParameter('materials', 'list', type(materials).__name__)
@@ -61,7 +71,8 @@ class UpdateBookingController:
                 end_date=end_date,
                 court_number=court_number,
                 sport=sport,
-                materials=materials
+                materials=materials,
+                booking_type=booking_type
             )
             
             viewmodel = UpdateBookingViewmodel(booking=booking)

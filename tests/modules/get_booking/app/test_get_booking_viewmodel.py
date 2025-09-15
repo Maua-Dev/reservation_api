@@ -18,7 +18,8 @@ class Test_GetBookingViewModel:
                 'sport': 'Tennis',
                 'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
                 'booking_id': 'b1d3bebf-dc0d-4fc1-861c-506a40cc2925',
-                'materials': ['Raquete', 'Bola', 'Rede', 'Tenis']
+                'materials': ['Raquete', 'Bola', 'Rede', 'Tenis'],
+                'type': 'Training'
             },
             'message': 'the booking was retrieved'  
         }

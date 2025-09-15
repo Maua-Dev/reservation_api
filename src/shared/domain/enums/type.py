@@ -1,6 +1,6 @@
 from enum import Enum
 
-class TYPE(Enum):
+class BOOKING_TYPE(Enum):
     MAINTENCE = 'Maintence'
     TRAINING = 'Training'
     COMMON = 'Common'

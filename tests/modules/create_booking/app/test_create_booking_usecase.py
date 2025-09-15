@@ -3,7 +3,7 @@ import pytest
 from src.modules.create_booking.app.create_booking_usecase import CreateBookingUsecase
 from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
-from src.shared.domain.enums.type import TYPE
+from src.shared.domain.enums.type import BOOKING_TYPE
 from src.shared.helpers.errors.usecase_errors import InvalidSchedule
 from src.shared.infra.repositories.booking_repository_mock import BookingRepositoryMock
 
@@ -20,7 +20,7 @@ class TestCreateBookingUsecase:
             user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
             materials=['Raquete', 'Bola', 'Rede', 'Tenis'],
             booking_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
-            booking_type=TYPE.TRAINING
+            booking_type=BOOKING_TYPE.TRAINING
         )
 
         booking_repository = BookingRepositoryMock()
@@ -34,7 +34,7 @@ class TestCreateBookingUsecase:
             sport="Tennis",
             user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
             materials=['Raquete', 'Bola', 'Rede', 'Tenis'],
-            booking_type=TYPE.TRAINING
+            booking_type=BOOKING_TYPE.TRAINING
         )
 
         assert response is not None
@@ -61,7 +61,7 @@ class TestCreateBookingUsecase:
                 sport="Invalid sport but string",
                 user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
                 materials=['Raquete', 'Bola', 'Rede', 'Tenis'],
-                booking_type=TYPE.TRAINING
+                booking_type=BOOKING_TYPE.TRAINING
             )
 
     def test_create_booking_usecase_invalid_materials(self):
@@ -79,7 +79,7 @@ class TestCreateBookingUsecase:
                 sport="Tennis",
                 user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
                 materials=[1, 2, 3],
-                booking_type=TYPE.TRAINING
+                booking_type=BOOKING_TYPE.TRAINING
             )
 
     def test_create_booking_usecase_invalid_schedule_overlap(self):
@@ -97,7 +97,7 @@ class TestCreateBookingUsecase:
                 sport="Tennis",
                 user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
                 materials=["colete"],
-                booking_type=TYPE.TRAINING
+                booking_type=BOOKING_TYPE.TRAINING
             )
 
             assert e.value == "Court is already booked for the selected time slot or has to have 15 min tolerance"
@@ -120,7 +120,7 @@ class TestCreateBookingUsecase:
                     user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
                     materials=['Bola', 'Chuteira'],
                     booking_id='ddd35c66-13a4-4641-9d54-773b4b8ccc98',
-                    booking_type=TYPE.TRAINING
+                    booking_type=BOOKING_TYPE.TRAINING
                 )
             )
 
@@ -131,7 +131,7 @@ class TestCreateBookingUsecase:
                 sport=SPORT.FUTSAL,
                 user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
                 materials=['Bola', 'Chuteira'],
-                booking_type=TYPE.TRAINING          
+                booking_type=BOOKING_TYPE.TRAINING          
             )
 
             assert e.value == "Court is already booked for the selected time slot or has to have 15 min tolerance"
@@ -146,7 +146,7 @@ class TestCreateBookingUsecase:
                     sport=SPORT.FUTSAL,
                     user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
                     materials=['Bola', 'Chuteira'],
-                    booking_type=TYPE.TRAINING  
+                    booking_type=BOOKING_TYPE.TRAINING  
                 )
 
                 assert e2.value == "Court is already booked for the selected time slot or has to have 15 min tolerance"

@@ -6,6 +6,7 @@ from boto3.dynamodb.conditions import Key
 
 from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
+from src.shared.domain.enums.type import BOOKING_TYPE
 from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
 from src.shared.environments import Environments
 from src.shared.helpers.errors.usecase_errors import ForbiddenAction
@@ -52,7 +53,8 @@ class BookingRepositoryDynamo(IBookingRepository):
                        end_date: int = None,
                        court_number: int = None,
                        sport: SPORT = None,
-                       materials: List[str] = None) -> Optional[Booking]:
+                       materials: List[str] = None,
+                       booking_type: BOOKING_TYPE = None) -> Optional[Booking]:
 
         booking_to_update = self.get_booking(booking_id)
 
@@ -66,7 +68,8 @@ class BookingRepositoryDynamo(IBookingRepository):
             "sport": sport.value if sport is not None else booking_to_update.sport.value,
             "materials": materials if materials is not None else booking_to_update.materials,
             "user_id": booking_to_update.user_id,
-            "booking_id": booking_to_update.booking_id
+            "booking_id": booking_to_update.booking_id,
+            "booking_type": booking_type.value if booking_type is not None else booking_to_update.booking_type.value
         }
 
         resp = self.dynamo.update_item(update_dict=update_dict,
@@ -81,10 +84,11 @@ class BookingRepositoryDynamo(IBookingRepository):
     def get_bookings(self,
                      booking_id: Optional[str] = None,
                      user_id: Optional[str] = None,
-                     sport: Optional[SPORT] = None,
+                     sport: Optional[str] = None,
                      court_number: Optional[int] = None,
                      end_date: Optional[int] = None,
-                     start_date: Optional[int] = None) -> List[Optional[Booking]]:
+                     start_date: Optional[int] = None,
+                     booking_type: Optional[str] = None) -> List[Optional[Booking]]:
 
         filters = locals().copy()
         filters.pop('self')

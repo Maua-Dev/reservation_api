@@ -1,7 +1,7 @@
 from src.modules.create_booking.app.create_booking_viewmodel import CreateBookingViewmodel
 from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
-from src.shared.domain.enums.type import TYPE
+from src.shared.domain.enums.type import BOOKING_TYPE
 
 
 class TestCreateBookingViewmodel:
@@ -16,7 +16,7 @@ class TestCreateBookingViewmodel:
             user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
             booking_id='b1d3bebf-dc0d-4fc1-861c-506a40cc2925',
             materials=['Raquete', 'Bola', 'Rede', 'Tenis'],
-            booking_type=TYPE.TRAINING
+            booking_type=BOOKING_TYPE.TRAINING
         )
 
         expected = {

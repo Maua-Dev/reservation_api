@@ -3,7 +3,7 @@ import uuid
 from typing import Optional, List
 from src.shared.domain.entities.court import Court
 from src.shared.domain.enums.sport import SPORT
-from src.shared.domain.enums.type import TYPE
+from src.shared.domain.enums.type import BOOKING_TYPE
 from src.shared.helpers.errors.domain_errors import EntityError, EntityParameterOrderDatesError
 
 class Booking(abc.ABC):
@@ -14,10 +14,10 @@ class Booking(abc.ABC):
     user_id: str
     booking_id: str
     materials: List[str]
-    booking_type: TYPE
+    booking_type: BOOKING_TYPE
 
 
-    def __init__(self, start_date: int, end_date: int, court_number: int, sport: SPORT, user_id: str, booking_id: str, materials: List[str], booking_type: TYPE):
+    def __init__(self, start_date: int, end_date: int, court_number: int, sport: SPORT, user_id: str, booking_id: str, materials: List[str], booking_type: BOOKING_TYPE):
         if not Booking.validate_dates(start_date, end_date):
             raise EntityError("dates")
         self.start_date = start_date
@@ -46,10 +46,10 @@ class Booking(abc.ABC):
             raise EntityError("materials")
         self.materials = materials
 
-        if not Booking.validate_type(booking_type):
+        if not Booking.validate_booking_type(booking_type):
             raise EntityError("type")
         
-        if booking_type == TYPE.MAINTENCE and self.sport != SPORT.NA:
+        if booking_type == BOOKING_TYPE.MAINTENCE and self.sport != SPORT.NA:
             raise EntityError("sport")
 
         self.booking_type = booking_type
@@ -106,8 +106,8 @@ class Booking(abc.ABC):
         return True
     
     @staticmethod
-    def validate_type(booking_type: TYPE) -> bool:
-        if not isinstance(booking_type, TYPE):
+    def validate_booking_type(booking_type: BOOKING_TYPE) -> bool:
+        if not isinstance(booking_type, BOOKING_TYPE):
             return False
         return True
     

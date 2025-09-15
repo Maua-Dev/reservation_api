@@ -20,6 +20,7 @@ class BookingViewmodel:
         self.user_id = booking.user_id
         self.booking_id = booking.booking_id
         self.materials = booking.materials
+        self.booking_type = booking.booking_type
         
     def to_dict(self):
         return {
@@ -29,7 +30,8 @@ class BookingViewmodel:
             'sport': self.sport.value,
             'user_id': self.user_id,
             'booking_id': self.booking_id,
-            'materials': self.materials
+            'materials': self.materials,
+            'type': self.booking_type.value
         }
 
 class DeleteBookingViewModel:

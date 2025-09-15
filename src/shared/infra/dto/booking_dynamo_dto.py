@@ -2,6 +2,7 @@ from typing import List
 
 from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
+from src.shared.domain.enums.type import BOOKING_TYPE
 
 
 class BookingDynamoDTO:
@@ -12,8 +13,9 @@ class BookingDynamoDTO:
     user_id: str
     booking_id: str
     materials: List[str]
+    booking_type: BOOKING_TYPE
 
-    def __init__(self, start_date: int, end_date: int, court_number: int, sport: SPORT, user_id: str, booking_id: str, materials: List[str]):
+    def __init__(self, start_date: int, end_date: int, court_number: int, sport: SPORT, user_id: str, booking_id: str, materials: List[str], booking_type: BOOKING_TYPE):
         self.start_date = start_date
         self.end_date = end_date
         self.court_number = court_number
@@ -21,6 +23,7 @@ class BookingDynamoDTO:
         self.user_id = user_id
         self.booking_id = booking_id
         self.materials = materials
+        self.booking_type = booking_type
 
     @staticmethod
     def from_entity(booking: Booking) -> 'BookingDynamoDTO':
@@ -34,7 +37,8 @@ class BookingDynamoDTO:
             sport = booking.sport,
             user_id = booking.user_id,
             booking_id = booking.booking_id,
-            materials = booking.materials
+            materials = booking.materials,
+            booking_type= booking.booking_type
         )
 
     def to_dynamo(self) -> dict:
@@ -49,7 +53,8 @@ class BookingDynamoDTO:
             "sport": self.sport.value,
             "user_id": self.user_id,
             "booking_id": self.booking_id,
-            "materials": self.materials or []
+            "materials": self.materials or [],
+            "booking_type": self.booking_type.value
         }
 
         booking_without_none_values = {k: v for k, v in data.items() if v is not None}
@@ -68,7 +73,8 @@ class BookingDynamoDTO:
             sport = SPORT(booking_data["sport"]),
             user_id = booking_data["user_id"],
             booking_id = booking_data["booking_id"],
-            materials = booking_data.get("materials") or []
+            materials = booking_data.get("materials") or [],
+            booking_type= booking_data["booking_type"]
         )
     
     def to_entity(self) -> Booking:
@@ -82,11 +88,12 @@ class BookingDynamoDTO:
             sport=self.sport,
             user_id=self.user_id,
             booking_id=self.booking_id,
-            materials=self.materials
+            materials=self.materials,
+            booking_type=self.booking_type
         )
     
     def __repr__(self):
-        return f"BookingDynamoDTO(start_date={self.start_date}, end_date={self.end_date}, court_number={self.court_number}, sport={self.sport}, user_id={self.user_id}, booking_id={self.booking_id}, materials={self.materials})"
+        return f"BookingDynamoDTO(start_date={self.start_date}, end_date={self.end_date}, court_number={self.court_number}, sport={self.sport.value}, user_id={self.user_id}, booking_id={self.booking_id}, materials={self.materials}, booking_type={self.booking_type.value})"
     
     def __eq__(self, other):
         return self.__dict__ == other.__dict__

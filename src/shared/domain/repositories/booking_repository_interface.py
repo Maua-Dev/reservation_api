@@ -4,6 +4,7 @@ from typing import Optional, List
 
 from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
+from src.shared.domain.enums.type import BOOKING_TYPE
 
 
 class IBookingRepository(ABC):
@@ -25,7 +26,8 @@ class IBookingRepository(ABC):
                        end_date: int = None,
                        court_number: int = None,
                        sport: SPORT = None,
-                       materials: List[str] = None) -> Optional[Booking]:
+                       materials: List[str] = None,
+                       booking_type: BOOKING_TYPE = None) -> Optional[Booking]:
         '''
         If booking exists, updates it and returns it
 
@@ -44,10 +46,11 @@ class IBookingRepository(ABC):
     def get_bookings(self,
                      booking_id: Optional[str] = None,
                      user_id: Optional[str] = None,
-                     sport: Optional[SPORT] = None,
+                     sport: Optional[str] = None,
                      court_number: Optional[int] = None,
                      end_date: Optional[int] = None,
-                     start_date: Optional[int] = None) -> List[Optional[Booking]]:
+                     start_date: Optional[int] = None,
+                     booking_type: Optional[str] = None) -> List[Optional[Booking]]:
         '''
         If the booking exists, returns it, else returns None
         '''

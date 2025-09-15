@@ -1,6 +1,6 @@
 import json
 
-from src.shared.domain.enums.type import TYPE
+from src.shared.domain.enums.type import BOOKING_TYPE
 
 from .create_booking_usecase import CreateBookingUsecase
 from .create_booking_viewmodel import CreateBookingViewmodel
@@ -93,7 +93,7 @@ class CreateBookingController:
                 sport=sport,
                 user_id=user_id,
                 materials=materials,
-                booking_type=TYPE(booking_type)
+                booking_type=BOOKING_TYPE(booking_type)
             )
 
             viewmodel = CreateBookingViewmodel(booking=booking)
