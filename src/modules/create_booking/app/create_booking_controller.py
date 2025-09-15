@@ -1,5 +1,7 @@
 import json
 
+from src.shared.domain.enums.type import BOOKING_TYPE
+
 from .create_booking_usecase import CreateBookingUsecase
 from .create_booking_viewmodel import CreateBookingViewmodel
 from src.shared.helpers.errors.controller_errors import MissingParameters, WrongTypeParameter, AuthorizerError
@@ -31,6 +33,7 @@ class CreateBookingController:
         sport = request.data.get('sport', None)
         user_id = user_from_authorizer.get('user_id', None)
         materials = request.data.get('materials', None)
+        booking_type = request.data.get('type', None)
 
         try:
 
@@ -75,6 +78,13 @@ class CreateBookingController:
                 raise WrongTypeParameter(fieldName='materials',
                                          fieldTypeExpected='list',
                                          fieldTypeReceived=type(materials).__name__)
+            
+            if booking_type is None:
+                raise MissingParameters('type')
+            if not isinstance(booking_type, str):
+                raise WrongTypeParameter(fieldName='type',
+                                         fieldTypeExpected='str',
+                                         fieldTypeReceived=type(booking_type).__name__)
 
             booking = self.create_booking_use_case(
                 start_date=start_date,
@@ -82,7 +92,8 @@ class CreateBookingController:
                 court_number=court_number,
                 sport=sport,
                 user_id=user_id,
-                materials=materials
+                materials=materials,
+                booking_type=BOOKING_TYPE(booking_type)
             )
 
             viewmodel = CreateBookingViewmodel(booking=booking)

@@ -50,7 +50,7 @@ class TestCreateBookingPresenter:
                 "time": "12/Mar/2020:19:03:58 +0000",
                 "timeEpoch": 1583348638390
             },
-            "body": '{"start_date": 1610617200, "end_date": 1610620800, "court_number": 1, "sport": "Tennis", "materials": ["ball", "racket"]}',
+            "body": {'start_date': 1610617200, 'end_date': 1610620800, 'court_number': 1, 'sport': 'Tennis', 'materials': ['ball', 'racket'], 'type': 'Common'},
             "pathParameters": None,
             "isBase64Encoded": None,
             "stageVariables": None

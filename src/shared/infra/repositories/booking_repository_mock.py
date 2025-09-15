@@ -1,6 +1,7 @@
 from typing import List, Optional
 from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
+from src.shared.domain.enums.type import BOOKING_TYPE
 from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
 from src.shared.helpers.errors.usecase_errors import ForbiddenAction
 
@@ -17,7 +18,8 @@ class BookingRepositoryMock(IBookingRepository):
                 sport=SPORT.TENNIS,
                 user_id='1f25448b-3429-4c19-8287-d9e64f17bc3a',
                 booking_id='b1d3bebf-dc0d-4fc1-861c-506a40cc2925',
-                materials=['Raquete', 'Bola', 'Rede', 'Tenis']
+                materials=['Raquete', 'Bola', 'Rede', 'Tenis'], 
+                booking_type=BOOKING_TYPE.TRAINING
             ),
 
             Booking(
@@ -27,7 +29,8 @@ class BookingRepositoryMock(IBookingRepository):
                 sport=SPORT.FOOTBALL,
                 user_id='c07e0862-3c07-4227-ab0f-511a267cb7ff',
                 booking_id='b2d3bebf-dc0d-4fc1-861c-506a40cc2925',
-                materials=['Bola', 'Chuteira']
+                materials=['Bola', 'Chuteira'], 
+                booking_type=BOOKING_TYPE.TRAINING
             ),
 
             Booking(
@@ -37,7 +40,8 @@ class BookingRepositoryMock(IBookingRepository):
                 sport=SPORT.BASKETBALL,
                 user_id='d351a9b1-937f-423c-a9d1-9929b5795be1',
                 booking_id='b3d3bebf-dc0d-4fc1-861c-506a40cc2925',
-                materials=['Bola']
+                materials=['Bola'], 
+                booking_type=BOOKING_TYPE.COMMON
             ),
 
             Booking(
@@ -47,7 +51,8 @@ class BookingRepositoryMock(IBookingRepository):
                 sport=SPORT.VOLLEYBALL,
                 user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
                 booking_id='b4d3bebf-dc0d-4fc1-861c-506a40cc2925',
-                materials=['Bola', 'Rede']
+                materials=['Bola', 'Rede'], 
+                booking_type=BOOKING_TYPE.COMMON
             ),
 
             Booking(
@@ -57,7 +62,8 @@ class BookingRepositoryMock(IBookingRepository):
                 sport=SPORT.HANDBALL,
                 user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
                 booking_id='b5d3bebf-dc0d-4fc1-861c-506a40cc2925',
-                materials=['Bola']
+                materials=['Bola'], 
+                booking_type=BOOKING_TYPE.TRAINING
             ),
 
             Booking(
@@ -67,7 +73,8 @@ class BookingRepositoryMock(IBookingRepository):
                 sport=SPORT.FUTSAL,
                 user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
                 booking_id='b6d3bebf-dc0d-4fc1-861c-506a40cc2925',
-                materials=['Bola', 'Chuteira']
+                materials=['Bola', 'Chuteira'], 
+                booking_type=BOOKING_TYPE.TRAINING
             ),
 
             Booking(
@@ -77,7 +84,8 @@ class BookingRepositoryMock(IBookingRepository):
                 sport=SPORT.RUGBY,
                 user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
                 booking_id='b7d3bebf-dc0d-4fc1-861c-506a40cc2925',
-                materials=['Bola', 'Tenis', 'Capacete']
+                materials=['Bola', 'Tenis', 'Capacete'], 
+                booking_type=BOOKING_TYPE.TRAINING
             ),
 
             Booking(
@@ -87,7 +95,8 @@ class BookingRepositoryMock(IBookingRepository):
                 sport=SPORT.PING_PONG,
                 user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
                 booking_id='b8d3bebf-dc0d-4fc1-861c-506a40cc2925',
-                materials=['Raquete', 'Bola']
+                materials=['Raquete', 'Bola'], 
+                booking_type=BOOKING_TYPE.TRAINING
             ),
         ]
 
@@ -101,7 +110,8 @@ class BookingRepositoryMock(IBookingRepository):
                        end_date: int = None,
                        court_number: int = None,
                        sport: SPORT = None,
-                       materials: List[str] = None
+                       materials: List[str] = None,
+                       booking_type: BOOKING_TYPE = None
                        ) -> Booking:
 
         booking = self.get_booking(booking_id)
@@ -119,7 +129,8 @@ class BookingRepositoryMock(IBookingRepository):
             booking.sport = sport
         if materials is not None:
             booking.materials = materials
-
+        if booking_type is not None:
+            booking.booking_type = booking_type
         return booking
 
     def get_booking(self, booking_id: str):
@@ -134,7 +145,8 @@ class BookingRepositoryMock(IBookingRepository):
                      sport: Optional[str] = None,
                      court_number: Optional[int] = None,
                      end_date: Optional[int] = None,
-                     start_date: Optional[int] = None) -> List[Optional[Booking]]:
+                     start_date: Optional[int] = None,
+                     booking_type: Optional[str] = None) -> List[Optional[Booking]]:
 
         filters = locals().copy()
         filters.pop('self')

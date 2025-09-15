@@ -17,7 +17,8 @@ class Test_GetBookingsViewModel:
                 'court_number': 1,
                 'sport': 'Tennis',
                 'booking_id': 'b1d3bebf-dc0d-4fc1-861c-506a40cc2925',
-                'materials': ['Raquete', 'Bola', 'Rede', 'Tenis']
+                'materials': ['Raquete', 'Bola', 'Rede', 'Tenis'],
+                'type': 'Training'
             }],
             'message': 'the bookings were retrieved'
         }

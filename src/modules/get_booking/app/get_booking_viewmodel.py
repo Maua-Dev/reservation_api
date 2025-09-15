@@ -16,6 +16,7 @@ class BookingViewmodel:
         self.sport = booking.sport
         self.booking_id = booking.booking_id
         self.materials = booking.materials
+        self.booking_type = booking.booking_type
 
     def to_dict(self):
         return {
@@ -24,7 +25,8 @@ class BookingViewmodel:
             'court_number': self.court_number,
             'sport': self.sport.value,
             'booking_id': self.booking_id,
-            'materials': self.materials
+            'materials': self.materials,
+            "type": self.booking_type.value
         }
         
 class GetBookingViewmodel:

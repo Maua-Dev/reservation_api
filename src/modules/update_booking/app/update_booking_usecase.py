@@ -1,6 +1,7 @@
 from typing import List
 from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
+from src.shared.domain.enums.type import BOOKING_TYPE
 from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
 from src.shared.helpers.errors.domain_errors import EntityError, EntityParameterOrderDatesError
 from src.shared.helpers.errors.usecase_errors import ForbiddenAction, NoItemsFound, InvalidSchedule
@@ -17,7 +18,8 @@ class UpdateBookingUsecase:
                 court_number: int = None, 
                 sport: SPORT = None, 
                 materials: List[str] = None,
-                new_user_id: str = None):
+                new_user_id: str = None,
+                booking_type: BOOKING_TYPE = None):
         
         user_id = user.get('user_id')
         user_role = user.get('role') 
@@ -40,6 +42,7 @@ class UpdateBookingUsecase:
         court_number = court_number if court_number is not None else existing_booking.court_number
         sport = sport if sport is not None else existing_booking.sport
         materials = materials if materials is not None else existing_booking.materials
+        booking_type = booking_type if booking_type is not None else existing_booking.booking_type
         
         if Booking.validate_dates(start_date, end_date) is False:
             raise EntityError("date")
@@ -55,6 +58,9 @@ class UpdateBookingUsecase:
             
         if Booking.validate_materials(materials) is False:
             raise EntityError("materials")
+        
+        if Booking.validate_booking_type(booking_type) is False:
+            raise EntityError("type")
         
         all_bookings = self.booking_repo.get_all_bookings()
 
@@ -77,7 +83,8 @@ class UpdateBookingUsecase:
             end_date=end_date,
             court_number=court_number,
             sport=sport,
-            materials=materials
+            materials=materials,
+            booking_type=booking_type
         )
         
         if booking.user_id != existing_booking.user_id:
