@@ -51,6 +51,7 @@ class UpdateBookingController:
                 
                 sport = SPORT(sport_value)
 
+            
             if booking_type is not None:
                 if not isinstance(booking_type, str):
                     raise WrongTypeParameter('type', 'str', type(booking_type).__name__)
