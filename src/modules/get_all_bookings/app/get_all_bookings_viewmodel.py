@@ -1,5 +1,6 @@
 from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
+from src.shared.domain.enums.type import BOOKING_TYPE   
 from typing import List
 
 class BookingViewModel:
@@ -9,6 +10,7 @@ class BookingViewModel:
     sport: SPORT
     booking_id: str
     materials: List[str]
+    booking_type: BOOKING_TYPE
 
     def __init__(self, booking: Booking):
         self.start_date = booking.start_date
