@@ -74,7 +74,7 @@ class BookingDynamoDTO:
             user_id = booking_data["user_id"],
             booking_id = booking_data["booking_id"],
             materials = booking_data.get("materials") or [],
-            booking_type= BOOKING_TYPE(booking_data["booking_type"])
+            booking_type= BOOKING_TYPE(booking_data.get("booking_type", None)) if booking_data.get("booking_type", None) is not None else 'Undefined'
         )
     
     def to_entity(self) -> Booking:
