@@ -34,7 +34,7 @@ class TestCreateBookingUsecase:
             sport="Tennis",
             user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
             materials=['Raquete', 'Bola', 'Rede', 'Tenis'],
-            booking_type=BOOKING_TYPE.TRAINING
+            booking_type='Training'
         )
 
         assert response is not None
@@ -61,7 +61,7 @@ class TestCreateBookingUsecase:
                 sport="Invalid sport but string",
                 user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
                 materials=['Raquete', 'Bola', 'Rede', 'Tenis'],
-                booking_type=BOOKING_TYPE.TRAINING
+                booking_type='Training'
             )
 
     def test_create_booking_usecase_invalid_materials(self):
@@ -79,7 +79,7 @@ class TestCreateBookingUsecase:
                 sport="Tennis",
                 user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
                 materials=[1, 2, 3],
-                booking_type=BOOKING_TYPE.TRAINING
+                booking_type='Training'
             )
 
     def test_create_booking_usecase_invalid_schedule_overlap(self):
@@ -97,7 +97,7 @@ class TestCreateBookingUsecase:
                 sport="Tennis",
                 user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
                 materials=["colete"],
-                booking_type=BOOKING_TYPE.TRAINING
+                booking_type='Training'
             )
 
             assert e.value == "Court is already booked for the selected time slot or has to have 15 min tolerance"
@@ -131,7 +131,7 @@ class TestCreateBookingUsecase:
                 sport=SPORT.FUTSAL,
                 user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
                 materials=['Bola', 'Chuteira'],
-                booking_type=BOOKING_TYPE.TRAINING          
+                booking_type='Training'      
             )
 
             assert e.value == "Court is already booked for the selected time slot or has to have 15 min tolerance"
@@ -146,7 +146,7 @@ class TestCreateBookingUsecase:
                     sport=SPORT.FUTSAL,
                     user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
                     materials=['Bola', 'Chuteira'],
-                    booking_type=BOOKING_TYPE.TRAINING  
+                    booking_type='Training'
                 )
 
                 assert e2.value == "Court is already booked for the selected time slot or has to have 15 min tolerance"

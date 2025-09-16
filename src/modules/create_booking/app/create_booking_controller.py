@@ -93,7 +93,7 @@ class CreateBookingController:
                 sport=sport,
                 user_id=user_id,
                 materials=materials,
-                booking_type=BOOKING_TYPE(booking_type)
+                booking_type=booking_type
             )
 
             viewmodel = CreateBookingViewmodel(booking=booking)

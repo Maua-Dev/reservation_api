@@ -28,7 +28,7 @@ class CreateBookingUsecase:
                  sport: str,
                  user_id: str,
                  materials: List[str],
-                 booking_type: BOOKING_TYPE
+                 booking_type: str
                  ) -> Booking:
 
         booking_id = str(uuid.uuid4())
@@ -44,6 +44,11 @@ class CreateBookingUsecase:
         for material in materials:
             if not isinstance(material, str):
                 raise ValueError("Invalid material type")
+            
+        if booking_type not in [type.value for type in BOOKING_TYPE]:
+            raise ValueError("Invalid type enum value")
+        
+        self.booking_type = BOOKING_TYPE(booking_type)
 
         all_bookings = self.repo.get_all_bookings()
 
@@ -64,7 +69,7 @@ class CreateBookingUsecase:
                                                 user_id,
                                                 booking_id,
                                                 materials,
-                                                booking_type))
+                                                self.booking_type))
 
         return resp
 
