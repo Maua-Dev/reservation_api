@@ -39,7 +39,7 @@ class TestGetBookingsController:
         response = controller(request)
 
         assert response.status_code == 400
-        assert response.body == 'Empty query parameters: At least one of the filters must be provided: booking_id, user_id, sport, court_number, end_date, start_date'
+        assert response.body == 'Empty query parameters: At least one of the filters must be provided: booking_id, user_id, sport, court_number, end_date, start_date, type'
 
     def test_get_bookings_controller_wrong_type_booking_id(self):
         repo = BookingRepositoryMock()

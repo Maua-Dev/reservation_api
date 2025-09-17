@@ -33,9 +33,9 @@ class GetBookingsController:
             start_date = start_date if start_date != "" else None
             booking_type = booking_type if booking_type != "" else None
 
-            if not booking_id and not user_id and not sport and not court_number and not end_date and not start_date:
+            if not booking_id and not user_id and not sport and not court_number and not end_date and not start_date and not booking_type:
                 raise EmptyQueryParameters(
-                    'At least one of the filters must be provided: booking_id, user_id, sport, court_number, end_date, start_date')
+                    'At least one of the filters must be provided: booking_id, user_id, sport, court_number, end_date, start_date, type')
 
             if court_number is not None:
                 try:
