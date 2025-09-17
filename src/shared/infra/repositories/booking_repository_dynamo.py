@@ -86,9 +86,10 @@ class BookingRepositoryDynamo(IBookingRepository):
                      user_id: Optional[str] = None,
                      sport: Optional[str] = None,
                      court_number: Optional[int] = None,
+                     booking_type: Optional[str] = None,
                      end_date: Optional[int] = None,
-                     start_date: Optional[int] = None,
-                     booking_type: Optional[str] = None) -> List[Optional[Booking]]:
+                     start_date: Optional[int] = None
+                     ) -> List[Optional[Booking]]:
 
         filters = locals().copy()
         filters.pop('self')

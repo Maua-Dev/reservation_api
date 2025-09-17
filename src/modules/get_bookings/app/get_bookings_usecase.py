@@ -52,7 +52,7 @@ class GetBookingsUseCase:
             court_number=court_number if court_number else None,
             end_date=end_date if end_date else None,
             start_date=start_date if start_date else None,
-            booking_type=booking_type)
+            booking_type=BOOKING_TYPE(booking_type) if booking_type else None)
         if bookings is None or bookings == []:
             raise NoItemsFound('booking filters passed')
         
