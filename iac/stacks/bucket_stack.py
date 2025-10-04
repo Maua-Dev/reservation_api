@@ -1,12 +1,12 @@
 from aws_cdk import (
     aws_s3 as s3,
+    aws_cloudfront as cloudfront,
+    aws_cloudfront_origins as origins,
     aws_iam as iam,
     RemovalPolicy,
-    Stack,
 )
 from constructs import Construct
 import os
-import random
 
 class BucketStack(Construct):
 
@@ -27,7 +27,17 @@ class BucketStack(Construct):
         self.bucket = s3.Bucket(
             self, f"BACK_S3_REPORT_BUCKET_{stage}",
             # TODO remover isso quando voltar pra conta nova ou tentar deletar o bucket criado la com power user
-            bucket_name=f"{self.stack_name}-report-bucket{stage}-{random.randint(1000,9999)}".lower(),
+            bucket_name=f"{self.stack_name}-report-bucket-{stage}".lower(),
             versioned=True,
             removal_policy=RemovalPolicy.DESTROY if not (stage == 'PROD') else RemovalPolicy.RETAIN,
+            block_public_access=s3.BlockPublicAccess.BLOCK_ALL
+        )
+        
+        self.distribution = cloudfront.Distribution(
+            self, f"ReportBucketDistribution{stage}",
+            default_behavior=cloudfront.BehaviorOptions(
+                origin=origins.S3Origin(self.bucket),
+                viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+            ),
+            default_root_object=None  # não obrigatório, mas evita erro se não tiver index.html
         )
