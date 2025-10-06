@@ -145,7 +145,7 @@ class BookingRepositoryDynamo(IBookingRepository):
                 sort_key=self.booking_sort_key_format(booking_id)
             )
 
-            self.send_user_email(user)
+            self.send_user_email(user, deleted)
 
             return BookingDynamoDTO.from_dynamo(deleted['Attributes']).to_entity()
 
@@ -183,11 +183,11 @@ class BookingRepositoryDynamo(IBookingRepository):
         return super().get_all_users()
     
 
-    def send_user_email(self, user) -> bool:
+    def send_user_email(self, user, deleted_booking: Booking) -> bool:
         try:
 
             client_ses = boto3.client('ses', region_name=os.environ.get('AWS_REGION'))
-            email_to_send = compose_deleted_user_email(user)
+            email_to_send = compose_deleted_user_email(user, deleted_booking)
 
             response = client_ses.send_email(
                 Destination={
@@ -213,8 +213,6 @@ class BookingRepositoryDynamo(IBookingRepository):
                 },
                 Source=os.environ.get("FROM_EMAIL"),
             )
-
-            print("ESSA É A MAGIA DO PRINT, AQUI ESTÁ A SUA RESPONSE -----> ", response)
 
             return True
         except Exception as err:

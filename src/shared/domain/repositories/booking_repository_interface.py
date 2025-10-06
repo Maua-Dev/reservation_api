@@ -82,7 +82,7 @@ class IBookingRepository(ABC):
 
     # TODO: método para enviar e-mail para o usuário
     @abstractmethod 
-    def send_user_email(self, user) -> bool:
+    def send_user_email(self, user, deleted_booking: Booking) -> bool:
         '''
         Send user an e-mail
         '''
