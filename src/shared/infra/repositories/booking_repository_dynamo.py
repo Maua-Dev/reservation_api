@@ -145,13 +145,11 @@ class BookingRepositoryDynamo(IBookingRepository):
                 sort_key=self.booking_sort_key_format(booking_id)
             )
 
-            print(1)
+            deleted_booking = BookingDynamoDTO.from_dynamo(deleted['Attributes']).to_entity()
 
-            self.send_user_email(user, deleted)
+            self.send_user_email(user, deleted_booking)
 
-            print(2)
-
-            return BookingDynamoDTO.from_dynamo(deleted['Attributes']).to_entity()
+            return deleted_booking
 
         if user_role == 'STUDENT':
             raise ForbiddenAction('user id')
@@ -190,13 +188,7 @@ class BookingRepositoryDynamo(IBookingRepository):
     def send_user_email(self, user, deleted_booking: Booking) -> bool:
         try:
 
-            print('3 ' + Environments.get_envs().from_email)
-            print('4 ' + Environments.get_envs().hidden_copy)
-            print('5 ' + user.get('email'))
-
             client_ses = boto3.client('ses', region_name=os.environ.get('AWS_REGION'))
-
-            print('6 cliente aberto com sucesso')
 
             email_to_send = compose_deleted_user_email(user, deleted_booking)
 
