@@ -190,10 +190,17 @@ class BookingRepositoryDynamo(IBookingRepository):
     def send_user_email(self, user, deleted_booking: Booking) -> bool:
         try:
 
-            print(3)
+            print('3 ' + Environments.get_envs().from_email)
+            print('4 ' + Environments.get_envs().hidden_copy)
+            print('5 ' + user.get('email'))
 
             client_ses = boto3.client('ses', region_name=os.environ.get('AWS_REGION'))
+
+            print('6 cliente aberto com sucesso')
+
             email_to_send = compose_deleted_user_email(user, deleted_booking)
+
+            print('7 mensagem email criada -> ' + email_to_send)
 
             response = client_ses.send_email(
                 Destination={
@@ -220,7 +227,7 @@ class BookingRepositoryDynamo(IBookingRepository):
                 Source = Environments.get_envs().from_email,
             )
 
-            print('4 endereco de envio -> ' + Environments.get_envs().from_email)
+            print('EMAIL ENVIADO')
 
             return True
         except Exception as err:
