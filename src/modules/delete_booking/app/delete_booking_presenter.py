@@ -10,9 +10,6 @@ controller = DeleteBookingController(usecase)
 
 def lambda_handler(event, context):
     
-    print(event)
-    print("PRINT DO EVENT TA AQUI")
-    
     httpRequest = LambdaHttpRequest(data=event)
     
     user_info_string = event.get('requestContext', {}).get('authorizer', {}).get('user')

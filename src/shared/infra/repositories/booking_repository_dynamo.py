@@ -145,7 +145,11 @@ class BookingRepositoryDynamo(IBookingRepository):
                 sort_key=self.booking_sort_key_format(booking_id)
             )
 
+            print(1)
+
             self.send_user_email(user, deleted)
+
+            print(2)
 
             return BookingDynamoDTO.from_dynamo(deleted['Attributes']).to_entity()
 
@@ -186,6 +190,8 @@ class BookingRepositoryDynamo(IBookingRepository):
     def send_user_email(self, user, deleted_booking: Booking) -> bool:
         try:
 
+            print(3)
+
             client_ses = boto3.client('ses', region_name=os.environ.get('AWS_REGION'))
             email_to_send = compose_deleted_user_email(user, deleted_booking)
 
@@ -214,7 +220,7 @@ class BookingRepositoryDynamo(IBookingRepository):
                 Source = Environments.get_envs().from_email,
             )
 
-            print('endereco de envio -> ' + Environments.get_envs().from_email)
+            print('4 endereco de envio -> ' + Environments.get_envs().from_email)
 
             return True
         except Exception as err:
