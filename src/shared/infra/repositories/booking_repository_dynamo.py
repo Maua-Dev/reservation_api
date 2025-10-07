@@ -196,7 +196,7 @@ class BookingRepositoryDynamo(IBookingRepository):
                     ],
                     'BccAddresses':
                         [
-                            Environments.hidden_copy
+                            Environments.get_envs().hidden_copy
                         ]
                 },
                 Message={
@@ -211,10 +211,10 @@ class BookingRepositoryDynamo(IBookingRepository):
                         'Data': 'Mauá Reservation - Reserva Cancelada',
                     },
                 },
-                Source = Environments.from_email,
+                Source = Environments.get_envs().from_email,
             )
 
-            
+            print('endereco de envio -> ' + Environments.get_envs().from_email)
 
             return True
         except Exception as err:
