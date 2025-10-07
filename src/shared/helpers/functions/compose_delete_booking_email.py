@@ -254,6 +254,4 @@ def compose_deleted_user_email(user, deleted_booking: Booking):
         </html>
         """
 
-    message = message.format(name=name)
-
     return message
