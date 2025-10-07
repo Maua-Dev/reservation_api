@@ -31,6 +31,8 @@ class Environments:
     dynamo_sort_key: str
     cloud_front_distribution_domain: str
     mss_name: str 
+    from_email: str
+    hidden_copy: str
 
     def _configure_local(self):
         from dotenv import load_dotenv
@@ -64,6 +66,8 @@ class Environments:
             self.dynamo_partition_key = os.environ.get("DYNAMO_PARTITION_KEY")
             self.dynamo_sort_key = os.environ.get("DYNAMO_SORT_KEY")
             self.cloud_front_distribution_domain = os.environ.get("CLOUD_FRONT_DISTRIBUTION_DOMAIN")
+            self.from_email = os.environ.get("FROM_EMAIL")
+            self.hidden_copy = os.environ.get("HIDDEN_COPY")
 
     # @staticmethod
     # def get_user_repo() -> IUserRepository:

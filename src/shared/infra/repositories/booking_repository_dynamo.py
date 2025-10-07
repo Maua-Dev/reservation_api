@@ -196,7 +196,7 @@ class BookingRepositoryDynamo(IBookingRepository):
                     ],
                     'BccAddresses':
                         [
-                            os.environ.get("HIDDEN_COPY")
+                            Environments.hidden_copy
                         ]
                 },
                 Message={
@@ -211,8 +211,10 @@ class BookingRepositoryDynamo(IBookingRepository):
                         'Data': 'Mauá Reservation - Reserva Cancelada',
                     },
                 },
-                Source=os.environ.get("FROM_EMAIL"),
+                Source = Environments.from_email,
             )
+
+            
 
             return True
         except Exception as err:

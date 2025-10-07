@@ -57,6 +57,8 @@ class IacStack(Stack):
             "REGION": self.aws_region,
             "USER_API_URL": os.environ.get("USER_API_URL"),
             "S3_BUCKET_NAME": self.s3_bucket.bucket.bucket_name,
+            "FROM_EMAIL": os.environ.get("FROM_EMAIL"),
+            "HIDDEN_COPY": os.environ.get("HIDDEN_COPY")
         }
 
 
