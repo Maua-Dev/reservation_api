@@ -1,4 +1,5 @@
 from src.shared.clients.user_api_client import UserAPIClient
+from src.shared.domain.entities.booking import Booking
 from .generate_report_extractor import GenerateReportExtractor
 from typing import List
 
@@ -15,14 +16,15 @@ class GenerateReportAggregator:
         #fazer logica aqui
         #trocar os bookings por users
         #dps instalar as dependencias do requirements-dev.txt
-        
-        
 
         users_statistics = {}
 
         user_api_client = UserAPIClient()
 
         for booking in bookings:
+
+            print(booking.to_dict)
+
             if booking.user_id not in users_statistics:
                 user_name = user_api_client.get_user_name(booking.user_id)
                 key = user_name if user_name is not None else booking.user_id

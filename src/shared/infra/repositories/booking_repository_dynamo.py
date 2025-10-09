@@ -176,7 +176,7 @@ class BookingRepositoryDynamo(IBookingRepository):
         for item in all_items:
             if item.get('entity') == 'booking':
                 booking = BookingDynamoDTO.from_dynamo(item).to_entity()
-                if initial_date <= booking.start_date/1000 <= final_date:
+                if initial_date <= booking.start_date <= final_date:
                     all_bookings.append(booking)
 
         return all_bookings
