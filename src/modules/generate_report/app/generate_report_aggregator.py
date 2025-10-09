@@ -51,10 +51,10 @@ class GenerateReportAggregator:
 
 
 
-            users_statistics[key]["reservas_feitas"] += 1
-            users_statistics[key][booking.sport.value] += 1
-            users_statistics[key][booking.court_number] += 1
-            users_statistics[key]["tempo_em_quadra"] += booking.end_date - booking.start_date
+                users_statistics[key]["reservas_feitas"] += 1
+                users_statistics[key][booking.sport.value] += 1
+                users_statistics[key][booking.court_number] += 1
+                users_statistics[key]["tempo_em_quadra"] += booking.end_date - booking.start_date
 
 
         #court statistics logic
