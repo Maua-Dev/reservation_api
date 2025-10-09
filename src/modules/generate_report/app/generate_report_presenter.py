@@ -12,7 +12,6 @@ repo = Environments.get_envs().get_booking_repo()()
 
 
 def lambda_handler(event, context):
-    extractor = GenerateReportExtractor(repo)
     #"2025-04-03T15:00:00Z" date format
 
     current_date = datetime.datetime.now()

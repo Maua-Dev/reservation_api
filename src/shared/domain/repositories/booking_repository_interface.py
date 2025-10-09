@@ -74,6 +74,13 @@ class IBookingRepository(ABC):
         pass
 
     @abstractmethod
+    def get_all_bookings_by_date_range(self, initial_date: int, final_date: int) -> Optional[List[Booking]]:
+        '''
+        Returns all bookings, filtered by date range
+        '''
+        pass
+
+    @abstractmethod
     def get_all_users(self) -> List[str]:
         '''
         Returns name users by user id
