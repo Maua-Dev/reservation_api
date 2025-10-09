@@ -15,13 +15,18 @@ class GenerateReportTransformer:
         df_courts = pd.DataFrame.from_dict(court_statistics, orient="index")
         df_sports = pd.DataFrame.from_dict(sports_statistics, orient="index")
 
+        
+        print(f"DF Users shape: {df_users.shape}")
+        print(f"DF Courts shape: {df_courts.shape}")
+        print(f"DF Sports shape: {df_sports.shape}")
+
         output = io.BytesIO()
 
         with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
             df_users.to_excel(writer, sheet_name="Usuários")
             df_courts.to_excel(writer, sheet_name="Quadras")
             df_sports.to_excel(writer, sheet_name="Esportes")
-
+            writer.close()
         output.seek(0)
 
         return output

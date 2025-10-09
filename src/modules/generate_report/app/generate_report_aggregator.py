@@ -16,6 +16,7 @@ class GenerateReportAggregator:
         #trocar os bookings por users
         #dps instalar as dependencias do requirements-dev.txt
         
+        
 
         users_statistics = {}
 
@@ -115,5 +116,10 @@ class GenerateReportAggregator:
                 sport_statistics[sport_key][user_column] += 1
 
                 #sport_statistics logic
+
+        print(f"Users: {len(users_statistics)}")
+        print(f"Courts: {len(court_statistics)}")
+        print(f"Sports: {len(sport_statistics)}")
+        print(f"Sample user data: {list(users_statistics.items())[:1]}")
 
         return users_statistics, court_statistics, sport_statistics
