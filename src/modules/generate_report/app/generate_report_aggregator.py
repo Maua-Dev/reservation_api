@@ -23,7 +23,7 @@ class GenerateReportAggregator:
 
         for booking in bookings:
 
-            print(booking.to_dict)
+            print(booking.to_dict())
 
             if booking.user_id not in users_statistics:
                 user_name = user_api_client.get_user_name(booking.user_id)
@@ -43,6 +43,7 @@ class GenerateReportAggregator:
                     3: 0,
                     4: 0,
                     5: 0,
+                    6: 0,
                     "tempo_em_quadra": 0
                 }
 
