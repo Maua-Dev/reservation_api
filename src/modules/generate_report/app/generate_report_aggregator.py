@@ -13,21 +13,17 @@ class GenerateReportAggregator:
 
         bookings = self.extractor(initial_date, final_date)
 
-        #fazer logica aqui
-        #trocar os bookings por users
-        #dps instalar as dependencias do requirements-dev.txt
-
         users_statistics = {}
 
         user_api_client = UserAPIClient()
 
         for booking in bookings:
 
-            print(booking.to_dict())
+            user_name = user_api_client.get_user_name(booking.user_id)
+            key = user_name if user_name is not None else booking.user_id
 
-            if booking.user_id not in users_statistics:
-                user_name = user_api_client.get_user_name(booking.user_id)
-                key = user_name if user_name is not None else booking.user_id
+            if key not in users_statistics:
+
                 users_statistics[key] = {
                     "reservas_feitas": 0,
                     "Tennis": 0,
@@ -50,11 +46,10 @@ class GenerateReportAggregator:
                 }
 
 
-
-                users_statistics[key]["reservas_feitas"] += 1
-                users_statistics[key][booking.sport.value] += 1
-                users_statistics[key][booking.court_number] += 1
-                users_statistics[key]["tempo_em_quadra"] += booking.end_date - booking.start_date
+            users_statistics[key]["reservas_feitas"] += 1
+            users_statistics[key][booking.sport.value] += 1
+            users_statistics[key][booking.court_number] += 1
+            users_statistics[key]["tempo_em_quadra"] += (booking.end_date - booking.start_date) / (1000 * 60 * 60)
 
 
         #court statistics logic
@@ -124,10 +119,5 @@ class GenerateReportAggregator:
                 sport_statistics[sport_key][user_column] += 1
 
                 #sport_statistics logic
-
-        print(f"Users: {len(users_statistics)}")
-        print(f"Courts: {len(court_statistics)}")
-        print(f"Sports: {len(sport_statistics)}")
-        print(f"Sample user data: {list(users_statistics.items())[:1]}")
 
         return users_statistics, court_statistics, sport_statistics
