@@ -38,6 +38,8 @@ class GenerateReportAggregator:
                     "Futsal": 0,
                     "Rugby": 0,
                     "Ping Pong": 0,
+                    "Beach Tennis": 0,
+                    "NA": 0,
                     1: 0,
                     2: 0,
                     3: 0,
@@ -72,7 +74,9 @@ class GenerateReportAggregator:
                     "Handball": 0,
                     "Futsal": 0,
                     "Rugby": 0,
-                    "Ping Pong": 0
+                    "Ping Pong": 0,
+                    "Beach Tennis": 0,
+                    "NA": 0
                 }
 
             sport_column = booking.sport.value
@@ -104,6 +108,7 @@ class GenerateReportAggregator:
                     "quadra 3": 0,
                     "quadra 4": 0,
                     "quadra 5": 0,
+                    "quadra 6": 0,
                     "Tempo Total Praticado": 0,
                 }
 
