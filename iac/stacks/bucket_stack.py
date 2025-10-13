@@ -25,16 +25,16 @@ class BucketStack(Construct):
             stage = 'DEV'
 
         self.bucket = s3.Bucket(
-            self, f"BACK_S3_REPORT_BUCKET_{stage}",
+            self, f"RESERVATION_BACK_S3_BUCKET_{stage}",
             # TODO remover isso quando voltar pra conta nova ou tentar deletar o bucket criado la com power user
-            bucket_name=f"{self.stack_name}-report-bucket-{stage}".lower(),
+            bucket_name=f"{self.stack_name}-bucket-{stage}".lower(),
             versioned=True,
             removal_policy=RemovalPolicy.DESTROY if not (stage == 'PROD') else RemovalPolicy.RETAIN,
             block_public_access=s3.BlockPublicAccess.BLOCK_ALL
         )
         
         self.distribution = cloudfront.Distribution(
-            self, f"ReportBucketDistribution{stage}",
+            self, f"ReservationBucketDistribution{stage}",
             default_behavior=cloudfront.BehaviorOptions(
                 origin=origins.S3Origin(self.bucket),
                 viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
