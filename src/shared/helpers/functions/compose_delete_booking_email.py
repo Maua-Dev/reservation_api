@@ -5,8 +5,8 @@ from src.shared.domain.entities.booking import Booking
 def compose_deleted_user_email(user, deleted_booking: Booking):
     name = user.get('name')
     email = user.get('email')
-    data_hora_inicio = datetime.fromtimestamp(deleted_booking.start_date/1000)
-    data_hora_fim = datetime.fromtimestamp(deleted_booking.end_date/1000)
+    data_hora_inicio = datetime.fromtimestamp((deleted_booking.start_date - 3 * 60 * 60 * 1000)/1000)
+    data_hora_fim = datetime.fromtimestamp((deleted_booking.end_date - 3 * 60 * 60 * 1000)/1000)
 
     message = f"""
         <!doctype html>
