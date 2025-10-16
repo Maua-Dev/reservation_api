@@ -1,12 +1,14 @@
 from datetime import datetime
 from src.shared.domain.entities.booking import Booking
-
+from src.shared.environments import Environments
 
 def compose_deleted_user_email(user, deleted_booking: Booking):
     name = user.get('name')
     email = user.get('email')
     data_hora_inicio = datetime.fromtimestamp((deleted_booking.start_date - 3 * 60 * 60 * 1000)/1000)
     data_hora_fim = datetime.fromtimestamp((deleted_booking.end_date - 3 * 60 * 60 * 1000)/1000)
+
+    s3_assets_endpoint = Environments.get_envs().s3_assets + '/assets'
 
     message = f"""
         <!doctype html>
@@ -213,7 +215,7 @@ def compose_deleted_user_email(user, deleted_booking: Booking):
                 <h1>Reserva Cancelada!</h1>
               </div>
 
-              <img src="court-image.jpg" alt="Quadra" />
+              <img src="{s3_assets_endpoint + '/capa-topo.jpeg'}" alt="Quadra" />
 
               <div class="content">
                 <div class="greeting">Olá {name},</div>
@@ -237,10 +239,17 @@ def compose_deleted_user_email(user, deleted_booking: Booking):
 
                 <div class="cancelled-notice">foi cancelada!!</div>
 
+                <div class="reason">Motivo: CEAF / Chuva / Evento</div>
+                <div class="contact-info">
+                  <div class="reason">Infelizmente sua reserva foi cancelada, por motivos de manutenção, condições climáticas, ou exceções. Dúvidas? Entre em contato pelo nosso e-mail ceaf@maua.br</div>
+                  </div>
+          
+                </div>
+
               </div>
 
               <div class="footer">
-                <img src="logo.png" alt="Logo" />
+                <img class="logo" src="{s3_assets_endpoint + '/logo-simplista.svg'}" alt="Logo" />
                 <div class="signature">Atenciosamente,</div>
                 <div class="signature team-name">Equipe Reservation</div>
                 <div class="site-name">
