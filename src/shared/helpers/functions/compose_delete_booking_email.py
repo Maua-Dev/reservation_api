@@ -237,9 +237,8 @@ def compose_deleted_user_email(user, deleted_booking: Booking):
                   </div>
                 </div>
 
-                <div class="cancelled-notice">foi cancelada!!</div>
+                <div class="cancelled-notice">foi CANCELADA</div>
 
-                <div class="reason">Motivo: CEAF / Chuva / Evento</div>
                 <div class="contact-info">
                   <div class="reason">Infelizmente sua reserva foi cancelada, por motivos de manutenção, condições climáticas, ou exceções. Dúvidas? Entre em contato pelo nosso e-mail ceaf@maua.br</div>
                   </div>
