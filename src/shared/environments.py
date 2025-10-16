@@ -33,6 +33,7 @@ class Environments:
     mss_name: str 
     from_email: str
     hidden_copy: str
+    s3_assets: str
 
     def _configure_local(self):
         from dotenv import load_dotenv
@@ -68,6 +69,7 @@ class Environments:
             self.cloud_front_distribution_domain = os.environ.get("CLOUD_FRONT_DISTRIBUTION_DOMAIN")
             self.from_email = os.environ.get("FROM_EMAIL")
             self.hidden_copy = os.environ.get("HIDDEN_COPY")
+            self.s3_assets = os.environ.get("S3_ASSETS_CDN")
 
     # @staticmethod
     # def get_user_repo() -> IUserRepository:
