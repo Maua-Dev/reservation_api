@@ -33,8 +33,10 @@ class GenerateReportAggregator:
                     "Handball": 0,
                     "Futsal": 0,
                     "Rugby": 0,
-                    "Ping Pong": 0,
+                    "Tênis de Mesa": 0,
                     "Beach Tennis": 0,
+                    "Natação": 0,
+                    "Corrida": 0,
                     "NA": 0,
                     1: 0,
                     2: 0,
@@ -42,6 +44,7 @@ class GenerateReportAggregator:
                     4: 0,
                     5: 0,
                     6: 0,
+                    7: 0,
                     "tempo_em_quadra": 0
                 }
 
