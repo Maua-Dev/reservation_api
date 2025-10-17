@@ -107,6 +107,7 @@ class GenerateReportAggregator:
                     "quadra 4": 0,
                     "quadra 5": 0,
                     "quadra 6": 0,
+                    "quadra 7": 0,
                     "Tempo Total Praticado": 0,
                 }
 
