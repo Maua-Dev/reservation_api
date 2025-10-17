@@ -38,6 +38,7 @@ class GenerateReportAggregator:
                     "Natação": 0,
                     "Corrida": 0,
                     "NA": 0,
+                    0: 0,
                     1: 0,
                     2: 0,
                     3: 0,
