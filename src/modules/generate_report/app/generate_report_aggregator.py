@@ -33,7 +33,7 @@ class GenerateReportAggregator:
                     "Handball": 0,
                     "Futsal": 0,
                     "Rugby": 0,
-                    "Tênis de Mesa": 0,
+                    "Ping Pong": 0,
                     "Beach Tennis": 0,
                     "Natação": 0,
                     "Corrida": 0,

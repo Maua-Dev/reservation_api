@@ -8,7 +8,7 @@ class SPORT(Enum):
     HANDBALL = "Handball"
     FUTSAL = "Futsal"
     RUGBY = "Rugby"
-    TENIS_DE_MESA = "Tênis de Mesa"
+    PING_PONG= "Ping Pong"
     BEACH_TENNIS = "Beach Tennis"
     NATACAO = "Natação"
     CORRIDA = "Corrida"
