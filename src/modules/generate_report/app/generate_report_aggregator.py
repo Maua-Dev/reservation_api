@@ -60,6 +60,7 @@ class GenerateReportAggregator:
         court_statistics = {}
 
         for booking in bookings:
+            user_name = user_api_client.get_user_name(booking.user_id)
             court_key = booking.court_number
 
             if court_key not in court_statistics:
@@ -82,7 +83,7 @@ class GenerateReportAggregator:
             if sport_column not in court_statistics[court_key]:
                 court_statistics[court_key][sport_column] = 0
 
-            user_column = f"user_{booking.user_id}"
+            user_column = user_name
             if user_column not in court_statistics[court_key]:
                 court_statistics[court_key][user_column] = 0
 
@@ -97,7 +98,7 @@ class GenerateReportAggregator:
 
         for booking in bookings:
             sport_key = booking.sport.value
-
+            user_name = user_api_client.get_user_name(booking.user_id)
             # Se ainda não existir, inicializa
             if sport_key not in sport_statistics:
                 sport_statistics[sport_key] = {
@@ -117,7 +118,7 @@ class GenerateReportAggregator:
                 sport_statistics[sport_key][f"quadra {booking.court_number}"] += 1
                 sport_statistics[sport_key]["Tempo Total Praticado"] += (booking.end_date - booking.start_date)
 
-                user_column = f"Usuário: {booking.user_id}"
+                user_column = user_name
                 if user_column not in sport_statistics[sport_key]:
                     sport_statistics[sport_key][user_column] = 0
 
