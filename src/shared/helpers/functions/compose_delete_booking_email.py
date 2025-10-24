@@ -11,211 +11,211 @@ def compose_deleted_user_email(user, deleted_booking: Booking):
     s3_assets_endpoint = Environments.get_envs().s3_assets + '/assets'
 
     message = f"""
-        <!doctype html>
-        <html lang="pt-BR">
-          <head>
-            <meta charset="UTF-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <title>Reserva Cancelada</title>
-            <style>
-              * {{
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-              }}
+      <!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reserva Cancelada</title>
+    <style>
+      * {{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }}
 
-              body {{
-                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-                background-color: #f5f5f5;
-                min-height: 100vh;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                padding: 20px;
-              }}
+      body {{
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f5f5f5;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }}
 
-              .card {{
-                background: white;
-                border-radius: 20px;
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-                max-width: 600px;
-                width: 100%;
-                overflow: hidden;
-                position: relative;
-              }}
+      .card {{
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+      }}
 
-              .header {{
-                background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
-                color: white;
-                padding: 30px 20px;
-                text-align: center;
-                position: relative;
-              }}
+      .header {{
+        background: #ff6b6b;
+        color: white;
+        padding: 30px 20px;
+        text-align: center;
+        position: relative;
+      }}
 
-              .header h1 {{
-                font-size: 28px;
-                font-weight: bold;
-                margin: 0;
-                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-              }}
+      .header h1 {{
+        font-size: 28px;
+        font-weight: bold;
+        margin: 0;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }}
 
-              .court-image {{
-                width: 100%;
-                height: 200px;
-                object-fit: cover;
-                background: linear-gradient(45deg, #4a9eff, #2ecc71);
-                position: relative;
-              }}
+      .court-image {{
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        background: #4a9eff;
+        position: relative;
+      }}
 
-              .court-placeholder {{
-                width: 100%;
-                height: 200px;
-                background: linear-gradient(135deg, #4a9eff, #2ecc71);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                font-size: 18px;
-                font-weight: bold;
-              }}
+      .court-placeholder {{
+        width: 100%;
+        height: 200px;
+        background: #4a9eff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+      }}
 
-              .content {{
-                padding: 40px 30px;
-                text-align: center;
-              }}
+      .content {{
+        padding: 40px 30px;
+        text-align: center;
+      }}
 
-              .greeting {{
-                font-size: 24px;
-                color: #2c3e50;
-                margin-bottom: 20px;
-                font-weight: 600;
-              }}
+      .greeting {{
+        font-size: 24px;
+        color: #2c3e50;
+        margin-bottom: 20px;
+        font-weight: 600;
+      }}
 
-              .message {{
-                font-size: 18px;
-                color: #555;
-                margin-bottom: 25px;
-                line-height: 1.4;
-              }}
+      .message {{
+        font-size: 18px;
+        color: #555;
+        margin-bottom: 25px;
+        line-height: 1.4;
+      }}
 
-              .reservation-details {{
-                background: #f8f9fa;
-                border-radius: 15px;
-                padding: 25px;
-                margin: 25px 0;
-                border-left: 5px solid #ff6b6b;
-              }}
+      .reservation-details {{
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 25px;
+        margin: 25px 0;
+        border-left: 5px solid #ff6b6b;
+      }}
 
-              .detail-item {{
-                margin: 10px 0;
-                font-size: 16px;
-              }}
+      .detail-item {{
+        margin: 10px 0;
+        font-size: 16px;
+      }}
 
-              .detail-label {{
-                font-weight: bold;
-                color: #2c3e50;
-              }}
+      .detail-label {{
+        font-weight: bold;
+        color: #2c3e50;
+      }}
 
-              .detail-value {{
-                color: #555;
-              }}
+      .detail-value {{
+        color: #555;
+      }}
 
-              .cancelled-notice {{
-                font-size: 20px;
-                font-weight: bold;
-                color: #e74c3c;
-                margin: 20px 0;
-                padding: 15px;
-                background: #ffeaea;
-                border-radius: 10px;
-                border: 2px solid #ff6b6b;
-              }}
+      .cancelled-notice {{
+        font-size: 20px;
+        font-weight: bold;
+        color: #e74c3c;
+        margin: 20px 0;
+        padding: 15px;
+        background: #ffeaea;
+        border-radius: 10px;
+        border: 2px solid #ff6b6b;
+      }}
 
-              .reason {{
-                font-size: 16px;
-                color: #555;
-                margin: 20px 0;
-                font-weight: 600;
-              }}
+      .reason {{
+        font-size: 16px;
+        color: #555;
+        margin: 20px 0;
+        font-weight: 600;
+      }}
 
-              .contact-info {{
-                font-size: 16px;
-                color: #666;
-                margin: 25px 0;
-                line-height: 1.5;
-              }}
+      .contact-info {{
+        font-size: 16px;
+        color: #666;
+        margin: 25px 0;
+        line-height: 1.5;
+      }}
 
-              .contact-link {{
-                color: #3498db;
-                text-decoration: underline;
-                font-weight: 600;
-              }}
+      .contact-link {{
+        color: #3498db;
+        text-decoration: underline;
+        font-weight: 600;
+      }}
 
-              .footer {{
-                border-top: 1px solid #eee;
-                padding: 30px;
-                text-align: center;
-                background: #fafafa;
-              }}
+      .footer {{
+        border-top: 1px solid #eee;
+        padding: 30px;
+        text-align: center;
+        background: #fafafa;
+      }}
 
-              .logo {{
-                width: 60px;
-                height: 60px;
-                background: linear-gradient(135deg, #3498db, #2ecc71);
-                border-radius: 15px;
-                margin: 0 auto 15px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                font-size: 24px;
-                font-weight: bold;
-              }}
+      .logo {{
+        width: 60px;
+        height: 60px;
+        background: #4a9eff;
+        border-radius: 15px;
+        margin: 0 auto 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+      }}
 
-              .signature {{
-                font-size: 16px;
-                color: #555;
-                margin: 5px 0;
-              }}
+      .signature {{
+        font-size: 16px;
+        color: #555;
+        margin: 5px 0;
+      }}
 
-              .team-name {{
-                font-weight: bold;
-                color: #2c3e50;
-              }}
+      .team-name {{
+        font-weight: bold;
+        color: #2c3e50;
+      }}
 
-              .site-name {{
-                color: #666;
-                font-size: 14px;
-                margin-top: 10px;
-              }}
+      .site-name {{
+        color: #666;
+        font-size: 14px;
+        margin-top: 10px;
+      }}
 
-              @media (max-width: 600px) {{
-                .card {{
-                  margin: 10px;
-                  border-radius: 15px;
-                }}
+      @media (max-width: 600px) {{
+        .card {{
+          margin: 10px;
+          border-radius: 15px;
+        }}
 
-                .content {{
-                  padding: 30px 20px;
-                }}
+        .content {{
+          padding: 30px 20px;
+        }}
 
-                .header h1 {{
-                  font-size: 24px;
-                }}
+        .header h1 {{
+          font-size: 24px;
+        }}
 
-                .greeting {{
-                  font-size: 20px;
-                }}
-              }}
-            </style>
-          </head>
-          <body>
+        .greeting {{
+          font-size: 20px;
+        }}
+      }}
+    </style>
+  </head>
+  <body>
             <div class="card">
               <div class="header">
                 <h1>Reserva Cancelada!</h1>
               </div>
 
-              <img src="{s3_assets_endpoint + '/capa-topo.jpeg'}" alt="Quadra" />
+              <img src="{s3_assets_endpoint + '/logo-completa.svg'}" alt="Quadra" />
 
               <div class="content">
                 <div class="greeting">Olá {name},</div>
@@ -259,7 +259,7 @@ def compose_deleted_user_email(user, deleted_booking: Booking):
               </div>
             </div>
           </body>
-        </html>
+</html>
         """
 
     return message
