@@ -214,9 +214,9 @@ def compose_deleted_user_email(user, deleted_booking: Booking):
               <div class="header">
                 <h1>Reserva Cancelada!</h1>
               </div>
-
-              <img src="{s3_assets_endpoint + '/logo-completa.svg'}" alt="Quadra" />
-
+              <div style="  text-align: center;">
+                <img style="display: inline-block;"  text-align: center;" src="{s3_assets_endpoint + '/logo-completa.svg'}" alt="Quadra" />
+              </div>
               <div class="content">
                 <div class="greeting">Olá {name},</div>
 
@@ -245,9 +245,7 @@ def compose_deleted_user_email(user, deleted_booking: Booking):
           
                 </div>
 
-              </div>
-
-              <div class="footer">
+                <div class="footer">
                 <img class="logo" src="{s3_assets_endpoint + '/logo-simplista.svg'}" alt="Logo" />
                 <div class="signature">Atenciosamente,</div>
                 <div class="signature team-name">Equipe Reservation</div>
@@ -257,6 +255,10 @@ def compose_deleted_user_email(user, deleted_booking: Booking):
                   >
                 </div>
               </div>
+                
+              </div>
+
+              
             </div>
           </body>
 </html>
