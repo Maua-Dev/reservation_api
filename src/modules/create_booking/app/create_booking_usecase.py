@@ -3,6 +3,7 @@ from typing import List
 
 from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
+from src.shared.domain.enums.type import BOOKING_TYPE
 from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
 from src.shared.helpers.errors.usecase_errors import DuplicatedItem, InvalidSchedule
 
@@ -15,6 +16,7 @@ class CreateBookingUsecase:
     user_id: str
     booking_id: str
     materials: List[str]
+    booking_type: BOOKING_TYPE
 
     def __init__(self, repo: IBookingRepository):
         self.repo = repo
@@ -25,7 +27,8 @@ class CreateBookingUsecase:
                  court_number: int,
                  sport: str,
                  user_id: str,
-                 materials: List[str]
+                 materials: List[str],
+                 booking_type: str
                  ) -> Booking:
 
         booking_id = str(uuid.uuid4())
@@ -41,12 +44,22 @@ class CreateBookingUsecase:
         for material in materials:
             if not isinstance(material, str):
                 raise ValueError("Invalid material type")
+            
+        if booking_type not in [type.value for type in BOOKING_TYPE]:
+            raise ValueError("Invalid type enum value")
+        
+        self.booking_type = BOOKING_TYPE(booking_type)
 
         all_bookings = self.repo.get_all_bookings()
 
         for booking in all_bookings:
-            if (booking.start_date < end_date and booking.end_date > start_date
-                    and booking.court_number == court_number):
+            if (
+                (
+                    booking.start_date < end_date + (15 * 60 * 1000) #15 minutes in mseconds
+                    and booking.end_date > start_date - (15 * 60 * 1000) #15 minutes in mseconds
+                    and booking.court_number == court_number
+                ) 
+            ):
                 raise InvalidSchedule()
 
         resp = self.repo.create_booking(Booking(start_date,
@@ -55,7 +68,8 @@ class CreateBookingUsecase:
                                                 self.sport,
                                                 user_id,
                                                 booking_id,
-                                                materials))
+                                                materials,
+                                                self.booking_type))
 
         return resp
 

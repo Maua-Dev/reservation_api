@@ -28,11 +28,12 @@ class TestCreateBookingPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
-                    "user": {
-                        "displayName": 'Lebron James',
-                        "mail": 'lbj@maua.br',
-                        "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
-                    }
+                    "user": json.dumps({
+                        "user": {
+                            "user_id": "c8435c66-13a4-4641-9d54-773b4b8ccc98",
+                        },
+                        "message": "the user was retrieved"
+                    })
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -49,7 +50,7 @@ class TestCreateBookingPresenter:
                 "time": "12/Mar/2020:19:03:58 +0000",
                 "timeEpoch": 1583348638390
             },
-            "body": '{"start_date": 1610617200, "end_date": 1610620800, "court_number": 1, "sport": "Tennis", "materials": ["ball", "racket"]}',
+            "body": {'start_date': 1610617200, 'end_date': 1610620800, 'court_number': 1, 'sport': 'Tennis', 'materials': ['ball', 'racket'], 'type': 'Training'},
             "pathParameters": None,
             "isBase64Encoded": None,
             "stageVariables": None
@@ -58,5 +59,5 @@ class TestCreateBookingPresenter:
         response = lambda_handler(event, None)
 
         print(response)
-        assert response['statusCode'] == 201
         assert json.loads(response['body'])['message'] == 'Booking created successfully'
+        assert response['statusCode'] == 201

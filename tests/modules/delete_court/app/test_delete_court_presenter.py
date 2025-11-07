@@ -18,13 +18,22 @@ class TestDeleteCourtPresenter:
                 "header2": "value1,value2"
             },
             "queryStringParameters": {
-                "parameter1": "1"
+                "number": "1"
             },
             "requestContext": {
                 "accountId": "123456789012",
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    "user": json.dumps({
+                        "user": {
+                            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                            'name': 'Nome',
+                            'email': 'user@email.com',
+                            'role': 'ADMIN'
+                        },
+                        "message": "the user was retrieved"
+                    })
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -41,7 +50,7 @@ class TestDeleteCourtPresenter:
                 "time": "12/Mar/2020:19:03:58 +0000",
                 "timeEpoch": 1583348638390
             },
-            "body": '{"number": 1}',
+            "body": {},
             "pathParameters": None,
             "isBase64Encoded": None,
             "stageVariables": None
@@ -74,6 +83,15 @@ class TestDeleteCourtPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    "user": json.dumps({
+                        "user": {
+                            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                            'name': 'Nome',
+                            'email': 'user@email.com',
+                            'role': 'ADMIN'
+                        },
+                        "message": "the user was retrieved"
+                    })
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -90,7 +108,7 @@ class TestDeleteCourtPresenter:
                 "time": "12/Mar/2020:19:03:58 +0000",
                 "timeEpoch": 1583348638390
             },
-            "body": '{}',
+            "body": {},
             "pathParameters": None,
             "isBase64Encoded": None,
             "stageVariables": None
@@ -116,13 +134,22 @@ class TestDeleteCourtPresenter:
                 "header2": "value1,value2"
             },
             "queryStringParameters": {
-                "parameter1": "1"
+                "number": "10"
             },
             "requestContext": {
                 "accountId": "123456789012",
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    "user": json.dumps({
+                        "user": {
+                            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                            'name': 'Nome',
+                            'email': 'user@email.com',
+                            'role': 'ADMIN'
+                        },
+                        "message": "the user was retrieved"
+                    })
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -139,7 +166,7 @@ class TestDeleteCourtPresenter:
                 "time": "12/Mar/2020:19:03:58 +0000",
                 "timeEpoch": 1583348638390
             },
-            "body": '{"number": 10}',
+            "body": {},
             "pathParameters": None,
             "isBase64Encoded": None,
             "stageVariables": None
@@ -165,13 +192,22 @@ class TestDeleteCourtPresenter:
                 "header2": "value1,value2"
             },
             "queryStringParameters": {
-                "parameter1": "1"
+                "number": "wrong_type"
             },
             "requestContext": {
                 "accountId": "123456789012",
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    "user": json.dumps({
+                        "user": {
+                            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                            'name': 'Nome',
+                            'email': 'user@email.com',
+                            'role': 'ADMIN'
+                        },
+                        "message": "the user was retrieved"
+                    })
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -188,7 +224,7 @@ class TestDeleteCourtPresenter:
                 "time": "12/Mar/2020:19:03:58 +0000",
                 "timeEpoch": 1583348638390
             },
-            "body": '{"number": "wrong_type"}',
+            "body": {},
             "pathParameters": None,
             "isBase64Encoded": None,
             "stageVariables": None
@@ -197,4 +233,4 @@ class TestDeleteCourtPresenter:
         response = lambda_handler(event, None)
 
         assert response['statusCode'] == 400
-        assert json.loads(response['body']) == 'Field number is not valid'
+        assert "Field number isn't in the right type" in json.loads(response['body'])

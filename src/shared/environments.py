@@ -31,6 +31,9 @@ class Environments:
     dynamo_sort_key: str
     cloud_front_distribution_domain: str
     mss_name: str 
+    from_email: str
+    hidden_copy: str
+    s3_assets: str
 
     def _configure_local(self):
         from dotenv import load_dotenv
@@ -52,6 +55,9 @@ class Environments:
             self.dynamo_partition_key = "PK"
             self.dynamo_sort_key = "SK"
             self.cloud_front_distribution_domain = "https://d3q9q9q9q9q9q9.cloudfront.net"
+            self.client_id = "root" #change to what is inside minio compose
+            self.client_secret = "root1234" #change to what is inside minio compose
+            self.bucket_endpoint_url = "http://localhost:9000"
 
         else:
             self.s3_bucket_name = os.environ.get("S3_BUCKET_NAME")
@@ -61,6 +67,9 @@ class Environments:
             self.dynamo_partition_key = os.environ.get("DYNAMO_PARTITION_KEY")
             self.dynamo_sort_key = os.environ.get("DYNAMO_SORT_KEY")
             self.cloud_front_distribution_domain = os.environ.get("CLOUD_FRONT_DISTRIBUTION_DOMAIN")
+            self.from_email = os.environ.get("FROM_EMAIL")
+            self.hidden_copy = os.environ.get("HIDDEN_COPY")
+            self.s3_assets = os.environ.get("S3_ASSETS_CDN")
 
     # @staticmethod
     # def get_user_repo() -> IUserRepository:

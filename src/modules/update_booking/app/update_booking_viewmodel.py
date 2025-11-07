@@ -4,13 +4,6 @@ from src.shared.domain.enums.sport import SPORT
 
 
 class BookingViewmodel:
-    start_date: int
-    end_date: int
-    court_number: int
-    sport: SPORT
-    user_id: str
-    booking_id: str
-    materials: List[str]
 
     def __init__(self, booking: Booking):
         self.booking = booking
@@ -23,7 +16,8 @@ class BookingViewmodel:
             'sport': self.booking.sport.value,
             'user_id': self.booking.user_id,
             'booking_id': self.booking.booking_id,
-            'materials': self.booking.materials
+            'materials': self.booking.materials,
+            'type': self.booking.booking_type.value
         }
     
 class UpdateBookingViewmodel:

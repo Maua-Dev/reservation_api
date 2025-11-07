@@ -11,7 +11,7 @@ class TestGetCourtController:
         usecase = GetCourtUsecase(repo=repo)
         controller = GetCourtController(usecase=usecase)
         request = HttpRequest(query_params={
-            "number": 2
+            "number": "2"
         })
 
         response = controller(request)

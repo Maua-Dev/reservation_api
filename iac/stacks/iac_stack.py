@@ -1,5 +1,5 @@
 from aws_cdk import (
-    Stack,
+    Stack, aws_iam
 )
 from constructs import Construct
 from aws_cdk.aws_apigateway import RestApi, Cors
@@ -55,7 +55,11 @@ class IacStack(Stack):
             "DYNAMO_PARTITION_KEY": "PK",
             "DYNAMO_SORT_KEY": "SK",
             "REGION": self.aws_region,
-            "GRAPH_MICROSOFT_ENDPOINT": os.getenv("GRAPH_MICROSOFT_ENDPOINT")
+            "USER_API_URL": os.environ.get("USER_API_URL"),
+            "S3_BUCKET_NAME": self.s3_bucket.bucket.bucket_name,
+            "FROM_EMAIL": os.environ.get("FROM_EMAIL"),
+            "HIDDEN_COPY": os.environ.get("HIDDEN_COPY"),
+            "S3_ASSETS_CDN": os.environ.get("S3_ASSETS_CDN")
         }
 
 
@@ -69,4 +73,23 @@ class IacStack(Stack):
         for function in self.lambda_stack.functions_that_need_s3_permissions:
             self.s3_bucket.bucket.grant_read_write(function)
 
+        ses_admin_policy = aws_iam.PolicyStatement(
+            effect=aws_iam.Effect.ALLOW,
+            actions=[
+                "ses:*",
+            ],
+            resources=[
+                "*"
+            ]
+        )
+
+        functions_that_need_ses_permissions = [
+            self.lambda_stack.delete_booking
+        ]
+
+        for f in functions_that_need_ses_permissions:
+            f.add_environment("HIDDEN_COPY", os.environ.get("HIDDEN_COPY"))
+            f.add_environment("FROM_EMAIL", os.environ.get("FROM_EMAIL"))
+            f.add_environment("REPLY_TO_EMAIL", os.environ.get("REPLY_TO_EMAIL"))
+            f.add_to_role_policy(ses_admin_policy)
         

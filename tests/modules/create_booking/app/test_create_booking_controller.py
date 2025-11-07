@@ -17,13 +17,14 @@ class TestCreateBookingController:
                 "end_date": 1630003600,
                 "court_number": 1,
                 "sport": "Tennis",
-                "materials": ["racket", "balls"]
+                "materials": ["racket", "balls"],
+                "type": "Training"
             },
             headers={
                 "user_from_authorizer": {
                     "displayName": 'Lebron James',
                     "mail": 'lbj@maua.br',
-                    "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+                    "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
                 }
             }
         )
@@ -48,7 +49,7 @@ class TestCreateBookingController:
                 "user_from_authorizer": {
                     "displayName": 'Lebron James',
                     "mail": 'lbj@maua.br',
-                    "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+                    "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
                 }
             })
 
@@ -72,7 +73,7 @@ class TestCreateBookingController:
             "user_from_authorizer": {
                 "displayName": 'Lebron James',
                 "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+                "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
             }
         })
 
@@ -95,7 +96,7 @@ class TestCreateBookingController:
             "user_from_authorizer": {
                 "displayName": 'Lebron James',
                 "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+                "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
             }
         })
 
@@ -119,7 +120,7 @@ class TestCreateBookingController:
             "user_from_authorizer": {
                 "displayName": 'Lebron James',
                 "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+                "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
             }
         })
 
@@ -143,7 +144,7 @@ class TestCreateBookingController:
             "user_from_authorizer": {
                 "displayName": 'Lebron James',
                 "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+                "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
             }
         })
 
@@ -166,7 +167,7 @@ class TestCreateBookingController:
             "user_from_authorizer": {
                 "displayName": 'Lebron James',
                 "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+                "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
             }
         })
 
@@ -189,7 +190,7 @@ class TestCreateBookingController:
             "user_from_authorizer": {
                 "displayName": 'Lebron James',
                 "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+                "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
             }
         })
 
@@ -213,7 +214,7 @@ class TestCreateBookingController:
             "user_from_authorizer": {
                 "displayName": 'Lebron James',
                 "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+                "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
             }
         })
 
@@ -236,7 +237,7 @@ class TestCreateBookingController:
             "user_from_authorizer": {
                 "displayName": 'Lebron James',
                 "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+                "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
             }
         })
 
@@ -260,7 +261,7 @@ class TestCreateBookingController:
             "user_from_authorizer": {
                 "displayName": 'Lebron James',
                 "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+                "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
             }
         })
 
@@ -279,12 +280,13 @@ class TestCreateBookingController:
             "end_date": 1630003600,
             "court_number": 1,
             "sport": "Tennis",
-            "materials": ["racket", 1]
+            "materials": ["racket", 1],
+            "type": 'Common'
         }, headers={
             "user_from_authorizer": {
                 "displayName": 'Lebron James',
                 "mail": 'lbj@maua.br',
-                "id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+                "user_id": 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
             }
         })
 

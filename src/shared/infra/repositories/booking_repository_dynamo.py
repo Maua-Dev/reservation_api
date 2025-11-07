@@ -1,11 +1,16 @@
+import os
 from typing import Optional, List
 
+import boto3
 from boto3.dynamodb.conditions import Key
 
 from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
+from src.shared.domain.enums.type import BOOKING_TYPE
 from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
 from src.shared.environments import Environments
+from src.shared.helpers.errors.usecase_errors import ForbiddenAction
+from src.shared.helpers.functions.compose_delete_booking_email import compose_deleted_user_email
 from src.shared.infra.dto.booking_dynamo_dto import BookingDynamoDTO
 from src.shared.infra.external.dynamo.datasources.dynamo_datasource import DynamoDatasource
 
@@ -48,7 +53,8 @@ class BookingRepositoryDynamo(IBookingRepository):
                        end_date: int = None,
                        court_number: int = None,
                        sport: SPORT = None,
-                       materials: List[str] = None) -> Optional[Booking]:
+                       materials: List[str] = None,
+                       booking_type: BOOKING_TYPE = None) -> Optional[Booking]:
 
         booking_to_update = self.get_booking(booking_id)
 
@@ -63,6 +69,7 @@ class BookingRepositoryDynamo(IBookingRepository):
             "materials": materials if materials is not None else booking_to_update.materials,
             "user_id": booking_to_update.user_id,
             "booking_id": booking_to_update.booking_id,
+            "booking_type": booking_type.value if booking_type is not None else booking_to_update.booking_type.value
         }
 
         resp = self.dynamo.update_item(update_dict=update_dict,
@@ -77,10 +84,12 @@ class BookingRepositoryDynamo(IBookingRepository):
     def get_bookings(self,
                      booking_id: Optional[str] = None,
                      user_id: Optional[str] = None,
-                     sport: Optional[SPORT] = None,
+                     sport: Optional[str] = None,
                      court_number: Optional[int] = None,
+                     booking_type: Optional[str] = None,
                      end_date: Optional[int] = None,
-                     start_date: Optional[int] = None) -> List[Optional[Booking]]:
+                     start_date: Optional[int] = None
+                     ) -> List[Optional[Booking]]:
 
         filters = locals().copy()
         filters.pop('self')
@@ -118,23 +127,104 @@ class BookingRepositoryDynamo(IBookingRepository):
 
         return BookingDynamoDTO.from_dynamo(dynamo_object['Item']).to_entity()
 
-    def delete_booking(self, booking_id: str) -> Optional[Booking]:
+    def delete_booking(self, booking_id: str, user) -> Optional[Booking]:
 
-        delete_booking = self.dynamo.delete_item(partition_key=self.booking_partition_key_format(),
-                                                 sort_key=self.booking_sort_key_format(booking_id))
-        if "Attributes" not in delete_booking:
+        booking = self.get_booking(booking_id)
+        user_role = user.get('role')
+        user_id = user.get('user_id')
+
+        if not booking:
             return None
 
-        return BookingDynamoDTO.from_dynamo(delete_booking['Attributes']).to_entity()
+        is_admin = user_role == 'ADMIN'
+        is_owner = user_role == 'STUDENT' and booking.user_id == user_id
+
+        if is_admin or is_owner:
+            deleted = self.dynamo.delete_item(
+                partition_key=self.booking_partition_key_format(),
+                sort_key=self.booking_sort_key_format(booking_id)
+            )
+
+            deleted_booking = BookingDynamoDTO.from_dynamo(deleted['Attributes']).to_entity()
+
+            self.send_user_email(user, deleted_booking)
+
+            return deleted_booking
+
+        if user_role == 'STUDENT':
+            raise ForbiddenAction('user id')
+
+        return None
+ 
 
     def get_all_bookings(self) -> Optional[List[Booking]]:
 
         all_bookings = []
-        all_items = self.dynamo.get_all_items().get('Items')
+        all_items = self.dynamo.get_all_items().get('Items') or []
 
         for item in all_items:
             if item.get('entity') == 'booking':
                 all_bookings.append(BookingDynamoDTO.from_dynamo(item).to_entity())
+        
+        return all_bookings
+
+    def get_all_bookings_by_date_range(self, initial_date: int, final_date: int) -> Optional[List[Booking]]:
+
+        all_bookings = []
+        all_items = self.dynamo.get_all_items().get('Items') or []
+
+        for item in all_items:
+            if item.get('entity') == 'booking':
+                booking = BookingDynamoDTO.from_dynamo(item).to_entity()
+                if initial_date <= booking.start_date <= final_date:
+                    all_bookings.append(booking)
 
         return all_bookings
+    
+    def get_all_users(self):
+        return super().get_all_users()
+    
+
+    def send_user_email(self, user, deleted_booking: Booking) -> bool:
+        try:
+
+            client_ses = boto3.client('ses', region_name=os.environ.get('AWS_REGION'))
+
+            email_to_send = compose_deleted_user_email(user, deleted_booking)
+
+            print('7 mensagem email criada -> ' + email_to_send)
+
+            response = client_ses.send_email(
+                Destination={
+                    'ToAddresses': [
+                        user.get('email'),
+                    ],
+                    'BccAddresses':
+                        [
+                            Environments.get_envs().hidden_copy
+                        ]
+                },
+                Message={
+                    'Body': {
+                        'Html': {
+                            'Charset': "UTF-8",
+                            'Data': email_to_send,
+                        },
+                    },
+                    'Subject': {
+                        'Charset': "UTF-8",
+                        'Data': 'Mauá Reservation - Reserva Cancelada',
+                    },
+                },
+                Source = Environments.get_envs().from_email,
+            )
+
+            print('EMAIL ENVIADO')
+
+            return True
+        except Exception as err:
+            print(err)
+            return False
+
+
 

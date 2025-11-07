@@ -25,6 +25,12 @@ class TestCreateCourtPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    "user": json.dumps({
+                        "user": {
+                            "role": "ADMIN",
+                        },
+                        "message": "the user was retrieved"
+                    })
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -77,6 +83,12 @@ class TestCreateCourtPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    "user": json.dumps({
+                        "user": {
+                            "role": "ADMIN",
+                        },
+                        "message": "the user was retrieved"
+                    })
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",

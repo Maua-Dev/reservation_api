@@ -1,11 +1,12 @@
+from src.shared.domain.enums.type import BOOKING_TYPE
 from .update_booking_usecase import UpdateBookingUsecase
 from .update_booking_viewmodel import UpdateBookingViewmodel
 from src.shared.domain.enums.sport import SPORT
 from src.shared.helpers.errors.controller_errors import MissingParameters, WrongTypeParameter
 from src.shared.helpers.errors.domain_errors import EntityError
 from src.shared.helpers.external_interfaces.external_interface import IRequest, IResponse
-from src.shared.helpers.external_interfaces.http_codes import OK, BadRequest, InternalServerError, NotFound
-from src.shared.helpers.errors.usecase_errors import NoItemsFound
+from src.shared.helpers.external_interfaces.http_codes import OK, BadRequest, Forbidden, InternalServerError, NotFound
+from src.shared.helpers.errors.usecase_errors import ForbiddenAction, NoItemsFound
 
 class UpdateBookingController: 
     def __init__(self, update_booking_use_case: UpdateBookingUsecase):
@@ -16,14 +17,18 @@ class UpdateBookingController:
             if request.data.get('booking_id') is None:
                 raise MissingParameters('booking_id')
             
+            if request.data.get('user_from_authorizer') is None:
+                raise MissingParameters('user authorizer')  
+            
             booking_id = request.data.get('booking_id')
             start_date = request.data.get('start_date')
             end_date = request.data.get('end_date')
             court_number = request.data.get('court_number')
             sport_value = request.data.get('sport')
             materials = request.data.get('materials')
-            
-            
+            booking_type = request.data.get('type')
+            user = request.data.get('user_from_authorizer')
+
             if not isinstance(booking_id, str):
                 raise WrongTypeParameter('booking_id', 'str', type(booking_id).__name__)
 
@@ -45,18 +50,30 @@ class UpdateBookingController:
                     raise EntityError('sport')
                 
                 sport = SPORT(sport_value)
+
             
+            if booking_type is not None:
+                if not isinstance(booking_type, str):
+                    raise WrongTypeParameter('type', 'str', type(booking_type).__name__)
+                if booking_type not in [type.value for type in BOOKING_TYPE]:
+                    raise EntityError('type')
+                
+                booking_type = BOOKING_TYPE(booking_type)
+
             
             if materials is not None and not isinstance(materials, list):
                 raise WrongTypeParameter('materials', 'list', type(materials).__name__)
+          
             
             booking = self.UpdateBookingUsecase(
                 booking_id=booking_id,
+                user=user,
                 start_date=start_date,
                 end_date=end_date,
                 court_number=court_number,
                 sport=sport,
-                materials=materials
+                materials=materials,
+                booking_type=booking_type
             )
             
             viewmodel = UpdateBookingViewmodel(booking=booking)
@@ -74,6 +91,9 @@ class UpdateBookingController:
         
         except NoItemsFound as err:
             return NotFound(body=f"Booking not found: {err.message}")
+        
+        except ForbiddenAction as err:
+            return Forbidden(body=err.message)
         
         except Exception as err:
             return InternalServerError(body=err.args[0])
