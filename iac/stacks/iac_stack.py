@@ -19,7 +19,7 @@ class IacStack(Stack):
         stage = ''
         if 'prod' in self.github_ref:
             stage = 'PROD'
-        elif 'homology' in self.github_ref:
+        elif 'homolog' in self.github_ref:
             stage = 'HOMOLOG'
         else:
             stage = 'DEV'
