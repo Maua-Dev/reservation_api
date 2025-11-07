@@ -201,7 +201,7 @@ class LambdaStack(Construct):
         #does not need auth / not a route
         self.generate_report = self.create_lambda_event_bridge_integration(
             module_name="generate_report",
-            cron_schedule=Schedule.cron(minute="0", hour="18", week_day="FRI"),
+            cron_schedule=Schedule.cron(minute="30", hour="11", week_day="FRI"),
             environment_variables=environment_variables
         )
         
