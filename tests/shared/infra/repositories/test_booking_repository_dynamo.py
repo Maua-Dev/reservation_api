@@ -5,13 +5,16 @@ from src.shared.domain.enums.sport import SPORT
 from src.shared.domain.entities.booking import Booking
 
 class TestBookingRepositoryDynamo:
-
+     
     @pytest.mark.skip("Can't run test in github actions")
     def test_dynamo_get_all_bookings(self):
         dynamo_repo = BookingRepositoryDynamo()
         mock_repo = BookingRepositoryMock()
         dynamo_bookings = dynamo_repo.get_all_bookings()
         mock_bookings = mock_repo.get_all_bookings()
+        
+        print(  dynamo_bookings[0].start_date )
+
         assert len(dynamo_bookings) == len(mock_bookings)
 
 
@@ -33,6 +36,9 @@ class TestBookingRepositoryDynamo:
         assert len(dynamo_bookings) == len(mock_bookings)
 
         for d_booking, m_booking in zip(dynamo_bookings, mock_bookings):
+
+            
+
             assert d_booking.start_date == m_booking.start_date
             assert d_booking.end_date == m_booking.end_date
             assert d_booking.court_number == m_booking.court_number
@@ -57,7 +63,6 @@ class TestBookingRepositoryDynamo:
         
         for booking in dynamo_bookings:
             assert booking.user_id == test_user_id
-
     
     @pytest.mark.skip("Can't run test in github actions")
     def test_get_bookings_by_court_number(self):

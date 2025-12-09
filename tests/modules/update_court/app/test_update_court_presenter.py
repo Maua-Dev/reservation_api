@@ -25,6 +25,15 @@ class TestUpdateCourtPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    "user": json.dumps({
+                        "user": {
+                            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                            'name': 'Nome',
+                            'email': 'user@email.com',
+                            'role': 'ADMIN'
+                        },
+                        "message": "the user was retrieved"
+                    })
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -77,6 +86,15 @@ class TestUpdateCourtPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    "user": json.dumps({
+                        "user": {
+                            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                            'name': 'Nome',
+                            'email': 'user@email.com',
+                            'role': 'ADMIN'
+                        },
+                        "message": "the user was retrieved"
+                    })
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -130,6 +148,15 @@ class TestUpdateCourtPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    "user": json.dumps({
+                        "user": {
+                            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                            'name': 'Nome',
+                            'email': 'user@email.com',
+                            'role': 'ADMIN'
+                        },
+                        "message": "the user was retrieved"
+                    })
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -179,6 +206,15 @@ class TestUpdateCourtPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    "user": json.dumps({
+                        "user": {
+                            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                            'name': 'Nome',
+                            'email': 'user@email.com',
+                            'role': 'ADMIN'
+                        },
+                        "message": "the user was retrieved"
+                    })
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -228,6 +264,15 @@ class TestUpdateCourtPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    "user": json.dumps({
+                        "user": {
+                            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                            'name': 'Nome',
+                            'email': 'user@email.com',
+                            'role': 'ADMIN'
+                        },
+                        "message": "the user was retrieved"
+                    })
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -278,6 +323,15 @@ class TestUpdateCourtPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    "user": json.dumps({
+                        "user": {
+                            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                            'name': 'Nome',
+                            'email': 'user@email.com',
+                            'role': 'ADMIN'
+                        },
+                        "message": "the user was retrieved"
+                    })
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -327,6 +381,15 @@ class TestUpdateCourtPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    "user": json.dumps({
+                        "user": {
+                            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                            'name': 'Nome',
+                            'email': 'user@email.com',
+                            'role': 'ADMIN'
+                        },
+                        "message": "the user was retrieved"
+                    })
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -376,6 +439,15 @@ class TestUpdateCourtPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    "user": json.dumps({
+                        "user": {
+                            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                            'name': 'Nome',
+                            'email': 'user@email.com',
+                            'role': 'ADMIN'
+                        },
+                        "message": "the user was retrieved"
+                    })
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
@@ -425,6 +497,15 @@ class TestUpdateCourtPresenter:
                 "apiId": "<urlid>",
                 "authentication": None,
                 "authorizer": {
+                    "user": json.dumps({
+                        "user": {
+                            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                            'name': 'Nome',
+                            'email': 'user@email.com',
+                            'role': 'ADMIN'
+                        },
+                        "message": "the user was retrieved"
+                    })
                 },
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",

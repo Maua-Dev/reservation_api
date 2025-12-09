@@ -1,5 +1,6 @@
 from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
+from src.shared.domain.enums.type import BOOKING_TYPE   
 from typing import List
 
 class BookingViewModel:
@@ -7,18 +8,18 @@ class BookingViewModel:
     end_date: int
     court_number: int
     sport: SPORT
-    user_id: str
     booking_id: str
     materials: List[str]
+    booking_type: BOOKING_TYPE
 
     def __init__(self, booking: Booking):
         self.start_date = booking.start_date
         self.end_date = booking.end_date
         self.court_number = booking.court_number
         self.sport = booking.sport
-        self.user_id = booking.user_id
         self.booking_id = booking.booking_id
         self.materials = booking.materials
+        self.booking_type = booking.booking_type
 
     def to_dict(self):
         return {
@@ -26,9 +27,9 @@ class BookingViewModel:
             'end_date': self.end_date,
             'court_number': self.court_number,
             'sport': self.sport.value,
-            'user_id': self.user_id,
             'booking_id': self.booking_id,
-            'materials': self.materials
+            'materials': self.materials,
+            "type": self.booking_type.value
         }
 class GetBookingViewModel:
     booking: Booking
@@ -41,7 +42,7 @@ class GetBookingViewModel:
             'booking' : self.booking_viewmodel.to_dict()
         }
 
-class GetAllBookingViewModel:
+class GetAllBookingsViewModel:
     bookings: List[GetBookingViewModel]
 
     def __init__(self, bookings: list):

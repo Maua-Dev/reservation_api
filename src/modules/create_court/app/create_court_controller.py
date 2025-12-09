@@ -2,10 +2,11 @@ from .create_court_usecase import CreateCourtUsecase
 from .create_court_viewmodel import CreateCourtViewmodel
 from src.shared.helpers.errors.controller_errors import MissingParameters, WrongTypeParameter
 from src.shared.helpers.errors.domain_errors import EntityError
-from src.shared.helpers.errors.usecase_errors import DuplicatedItem
+from src.shared.helpers.errors.usecase_errors import DuplicatedItem, ForbiddenAction
 from src.shared.helpers.external_interfaces.external_interface import IRequest, IResponse
 from src.shared.helpers.external_interfaces.http_codes import BadRequest, Created, InternalServerError
 from src.shared.domain.enums.status_enum import STATUS
+import json
 
 
 class CreateCourtController:
@@ -15,7 +16,7 @@ class CreateCourtController:
 
 
     def __call__(self, request: IRequest):
-        try:
+        try:            
             if  request.data.get('number') is None:
                 raise MissingParameters('number')
             
@@ -39,11 +40,18 @@ class CreateCourtController:
             if request.data.get('photo') is not None and type(request.data.get('photo')) is not str:
                 raise WrongTypeParameter(fieldName= 'photo', fieldTypeExpected= str, fieldTypeReceived= type(request.data.get('photo')))
             
+            user = request.data.get("user_from_authorizer")
+            
+            if not isinstance(user, dict):
+                
+                user = json.loads(user)
+            
             court = self.usecase(
                 number= request.data.get('number'),
                 status= status,
                 is_field= request.data.get('is_field'),
-                photo= request.data.get('photo')
+                photo= request.data.get('photo'),
+                role=user.get("role")
             )
 
             viewmodel = CreateCourtViewmodel(court= court)
@@ -60,6 +68,9 @@ class CreateCourtController:
             return BadRequest(body=err.message)
         
         except EntityError as err:
+            return BadRequest(body=err.message)
+        
+        except ForbiddenAction as err:
             return BadRequest(body=err.message)
         
         except Exception as err:

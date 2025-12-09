@@ -2,7 +2,7 @@ import json
 from src.modules.get_bookings.app.get_bookings_presenter import lambda_handler
 from src.shared.infra.repositories.booking_repository_mock import BookingRepositoryMock
 
-class Test_GetBookingPresenter:
+class TestGetBookingsPresenter:
 
     def test_get_bookings_presenter(self):
         event = {
@@ -32,7 +32,7 @@ class Test_GetBookingPresenter:
                 "authentication": None,
                 "authorizer": {
                     "user": {
-                        "id": "c8435c66-13a4-4641-9d54-773b4b8ccc98",
+                        "id": "1f25448b-3429-4c19-8287-d9e64f17bc3a",
                         "displayName": "User",
                         "mail": "lbj@maua.br"
                     }
@@ -67,7 +67,6 @@ class Test_GetBookingPresenter:
         assert json.loads(response['body'])['bookings'][0]['end_date'] == 1634583365000
         assert json.loads(response['body'])['bookings'][0]['court_number'] == 1
         assert json.loads(response['body'])['bookings'][0]['sport'] == 'Tennis'
-        assert json.loads(response['body'])['bookings'][0]['user_id'] == 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
         assert json.loads(response['body'])['bookings'][0]['materials'] == ['Raquete', 'Bola', 'Rede', 'Tenis']
 
 
@@ -122,7 +121,7 @@ class Test_GetBookingPresenter:
         
         response = lambda_handler(event, None)
         assert response['statusCode'] == 400
-        assert json.loads(response['body']) == 'Empty query parameters: At least one of the filters must be provided: booking_id, user_id, sport, court_number, end_date, start_date'
+        assert json.loads(response['body']) == 'Empty query parameters: At least one of the filters must be provided: booking_id, user_id, sport, court_number, end_date, start_date, type'
 
     def test_get_bookings_presenter_entity_error(self):
         event = {
@@ -287,11 +286,3 @@ class Test_GetBookingPresenter:
 
         assert response['statusCode'] == 404
         assert json.loads(response['body']) == 'No items found for booking filters passed'
-
-        
-
-
-
-
-
-        

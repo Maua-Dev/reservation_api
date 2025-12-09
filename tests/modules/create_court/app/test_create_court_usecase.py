@@ -1,7 +1,7 @@
 import pytest
 from src.modules.create_court.app.create_court_usecase import CreateCourtUsecase
 from src.shared.infra.repositories.reservation_repository_mock import ReservationRepositoryMock
-from src.shared.helpers.errors.usecase_errors import DuplicatedItem
+from src.shared.helpers.errors.usecase_errors import DuplicatedItem, ForbiddenAction
 from src.shared.domain.enums.status_enum import STATUS
 
 class TestCreateCourtUsecase:
@@ -13,7 +13,8 @@ class TestCreateCourtUsecase:
             number= 8,
             status= STATUS.AVAILABLE, 
             is_field= False,
-            photo = "https://super.abril.com.br/mundo-estranho/os-poneis-sao-cavalos-anoes"
+            photo = "https://super.abril.com.br/mundo-estranho/os-poneis-sao-cavalos-anoes",
+            role="ADMIN"
         )
 
         assert repo.courts[-1] == court
@@ -28,7 +29,7 @@ class TestCreateCourtUsecase:
         usecase = CreateCourtUsecase(repo=repo)
 
         with pytest.raises(DuplicatedItem):
-            court = usecase(number= 2, status= STATUS.AVAILABLE, is_field= False, photo = None)
+            court = usecase(number= 2, status= STATUS.AVAILABLE, is_field= False, photo = None, role="ADMIN")
 
     def test_create_court_usecase_no_photo(self):
         repo = ReservationRepositoryMock()
@@ -38,11 +39,26 @@ class TestCreateCourtUsecase:
             number= 7, 
             status= STATUS.UNAVAILABLE, 
             is_field = False, 
-            photo = None 
+            photo = None,
+            role="ADMIN"
         )
         assert court.photo is None
         assert repo.courts[-1] == court
         assert court.number == 7
+        
+    def test_create_court_usecase_not_admin(self):
+        
+        repo = ReservationRepositoryMock()
+        Usecase = CreateCourtUsecase(repo=repo)
+        
+        with pytest.raises(ForbiddenAction):
+            court = Usecase(
+                number= 7, 
+                status= STATUS.UNAVAILABLE, 
+                is_field = False, 
+                photo = None,
+                role="STUDENT"
+            )
         
         
         

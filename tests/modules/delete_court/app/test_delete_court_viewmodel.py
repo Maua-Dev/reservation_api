@@ -8,7 +8,7 @@ class Test_DeleteCourtViewModel:
     def test_delete_court_viewmodel(self):
         repo = ReservationRepositoryMock()
         usecase = DeleteCourtUsecase(repo=repo)
-        court = usecase(number=repo.courts[0].number)
+        court = usecase(number=repo.courts[0].number, role="ADMIN")
         viewmodel = DeleteCourtViewModel(court=court).to_dict()
 
         expected = {

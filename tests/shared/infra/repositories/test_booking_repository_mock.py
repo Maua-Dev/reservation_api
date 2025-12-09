@@ -1,3 +1,4 @@
+from src.shared.domain.enums.type import BOOKING_TYPE
 from src.shared.infra.repositories.booking_repository_mock import BookingRepositoryMock
 from src.shared.domain.enums.sport import SPORT
 from src.shared.domain.entities.booking import Booking
@@ -6,7 +7,7 @@ from src.shared.domain.entities.booking import Booking
 class TestBookingRepositoryMock:
     def test_create_booking(self):
         repo_mock = BookingRepositoryMock()
-        new_booking = Booking(start_date=1634576165000, end_date=1634583365000, court_number=1,sport=SPORT.TENNIS, user_id='c8435c66-13a4-4641-9d54-773b4b8ccd09', booking_id='c2d3bebf-dc0d-4fc1-861c-506a40cc2036', materials=['Raquete', 'Bola', 'Rede', 'Tenis'])
+        new_booking = Booking(start_date=1634576165000, end_date=1634583365000, court_number=1,sport=SPORT.TENNIS, user_id='c8435c66-13a4-4641-9d54-773b4b8ccd09', booking_id='c2d3bebf-dc0d-4fc1-861c-506a40cc2036', materials=['Raquete', 'Bola', 'Rede', 'Tenis'], booking_type=BOOKING_TYPE.TRAINING)
         len_before = len(repo_mock.bookings)
 
         response = repo_mock.create_booking(new_booking)
@@ -40,7 +41,7 @@ class TestBookingRepositoryMock:
 
         assert booking is not None
         assert booking.booking_id == booking_id
-        assert booking.user_id == 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
+        assert booking.user_id == '1f25448b-3429-4c19-8287-d9e64f17bc3a'
         assert booking.sport == SPORT.TENNIS
         assert booking.court_number == 1
         assert booking.start_date == 1634576165000
@@ -58,9 +59,14 @@ class TestBookingRepositoryMock:
     def test_delete_booking(self):
         repo_mock = BookingRepositoryMock()
         booking_id = 'b1d3bebf-dc0d-4fc1-861c-506a40cc2925'
+        user = {
+            'user_id': 'd351a9b1-937f-423c-a9d1-9929b5795be1',
+            'email': 'user@email.com',
+            'role': 'ADMIN'
+        }
 
         len_before = len(repo_mock.bookings)
-        deleted_booking = repo_mock.delete_booking(booking_id)
+        deleted_booking = repo_mock.delete_booking(booking_id, user)
         len_after = len(repo_mock.bookings)
 
         assert deleted_booking is not None

@@ -9,7 +9,15 @@ class TestDeleteCourtController:
         usecase = DeleteCourtUsecase(repo= repo)
         controller = DeleteCourtController(usecase=usecase)
         request = HttpRequest(body= {
-            "number": 2
+            "number": 2,
+            "user_from_authorizer": {
+                "name": "Dummy",
+                "email": "admin@maua.br",
+                "user_id": "user_id",
+                "ra": None,
+                "role": "ADMIN",
+                "confirm_user": False
+            }
         })
 
         response = controller(request)
@@ -22,7 +30,15 @@ class TestDeleteCourtController:
         usecase = DeleteCourtUsecase(repo= repo)
         controller = DeleteCourtController(usecase=usecase)
         request = HttpRequest(body={
-            "number": None
+            "number": None,
+            "user_from_authorizer": {
+                "name": "Dummy",
+                "email": "admin@maua.br",
+                "user_id": "user_id",
+                "ra": None,
+                "role": "ADMIN",
+                "confirm_user": False
+            }
         })
 
         response = controller(request)
@@ -34,7 +50,15 @@ class TestDeleteCourtController:
         usecase = DeleteCourtUsecase(repo= repo)
         controller = DeleteCourtController(usecase=usecase)
         request = HttpRequest(body={
-            "number": 0
+            "number": 0,
+            "user_from_authorizer": {
+                "name": "Dummy",
+                "email": "admin@maua.br",
+                "user_id": "user_id",
+                "ra": None,
+                "role": "ADMIN",
+                "confirm_user": False
+            }
         })
         
         reponse = controller(request)
@@ -46,19 +70,35 @@ class TestDeleteCourtController:
         usecase = DeleteCourtUsecase(repo=repo)
         controller = DeleteCourtController(usecase=usecase)
         request = HttpRequest(body={
-            "number": "wrong_type"  
+            "number": "wrong_type",
+            "user_from_authorizer": {
+                "name": "Dummy",
+                "email": "admin@maua.br",
+                "user_id": "user_id",
+                "ra": None,
+                "role": "ADMIN",
+                "confirm_user": False
+            }
         })
 
         response = controller(request)
         assert response.status_code == 400
-        assert response.body == "Field number is not valid"
+        assert "Field number isn't in the right type" in response.body
 
     def test_delete_court_controller_not_found(self):
         repo = ReservationRepositoryMock()
         usecase = DeleteCourtUsecase(repo=repo)
         controller = DeleteCourtController(usecase=usecase)
         request = HttpRequest(body={
-            "number": 10
+            "number": 10,
+            "user_from_authorizer": {
+                "name": "Dummy",
+                "email": "admin@maua.br",
+                "user_id": "user_id",
+                "ra": None,
+                "role": "ADMIN",
+                "confirm_user": False
+            }
         })
 
         response = controller(request)

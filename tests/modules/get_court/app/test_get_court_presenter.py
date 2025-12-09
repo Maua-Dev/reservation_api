@@ -19,7 +19,7 @@ class Test_GetCourtPresenter:
                 "header2": "value1,value2"
             },
             "queryStringParameters": {
-                "number": "1" #tem que passar ja que no querry sempre vem como string
+                "parameter1": "1"
             },
             "requestContext": {
                 "accountId": "123456789012",
@@ -42,7 +42,7 @@ class Test_GetCourtPresenter:
                 "time": "12/Mar/2020:19:03:58 +0000",
                 "timeEpoch": 1583348638390
             },
-            "body": {},
+            "body": {"number":1},
             "pathParameters": None,
             "isBase64Encoded": None,
             "stageVariables": None
@@ -117,7 +117,7 @@ class Test_GetCourtPresenter:
                 "header2": "value1,value2"
             },
             "queryStringParameters": {
-                "number": 15
+                "parameter1": "1"
             },
             "requestContext": {
                 "accountId": "123456789012",
@@ -140,7 +140,7 @@ class Test_GetCourtPresenter:
                 "time": "12/Mar/2020:19:03:58 +0000",
                 "timeEpoch": 1583348638390
             },
-            "body": {},
+            "body": {"number": 15},
             "pathParameters": None,
             "isBase64Encoded": None,
             "stageVariables": None
@@ -166,7 +166,7 @@ class Test_GetCourtPresenter:
                 "header2": "value1,value2"
             },
             "queryStringParameters": {
-                "code": "1"
+                "parameter1": "1"
             },
             "requestContext": {
                 "accountId": "123456789012",
@@ -189,7 +189,7 @@ class Test_GetCourtPresenter:
                 "time": "12/Mar/2020:19:03:58 +0000",
                 "timeEpoch": 1583348638390
             },
-            "body": {},
+            "body": {"code": "1"},
             "pathParameters": None,
             "isBase64Encoded": None,
             "stageVariables": None
@@ -216,7 +216,7 @@ class Test_GetCourtPresenter:
                 "header2": "value1,value2"
             },
             "queryStringParameters": {
-                "number": 8
+                "parameter1": "1"
             },
             "requestContext": {
                 "accountId": "123456789012",
@@ -239,7 +239,7 @@ class Test_GetCourtPresenter:
                 "time": "12/Mar/2020:19:03:58 +0000",
                 "timeEpoch": 1583348638390
             },
-            "body": {},
+            "body": {"number": 8},
             "pathParameters": None,
             "isBase64Encoded": None,
             "stageVariables": None

@@ -57,7 +57,6 @@ class Test_GetBookingPresenter:
         assert json.loads(response['body'])['booking']['end_date'] == 1634583365000
         assert json.loads(response['body'])['booking']['court_number'] == 1
         assert json.loads(response['body'])['booking']['sport'] == 'Tennis'
-        assert json.loads(response['body'])['booking']['user_id'] == 'c8435c66-13a4-4641-9d54-773b4b8ccc98'
         assert json.loads(response['body'])['booking']['materials'] == ['Raquete', 'Bola', 'Rede', 'Tenis']
 
 
@@ -76,7 +75,7 @@ class Test_GetBookingPresenter:
                 "header2": "value1,value2"
             },
             "queryStringParameters": {
-                "parameter1": "1"
+                
             },
             "requestContext": {
                 "accountId": "123456789012",
@@ -107,7 +106,7 @@ class Test_GetBookingPresenter:
         
         response = lambda_handler(event, None)
         assert response['statusCode'] == 400
-        assert json.loads(response['body']) == "Field booking_id is missing"
+        assert json.loads(response['body']) == 'Field booking_id is missing'
 
     def test_get_booking_presenter_entity_error(self):
         event = {
@@ -257,11 +256,4 @@ class Test_GetBookingPresenter:
 
         assert response['statusCode'] == 404
         assert json.loads(response['body']) == 'No items found for booking_id'
-
-        
-
-
-
-
-
         
