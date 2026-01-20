@@ -14,6 +14,7 @@ class BucketStack(Construct):
         super().__init__(scope,  "BucketStack", **kwargs)
 
         self.github_ref = os.environ.get('GITHUB_REF_NAME')
+        self.aws_account_id = os.environ.get('AWS_ACCOUNT_ID')
         self.stack_name = os.environ.get("STACK_NAME")
 
         stage = ''
@@ -27,7 +28,7 @@ class BucketStack(Construct):
         self.bucket = s3.Bucket(
             self, f"RESERVATION_BACK_S3_BUCKET_{stage}",
             # TODO remover isso quando voltar pra conta nova ou tentar deletar o bucket criado la com power user
-            bucket_name=f"{self.stack_name}-bucket-{stage}".lower(),
+            bucket_name=f"{self.stack_name}-{self.aws_account_id}-bucket-{stage}".lower(),
             versioned=True,
             removal_policy=RemovalPolicy.DESTROY if not (stage == 'PROD') else RemovalPolicy.RETAIN,
             block_public_access=s3.BlockPublicAccess.BLOCK_ALL
