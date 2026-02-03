@@ -14,6 +14,10 @@ class EntityParameterTypeError(EntityError):
     def message(self):
         return self.__message
     
+class EntitySchedulePeriodError(BaseError):
+    def __init__(self):
+        super().__init__(f'The scheduling period must not exceed 3 months')
+        
 class EntityParameterOrderDatesError(EntityError):
     def __init__(self, start_date: int, end_date: int):
         super().__init__(f'Initial date {start_date} must be less than or equal to end date {end_date}')
