@@ -1,3 +1,4 @@
+from datetime import timedelta
 import uuid
 from typing import List
 
@@ -5,7 +6,7 @@ from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
 from src.shared.domain.enums.type import BOOKING_TYPE
 from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
-from src.shared.helpers.errors.usecase_errors import DuplicatedItem, InvalidSchedule
+from src.shared.helpers.errors.usecase_errors import DuplicatedItem, InvalidSchedule, InvalidSchedulePeriod
 
 
 class CreateBookingUsecase:
@@ -53,6 +54,7 @@ class CreateBookingUsecase:
         all_bookings = self.repo.get_all_bookings()
 
         for booking in all_bookings:
+            
             if (
                 (
                     booking.start_date < end_date + (15 * 60 * 1000) #15 minutes in mseconds
@@ -61,6 +63,9 @@ class CreateBookingUsecase:
                 ) 
             ):
                 raise InvalidSchedule()
+            maxtime = booking.start_date + (timedelta(weeks=12).total_seconds()*1000)
+            if(booking.end_date > maxtime):
+                raise InvalidSchedulePeriod()
 
         resp = self.repo.create_booking(Booking(start_date,
                                                 end_date,
