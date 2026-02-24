@@ -45,11 +45,16 @@ class CreateBookingUsecase:
         for material in materials:
             if not isinstance(material, str):
                 raise ValueError("Invalid material type")
-            
+        
+        
         if booking_type not in [type.value for type in BOOKING_TYPE]:
             raise ValueError("Invalid type enum value")
-        
+
         self.booking_type = BOOKING_TYPE(booking_type)
+
+        maxtime = start_date + (timedelta(weeks=12).total_seconds()*1000)
+        if(end_date > maxtime):
+            raise InvalidSchedulePeriod()
 
         all_bookings = self.repo.get_all_bookings()
 
@@ -63,9 +68,6 @@ class CreateBookingUsecase:
                 ) 
             ):
                 raise InvalidSchedule()
-            maxtime = booking.start_date + (timedelta(weeks=12).total_seconds()*1000)
-            if(booking.end_date > maxtime):
-                raise InvalidSchedulePeriod()
 
         resp = self.repo.create_booking(Booking(start_date,
                                                 end_date,
