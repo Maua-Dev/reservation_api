@@ -27,8 +27,8 @@ class Booking(abc.ABC):
         if not Booking.validate_order_dates(start_date, end_date):
             raise EntityParameterOrderDatesError(start_date, end_date)
         
-        if not Booking.validate_scheduling_time(start_date, end_date):
-            raise EntitySchedulePeriodError()
+        # if not Booking.validate_scheduling_time(start_date, end_date):
+        #     raise EntitySchedulePeriodError()
 
         if not Booking.validate_court(court_number):
             raise EntityError("court")
@@ -71,12 +71,12 @@ class Booking(abc.ABC):
             return False
         return True
 
-    @staticmethod
-    def validate_scheduling_time(start_date: int, end_date: int)-> bool:
-        maxtime = start_date + (timedelta(weeks=12).total_seconds()*1000)
-        if end_date>maxtime:
-            return False
-        return True
+    # @staticmethod
+    # def validate_scheduling_time(start_date: int, end_date: int)-> bool:
+    #     maxtime = start_date + (timedelta(weeks=12).total_seconds()*1000)
+    #     if end_date>maxtime:
+    #         return False
+    #     return True
         
     @staticmethod
     def validate_court(court_number: int) -> bool:
