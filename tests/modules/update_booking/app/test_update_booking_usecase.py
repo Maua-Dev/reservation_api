@@ -2,10 +2,9 @@ import pytest
 
 from src.modules.update_booking.app.update_booking_usecase import UpdateBookingUsecase
 from src.shared.domain.enums.sport import SPORT
-from src.shared.helpers.errors.domain_errors import EntityError, EntityParameterOrderDatesError, EntityParameterTimeError
+from src.shared.helpers.errors.domain_errors import EntityError, EntityParameterOrderDatesError
 from src.shared.helpers.errors.usecase_errors import ForbiddenAction, InvalidSchedule, InvalidSchedulePeriod
 from src.shared.infra.repositories.booking_repository_mock import BookingRepositoryMock
-from src.shared.domain.enums.type import BOOKING_TYPE
 
 
 class Test_UpdateBookingUsecase:
