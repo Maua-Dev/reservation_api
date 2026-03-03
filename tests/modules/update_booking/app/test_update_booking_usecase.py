@@ -107,7 +107,7 @@ class Test_UpdateBookingUsecase:
                               user=user,
                               court_number=3, 
                               start_date=1634571899999,
-                              end_date=1734571000000, 
+                              end_date=1634671000000, 
                               sport=SPORT.TENNIS, 
                               materials=['Raquete', 'Bola', 'Rede', 'Tenis']
                               )
