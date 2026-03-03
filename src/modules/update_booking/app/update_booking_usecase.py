@@ -3,8 +3,9 @@ from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
 from src.shared.domain.enums.type import BOOKING_TYPE
 from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
-from src.shared.helpers.errors.domain_errors import EntityError, EntityParameterOrderDatesError, Ent
-from src.shared.helpers.errors.usecase_errors import ForbiddenAction, NoItemsFound, InvalidSchedule
+from src.shared.helpers.errors.domain_errors import EntityError, EntityParameterOrderDatesError
+from src.shared.helpers.errors.usecase_errors import ForbiddenAction, NoItemsFound, InvalidSchedule, InvalidSchedulePeriod
+from datetime import timedelta
 
 class UpdateBookingUsecase:
     def __init__(self, booking_repo: IBookingRepository):
