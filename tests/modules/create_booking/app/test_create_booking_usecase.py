@@ -4,7 +4,7 @@ from src.modules.create_booking.app.create_booking_usecase import CreateBookingU
 from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
 from src.shared.domain.enums.type import BOOKING_TYPE
-from src.shared.helpers.errors.usecase_errors import InvalidSchedule
+from src.shared.helpers.errors.usecase_errors import InvalidSchedule, InvalidSchedulePeriod
 from src.shared.infra.repositories.booking_repository_mock import BookingRepositoryMock
 
 
@@ -81,6 +81,26 @@ class TestCreateBookingUsecase:
                 materials=[1, 2, 3],
                 booking_type='Training'
             )
+
+    def test_create_booking_usecase_invalid_schedule_period(self):
+        
+        with pytest.raises(InvalidSchedulePeriod) as e:
+            
+            booking_repository = BookingRepositoryMock()
+
+            usecase = CreateBookingUsecase(booking_repository)
+            
+            response = usecase(
+                start_date=1771897236000,
+                end_date=1781897236000,
+                court_number=1,
+                sport="Tennis",
+                user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
+                materials=['Raquete', 'Bola', 'Rede', 'Tenis'],
+                booking_type='Training'
+            )
+
+        assert e.value.message == 'The scheduling period must not exceed 3 months'
 
     def test_create_booking_usecase_invalid_schedule_overlap(self):
 

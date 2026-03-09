@@ -2,8 +2,8 @@ import pytest
 
 from src.modules.update_booking.app.update_booking_usecase import UpdateBookingUsecase
 from src.shared.domain.enums.sport import SPORT
-from src.shared.helpers.errors.domain_errors import EntityError, EntityParameterOrderDatesError, EntityParameterTimeError
-from src.shared.helpers.errors.usecase_errors import ForbiddenAction, InvalidSchedule
+from src.shared.helpers.errors.domain_errors import EntityError, EntityParameterOrderDatesError
+from src.shared.helpers.errors.usecase_errors import ForbiddenAction, InvalidSchedule, InvalidSchedulePeriod
 from src.shared.infra.repositories.booking_repository_mock import BookingRepositoryMock
 
 
@@ -107,12 +107,38 @@ class Test_UpdateBookingUsecase:
                               user=user,
                               court_number=3, 
                               start_date=1634571899999,
-                              end_date=1734571000000, 
+                              end_date=1634671000000, 
                               sport=SPORT.TENNIS, 
                               materials=['Raquete', 'Bola', 'Rede', 'Tenis']
                               )
             
             assert e.value == "Court is already booked for the selected time slot or has to have 15 min tolerance"
+
+    def test_update_booking_usecase_invalid_schedule_period(self):
+        booking_repo = BookingRepositoryMock()
+        usecase = UpdateBookingUsecase(booking_repo= booking_repo)
+
+        booking_id = booking_repo.bookings[0].booking_id
+        
+        user = {
+                'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+                'name': 'Nome',
+                'email': 'user@email.com',
+                'role': 'STUDENT'
+            }   
+        
+        with pytest.raises(InvalidSchedulePeriod) as e:
+            booking = usecase(booking_id=booking_id, 
+                              user=user,
+                              court_number=3, 
+                              start_date=177248251500,
+                              end_date=187248251500, 
+                              sport=SPORT.TENNIS, 
+                              materials=['Raquete', 'Bola', 'Rede', 'Tenis']
+                              )
+        
+        assert e.value.message == "The scheduling period must not exceed 3 months"
+
 
     def test_update_booking_usecase_invalid_booking_id(self):
         booking_repo = BookingRepositoryMock()

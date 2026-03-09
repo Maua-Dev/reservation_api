@@ -4,6 +4,10 @@ class NoItemsFound(BaseError):
     def __init__(self, message: str):
         super().__init__(f'No items found for {message}')
 
+class InvalidSchedulePeriod(BaseError):
+    def __init__(self):
+        super().__init__(f'The scheduling period must not exceed 3 months')
+        
 class DuplicatedItem(BaseError):
     def __init__(self, message: str):
         super().__init__(f'The item alredy exists for this {message}')
