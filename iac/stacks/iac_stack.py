@@ -2,7 +2,7 @@ from aws_cdk import (
     Stack, aws_iam
 )
 from constructs import Construct
-from aws_cdk.aws_apigateway import RestApi, Cors, CorsOptions
+from aws_cdk.aws_apigateway import RestApi, Cors, CorsOptions, GatewayResponse, ResponseType
 import os
 
 from .bucket_stack import BucketStack
@@ -50,6 +50,32 @@ class IacStack(Stack):
             rest_api_name=f"{stack_name}_RestApi_{stage}",
             description="This is the Maua Reservation RestApi",
             default_cors_preflight_options=cors_options
+        )
+        
+        GatewayResponse(
+            self,
+            "AuthorizerDenyResponse",
+            rest_api=self.rest_api,
+            type=ResponseType.ACCESS_DENIED,
+            response_headers={
+                "Access-Control-Allow-Origin": "'*'",
+                "Access-Control-Allow-Headers": "'*'",
+                "Access-Control-Allow-Methods": "'*'",
+            },
+            status_code="403"
+        )
+        
+        GatewayResponse(
+            self,
+            "AuthorizerUnauthorizedResponse",
+            rest_api=self.rest_api,
+            type=ResponseType.UNAUTHORIZED,
+            response_headers={
+                "Access-Control-Allow-Origin": "'*'",
+                "Access-Control-Allow-Headers": "'*'",
+                "Access-Control-Allow-Methods": "'*'",
+            },
+            status_code="401"
         )
 
         api_gateway_resource = self.rest_api.root.add_resource(
