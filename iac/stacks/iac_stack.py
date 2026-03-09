@@ -2,7 +2,7 @@ from aws_cdk import (
     Stack, aws_iam
 )
 from constructs import Construct
-from aws_cdk.aws_apigateway import RestApi, Cors
+from aws_cdk.aws_apigateway import RestApi, Cors, CorsOptions
 import os
 
 from .bucket_stack import BucketStack
@@ -26,27 +26,35 @@ class IacStack(Stack):
 
         self.aws_region = os.environ.get("AWS_REGION")
         stack_name = os.environ.get("STACK_NAME")
+        
+        cors_options = CorsOptions(
+            allow_origins =
+                [
+                    "https://reservation.maua.br",
+                    "https://reservation.devmaua.com"
+                ] 
+            if stage == 'PROD'
+            else 
+                [
+                    "https://reservation.hml.devmaua.com",
+                    "https://reservation.dev.devmaua.com",
+                    "https://localhost:3000",
+                    "http://localhost:3000"
+                ],
+            allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            allow_headers=Cors.DEFAULT_HEADERS
+        )
 
         self.rest_api = RestApi(
             self, f"{stack_name}_RestApi_{stage}",
             rest_api_name=f"{stack_name}_RestApi_{stage}",
             description="This is the Maua Reservation RestApi",
-            default_cors_preflight_options= 
-            {
-                "allow_origins": Cors.ALL_ORIGINS,
-                "allow_methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-                "allow_headers": Cors.DEFAULT_HEADERS
-            }
+            default_cors_preflight_options=cors_options
         )
 
         api_gateway_resource = self.rest_api.root.add_resource(
             "reservation-api", 
-            default_cors_preflight_options= 
-            {
-                "allow_origins": Cors.ALL_ORIGINS,
-                "allow_methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-                "allow_headers": Cors.DEFAULT_HEADERS
-            }
+            default_cors_preflight_options=cors_options
         )
 
         self.dynamo_table = DynamoStack(self)
