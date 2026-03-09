@@ -4,7 +4,8 @@ from src.shared.domain.enums.sport import SPORT
 from src.shared.domain.enums.type import BOOKING_TYPE
 from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
 from src.shared.helpers.errors.domain_errors import EntityError, EntityParameterOrderDatesError
-from src.shared.helpers.errors.usecase_errors import ForbiddenAction, NoItemsFound, InvalidSchedule
+from src.shared.helpers.errors.usecase_errors import ForbiddenAction, NoItemsFound, InvalidSchedule, InvalidSchedulePeriod
+from datetime import timedelta
 
 class UpdateBookingUsecase:
     def __init__(self, booking_repo: IBookingRepository):
@@ -61,6 +62,11 @@ class UpdateBookingUsecase:
         
         if Booking.validate_booking_type(booking_type) is False:
             raise EntityError("type")
+            
+        maxtime = start_date + (timedelta(weeks=12).total_seconds()*1000)
+        if(end_date > maxtime):
+            raise InvalidSchedulePeriod()
+        
         
         all_bookings = self.booking_repo.get_all_bookings()
 
