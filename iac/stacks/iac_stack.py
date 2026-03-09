@@ -33,7 +33,7 @@ class IacStack(Stack):
             description="This is the Maua Reservation RestApi",
             default_cors_preflight_options= 
             {
-                "allow_origins": Cors.ALL_ORIGINS
+                "allow_origins": Cors.ALL_ORIGINS,
                 "allow_methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
                 "allow_headers": Cors.DEFAULT_HEADERS
             }
