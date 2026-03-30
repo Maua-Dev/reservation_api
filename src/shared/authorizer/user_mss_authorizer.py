@@ -34,7 +34,7 @@ def lambda_handler(event, context):
         # Fetching the user information from the user mss
         methodArn = event["methodArn"]
         headers = {"Authorization": f"Bearer {token}"}
-        response = http.request("GET", MSS_USER_API_ENDPOINT + "/reservation-mss-user/get-user", headers=headers)
+        response = http.request("GET", MSS_USER_API_ENDPOINT + "get-user", headers=headers)
 
         # Checking if the request was successful
         if response.status != 200:
