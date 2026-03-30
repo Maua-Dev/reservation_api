@@ -122,4 +122,4 @@ jobs:
           FROM_EMAIL: ${{ vars.FROM_EMAIL }}
           HIDDEN_COPY: ${{ vars.HIDDEN_COPY }}
           REPLY_TO_EMAIL: ${{ vars.REPLY_TO_EMAIL }}
-          USER_API_URL: ${{ secrets.USER_API_URL }}
+          USER_API_URL: ${{ env.USER_API_BASE }}
