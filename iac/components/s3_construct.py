@@ -5,7 +5,6 @@ from aws_cdk import (
     RemovalPolicy,
 )
 from constructs import Construct
-import os
 
 class S3Construct(Construct):
 
@@ -18,23 +17,19 @@ class S3Construct(Construct):
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
         
-        # deixei aqui como um legacy para o ID stackname para o bucket nao ser recriado. no futuro quando forem atualizar
-        # esse stackname mesmo que seja no CD, o bucket terá de ser recriado apesar de ter o mesmo nome (creio eu)
-
-        self.stack_name = os.environ.get("STACK_NAME")
-
         stage = stage.capitalize()
 
-        self.bucket = s3.Bucket(
-            self, f"RESERVATION_BACK_S3_BUCKET_{stage}",
-            bucket_name=f"{self.stack_name}-bucket-{stage}".lower(),
+        self.bucket_spreadsheets = s3.Bucket(
+            self, 
+            id=f"ReservationApi_Bucket_Back_{stage}",
+            bucket_name=f"ReservationApi-spreadsheets-{stage}".lower(),
             versioned=True,
             removal_policy=RemovalPolicy.DESTROY if not (stage == 'Prod') else RemovalPolicy.RETAIN,
             block_public_access=s3.BlockPublicAccess.BLOCK_ALL
         )
         
         self.distribution = cloudfront.Distribution(
-            self, f"ReservationBucketDistribution{stage}",
+            self, f"ReservationApiSpreadsheetsBucketDistribution{stage}",
             default_behavior=cloudfront.BehaviorOptions(
                 origin=origins.S3Origin(self.bucket),
                 viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,

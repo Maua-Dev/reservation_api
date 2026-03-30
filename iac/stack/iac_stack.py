@@ -49,9 +49,7 @@ class IacStack(Stack):
 
         self.s3_construct = S3Construct(
             self,
-            # aqui deixei como bucket stack mesmo para não mexer nos ids lógicos e ter que recriar o bucket
-            # para mais explicação cheque dentro da classe
-            construct_id="BucketStack",
+            construct_id="ReservationApiS3",
             stage=stage
         )
         
