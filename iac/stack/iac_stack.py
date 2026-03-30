@@ -66,7 +66,8 @@ class IacStack(Stack):
         )
 
         ENVIRONMENT_VARIABLES = {
-            "STAGE": stage,
+            # o .upper() aqui existe por causa do enum em environments usado para o stage
+            "STAGE": stage.upper(),
             "DYNAMO_TABLE_NAME": self.dynamo_construct.table.table_name,
             "DYNAMO_PARTITION_KEY": "PK",
             "DYNAMO_SORT_KEY": "SK",
