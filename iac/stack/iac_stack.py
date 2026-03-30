@@ -105,7 +105,7 @@ class IacStack(Stack):
         )
 
         functions_that_need_ses_permissions = [
-            self.lambda_stack.delete_booking
+            self.lambda_construct.delete_booking
         ]
 
         for f in functions_that_need_ses_permissions:
