@@ -72,7 +72,7 @@ class IacStack(Stack):
             "DYNAMO_SORT_KEY": "SK",
             "REGION": self.aws_region,
             "USER_API_URL": os.environ.get("USER_API_URL"),
-            "S3_BUCKET_NAME": self.s3_construct.bucket.bucket_name,
+            "S3_BUCKET_NAME": self.s3_construct.bucket_spreadsheets.bucket_name,
             "FROM_EMAIL": os.environ.get("FROM_EMAIL"),
             "HIDDEN_COPY": os.environ.get("HIDDEN_COPY"),
             "S3_ASSETS_CDN": os.environ.get("S3_ASSETS_CDN")
@@ -90,7 +90,7 @@ class IacStack(Stack):
             self.dynamo_construct.table.grant_read_write_data(function)
 
         for function in self.lambda_construct.functions_that_need_s3_permissions:
-            self.s3_construct.bucket.grant_read_write(function)
+            self.s3_construct.bucket_spreadsheets.grant_read_write(function)
 
         ses_admin_policy = aws_iam.PolicyStatement(
             effect=aws_iam.Effect.ALLOW,
