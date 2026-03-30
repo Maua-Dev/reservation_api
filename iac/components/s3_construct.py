@@ -31,7 +31,7 @@ class S3Construct(Construct):
         self.distribution = cloudfront.Distribution(
             self, f"ReservationApiSpreadsheetsBucketDistribution{stage}",
             default_behavior=cloudfront.BehaviorOptions(
-                origin=origins.S3Origin(self.bucket),
+                origin=origins.S3Origin(self.bucket_spreadsheets),
                 viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
             ),
             default_root_object=None  # não obrigatório, mas evita erro se não tiver index.html
