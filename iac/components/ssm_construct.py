@@ -29,6 +29,8 @@ class SsmConstruct(Construct):
         # aqui nao pode ter caracteres especiais, nem letras maiusculas. coloque apenas como o nome
         # do microserviço tudo junto e tudo minusculo quando for passar no iac stack
         
+        # podemos estudar passar o stackname como esse caminho. porem fiquemos atentos a caracteres especiais e letras maiusculas
+        
         mss_name_identification_for_path = mss_name_identification_for_path.lower().replace("-", "_")
 
         if api:

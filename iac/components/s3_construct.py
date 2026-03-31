@@ -3,6 +3,7 @@ from aws_cdk import (
     aws_cloudfront as cloudfront,
     aws_cloudfront_origins as origins,
     RemovalPolicy,
+    Aws
 )
 from constructs import Construct
 
@@ -12,7 +13,8 @@ class S3Construct(Construct):
         self, 
         scope: Construct,
         construct_id: str,
-        stage: str, 
+        stage: str,
+        stack_name: str,
         **kwargs
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
@@ -22,7 +24,7 @@ class S3Construct(Construct):
         self.bucket_spreadsheets = s3.Bucket(
             self, 
             id=f"ReservationApi_Bucket_Back_{stage}",
-            bucket_name=f"ReservationApi-spreadsheets-{stage}".lower(),
+            bucket_name=f"reservationapi-spreadsheets-{stage.lower()}-{Aws.ACCOUNT_ID}-{Aws.REGION}",
             versioned=True,
             removal_policy=RemovalPolicy.DESTROY if not (stage == 'Prod') else RemovalPolicy.RETAIN,
             block_public_access=s3.BlockPublicAccess.BLOCK_ALL

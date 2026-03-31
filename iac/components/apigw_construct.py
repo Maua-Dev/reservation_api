@@ -11,12 +11,13 @@ class ApigwConstruct(Construct):
         self, 
         scope: Construct, 
         construct_id: str, 
-        stage: str, 
+        stage: str,
+        stack_name: str,
         **kwargs
     ):
         
         stage = stage.capitalize()
-        
+                
         super().__init__(scope, construct_id, **kwargs)
         
         cors_options = CorsOptions(
@@ -38,8 +39,9 @@ class ApigwConstruct(Construct):
         )
 
         self.rest_api = RestApi(
-            self, f"ReservationApi_RestApi_{stage}",
-            rest_api_name=f"ReservationApi_RestApi_{stage}",
+            self, 
+            id=f"{stack_name}_RestApi_{stage}",
+            rest_api_name=f"{stack_name}_RestApi_{stage}",
             description="This is the Maua Reservation RestApi",
             deploy_options=apigateway.StageOptions(
                 stage_name=stage.lower(),

@@ -10,22 +10,18 @@ class DynamoConstruct(Construct):
         self, 
         scope: Construct,
         construct_id: str,
-        stage: str, 
+        stage: str,
+        stack_name: str,
         **kwargs
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
         stage = stage.capitalize()
-        
-        # deixei aqui como um stackname explicito (ReservationApi) pq o vindo do CD é todo mal formatado e muitas vezes quem vem
-        # programar infra aqui pela primeira vez mal sabe de onde essa variável vem
-        
-        # SE for trocar de volta pra um stackname vindo do CD aqui, provavelmente a tabela vai ser recriada (atenção à prod)
 
         self.table = dynamodb.Table(
             self, 
-            id=f"ReservationApi_DynamoTable_{stage}",
-            table_name=f"ReservationApi_DynamoTable_{stage}",
+            id=f"{stack_name}_DynamoTable_{stage}",
+            table_name=f"{stack_name}_DynamoTable_{stage}",
             partition_key=dynamodb.Attribute(
                 name="PK",
                 type=dynamodb.AttributeType.STRING

@@ -55,7 +55,7 @@ jobs:
           else
             echo "Invalid branch name!" && exit 1
           fi
-          echo "STACK_NAME=ReservationStackScheduleANDCourts${{env.STAGE}}" >> $GITHUB_ENV
+          echo "STACK_NAME=ReservationApiStack" >> $GITHUB_ENV
 
       - name: Fetch config from SSM
         run: |

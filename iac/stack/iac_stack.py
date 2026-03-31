@@ -1,5 +1,5 @@
 from aws_cdk import (
-    Stack, aws_iam
+    Stack, aws_iam, Aws
 )
 from constructs import Construct
 import os
@@ -16,46 +16,38 @@ class IacStack(Stack):
     def __init__(
         self, 
         scope: Construct, 
-        stack_id: str, 
+        stack_id: str,
+        stage: str,
+        stack_name: str,
         **kwargs
     ) -> None:
         
         super().__init__(scope, stack_id, **kwargs)
-        
-        self.github_ref = os.environ.get('GITHUB_REF_NAME')
-        stage = ''
-        if 'prod' in self.github_ref:
-            stage = 'PROD'
-        elif 'homolog' in self.github_ref:
-            stage = 'HOMOLOG'
-        else:
-            stage = 'DEV'
-            
-        stage = stage.capitalize()
-
-        self.aws_region = os.environ.get("AWS_REGION")
-        
+                    
         self.apigw_construct = ApigwConstruct(
             self,
-            construct_id="ReservationApiApigw",
+            construct_id=f"{stack_name}-Apigw",
             stage=stage,
+            stack_name=stack_name
         )
         
         self.dynamo_construct = DynamoConstruct(
             self,
-            construct_id="ReservationApiDynamo",
-            stage=stage
+            construct_id=f"{stack_name}-Dynamo",
+            stage=stage,
+            stack_name=stack_name
         )
 
         self.s3_construct = S3Construct(
             self,
-            construct_id="ReservationApiS3",
-            stage=stage
+            construct_id=f"{stack_name}-S3",
+            stage=stage,
+            stack_name=stack_name
         )
         
         self.ssm_construct = SsmConstruct(
             self,
-            construct_id="ReservationApiSsm",
+            construct_id=f"{stack_name}-Ssm",
             stage=stage,
             # atenção para esse próximo parâmetro. de preferencia deixe tudo minusculo sem _
             # isso deve corresponder ao prefixo de caminho passado no CD dos outros mss (inclusive front)
@@ -66,12 +58,11 @@ class IacStack(Stack):
         )
 
         ENVIRONMENT_VARIABLES = {
-            # o .upper() aqui existe por causa do enum em environments usado para o stage
-            "STAGE": stage.upper(),
+            "STAGE": stage,
             "DYNAMO_TABLE_NAME": self.dynamo_construct.table.table_name,
             "DYNAMO_PARTITION_KEY": "PK",
             "DYNAMO_SORT_KEY": "SK",
-            "REGION": self.aws_region,
+            "REGION": Aws.REGION,
             "USER_API_URL": os.environ.get("USER_API_URL"),
             "S3_BUCKET_NAME": self.s3_construct.bucket_spreadsheets.bucket_name,
             "FROM_EMAIL": os.environ.get("FROM_EMAIL"),
@@ -81,8 +72,9 @@ class IacStack(Stack):
 
         self.lambda_construct = LambdaConstruct(
             self, 
-            construct_id="ReservationApiLambda",
+            construct_id=f"{stack_name}-Lambda",
             stage=stage,
+            stack_name=stack_name,
             api_gateway_resource=self.apigw_construct.api_gateway_resource,
             environment_variables=ENVIRONMENT_VARIABLES
         )

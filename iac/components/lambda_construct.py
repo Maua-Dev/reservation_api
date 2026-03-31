@@ -9,8 +9,10 @@ from aws_cdk.aws_events import Rule, Schedule, EventField, RuleTargetInput
 from aws_cdk.aws_events_targets import LambdaFunction 
 
 class LambdaConstruct(Construct):
-    functions_that_need_dynamo_permissions = []
-    functions_that_need_s3_permissions = []
+    functions_that_need_dynamo_permissions: list
+    functions_that_need_s3_permissions: list
+    stage: str
+    stack_name: str
 
     def create_lambda_api_gateway_integration(
         self, 
@@ -22,7 +24,9 @@ class LambdaConstruct(Construct):
     ):
         
         function = lambda_.Function(
-            self, module_name.title(),
+            self, 
+            id=module_name.title(),
+            function_name=f"{module_name}-{self.stack_name}-{self.stage}",
             code=lambda_.Code.from_asset(f"../src/modules/{module_name}"),
             handler=f"app.{module_name}_presenter.lambda_handler",
             runtime=lambda_.Runtime("python3.13"),
@@ -51,7 +55,8 @@ class LambdaConstruct(Construct):
         
         function = lambda_.Function(
             self,
-            module_name.title(),
+            id=module_name.title(),
+            function_name=f"{module_name}-{self.stack_name}-{self.stage}",
             code=lambda_.Code.from_asset(f"../src/modules/{module_name}"),
             handler=f"app.{module_name}_presenter.lambda_handler",
             runtime=lambda_.Runtime("python3.13"),
@@ -61,7 +66,9 @@ class LambdaConstruct(Construct):
         )
 
         rule = Rule(
-            self, f"{module_name.title()}EventRuleForWeeklyUpload",
+            self, 
+            id=f"{module_name.title()}EventRuleForWeeklyUpload",
+            rule_name=f"{module_name.title()}EventRuleForWeeklyUpload",
             schedule=cron_schedule
         )
 
@@ -79,24 +86,30 @@ class LambdaConstruct(Construct):
         scope: Construct,
         construct_id: str,
         stage: str,
+        stack_name: str,
         api_gateway_resource: Resource,
-        environment_variables: dict
+        environment_variables: dict,
+        **kargs
     ) -> None:
     
-        stage = stage.capitalize()
+        self.stage = stage
+        self.stack_name = stack_name
 
-        super().__init__(scope, f"ReservationApi_LambdaConstruct_{stage}")
+        super().__init__(scope, construct_id, **kargs)
 
         self.lambda_layer = lambda_.LayerVersion(
             self, 
-            id=f"ReservationApi_LambdaLayer_{stage}",
+            id=f"{stack_name}_LambdaLayer_{stage}",
+            layer_version_name=f"{stack_name}-LambdaLayer-{self.stage}",
             # a pasta .build foi obtida do adjust layer directory, certifique-se de que a configuração da pasta layer gerada la esta igual
             code=lambda_.Code.from_asset("./build"),
             compatible_runtimes=[lambda_.Runtime("python3.13")]
         )
         
         authorizer_lambda = lambda_.Function(
-            self, "AuthorizerUserMssReservationApiLambda",
+            self, 
+            id=f"LambdaUserMssAuthorizer-{self.stack_name}-{self.stage}",
+            function_name=f"lambda_user_mss_authorizer-{self.stack_name}-{self.stage}",
             code=lambda_.Code.from_asset("../src/shared/authorizer"),
             handler="user_mss_authorizer.lambda_handler",
             runtime=lambda_.Runtime("python3.13"),
@@ -106,10 +119,11 @@ class LambdaConstruct(Construct):
         )
 
         token_authorizer_lambda = apigw.TokenAuthorizer(
-            self, "TokenAuthorizerReservationApi",
+            self, 
+            id=f"TokenUserMssAuthorizer-{self.stack_name}-{self.stage}",
+            authorizer_name=f"user_mss_authorizer-{self.stack_name}-{self.stage}",
             handler=authorizer_lambda,
             identity_source=apigw.IdentitySource.header("Authorization"),
-            authorizer_name="AuthorizerUserMssReservationMssAlertLambda",
             results_cache_ttl=Duration.seconds(0)
         )
 
