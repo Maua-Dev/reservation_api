@@ -26,7 +26,7 @@ class LambdaConstruct(Construct):
         function = lambda_.Function(
             self, 
             id=module_name.title(),
-            function_name=f"{module_name}-{self.stack_name}-{self.stage}",
+            function_name=f"{module_name}-{self.stack_name}-{self.stage}"[:63],
             code=lambda_.Code.from_asset(f"../src/modules/{module_name}"),
             handler=f"app.{module_name}_presenter.lambda_handler",
             runtime=lambda_.Runtime("python3.13"),
@@ -56,7 +56,7 @@ class LambdaConstruct(Construct):
         function = lambda_.Function(
             self,
             id=module_name.title(),
-            function_name=f"{module_name}-{self.stack_name}-{self.stage}",
+            function_name=f"{module_name}-{self.stack_name}-{self.stage}"[:63],
             code=lambda_.Code.from_asset(f"../src/modules/{module_name}"),
             handler=f"app.{module_name}_presenter.lambda_handler",
             runtime=lambda_.Runtime("python3.13"),
