@@ -33,7 +33,9 @@ tags = {
 
 IacStack(
     app, 
-    stack_id=stack_name, 
+    stack_id=stack_name,
+    stack_name=stack_name,
+    stage=stage,
     env=cdk.Environment(
         account=aws_account_id, 
         region=aws_region
