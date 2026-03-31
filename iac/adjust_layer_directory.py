@@ -6,7 +6,7 @@ from pathlib import Path # Importe a biblioteca pathlib
 # --- Configurações ---
 BUILD_DIRECTORY = "build"
 PYTHON_TOP_LEVEL_DIR = os.path.join(BUILD_DIRECTORY, "python")
-REQUIREMENTS_FILE = "requirements-layer.txt"
+REQUIREMENTS_FILE = "requirements-app.txt"
 
 # --- CONSTRUÇÃO CORRETA DO CAMINHO ---
 # Pega o diretório do projeto (a raiz 'reservation_api') subindo um nível a partir do script atual.
