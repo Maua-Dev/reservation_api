@@ -137,9 +137,10 @@ class BookingRepositoryDynamo(IBookingRepository):
             return None
 
         is_admin = user_role == 'ADMIN'
+        is_professor = user_role == 'PROFESSOR'
         is_owner = user_role == 'STUDENT' and booking.user_id == user_id
 
-        if is_admin or is_owner:
+        if is_admin or is_owner or is_professor:
             deleted = self.dynamo.delete_item(
                 partition_key=self.booking_partition_key_format(),
                 sort_key=self.booking_sort_key_format(booking_id)
