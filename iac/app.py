@@ -3,7 +3,7 @@ import os
 import aws_cdk as cdk
 from adjust_layer_directory import adjust_layer_directory
 
-from stacks.iac_stack import IacStack
+from stack.iac_stack import IacStack
 
 
 
@@ -19,26 +19,29 @@ app = cdk.App()
 aws_region = os.environ.get("AWS_REGION")
 aws_account_id = os.environ.get("AWS_ACCOUNT_ID")
 stack_name = os.environ.get("STACK_NAME")
-github_ref = os.environ.get("GITHUB_REF_NAME")
 
-stage = ''
-if 'prod' in github_ref:
-    stage = 'PROD'
-elif 'homolog' in github_ref:
-    stage = 'HOMOLOG'
-elif 'dev' in github_ref:
-    stage = 'DEV'
-else:
-    stage = 'TEST'
+# CD ja checa se esta dentro do branch name dev, hmlg, prod
+# É ideal manter o CD como capitalize para seguir no mesmo esquema do stackname
+stage = os.environ.get("GITHUB_REF_NAME").capitalize()
 
 tags = {
-    'project': 'Reservation Courts and Schedule MSS',
+    'project': 'Reservation Api MSS',
     'stage': stage,
-    'stack': 'BACK',
+    'stack': stack_name,
     'owner': 'DevCommunity'
 }
 
-IacStack(app, stack_name, env=cdk.Environment(account=aws_account_id, region=aws_region), tags=tags)
+IacStack(
+    app, 
+    stack_id=stack_name,
+    stack_name=stack_name,
+    stage=stage,
+    env=cdk.Environment(
+        account=aws_account_id, 
+        region=aws_region
+    ), 
+    tags=tags
+)
 
 
 app.synth()

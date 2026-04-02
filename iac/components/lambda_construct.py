@@ -1,8 +1,6 @@
-import os
-
 from aws_cdk import (
     aws_lambda as lambda_,
-    NestedStack, Duration,
+    Duration,
     aws_apigateway as apigw
 )
 from constructs import Construct
@@ -10,13 +8,25 @@ from aws_cdk.aws_apigateway import Resource, LambdaIntegration
 from aws_cdk.aws_events import Rule, Schedule, EventField, RuleTargetInput
 from aws_cdk.aws_events_targets import LambdaFunction 
 
-class LambdaStack(Construct):
-    functions_that_need_dynamo_permissions = []
+class LambdaConstruct(Construct):
+    functions_that_need_dynamo_permissions: list
+    functions_that_need_s3_permissions: list
+    stage: str
+    stack_name: str
 
-    def create_lambda_api_gateway_integration(self, module_name: str, method: str, api_resource: Resource,
-                                              environment_variables: dict = {"STAGE": "TEST"}, authorizer=None):
+    def create_lambda_api_gateway_integration(
+        self, 
+        module_name: str,
+        method: str,
+        api_resource: Resource,
+        environment_variables: dict = {"STAGE": "TEST"}, 
+        authorizer=None
+    ):
+        
         function = lambda_.Function(
-            self, module_name.title(),
+            self, 
+            id=module_name.title(),
+            function_name=f"{module_name}-{self.stack_name}-{self.stage}"[:63],
             code=lambda_.Code.from_asset(f"../src/modules/{module_name}"),
             handler=f"app.{module_name}_presenter.lambda_handler",
             runtime=lambda_.Runtime("python3.13"),
@@ -25,20 +35,28 @@ class LambdaStack(Construct):
             timeout=Duration.seconds(15)
         )
 
-        api_resource.add_resource(module_name.replace("_", "-")).add_method(method,
-                                                                            integration=LambdaIntegration(
-                                                                                function),
-                                                                            authorizer=authorizer)
-
+        api_resource.add_resource(
+            module_name.replace("_", "-")
+        ).add_method(
+            method,
+            integration=LambdaIntegration(
+                function
+            ),
+            authorizer=authorizer
+        )
         return function
 
-    def create_lambda_event_bridge_integration(self,
-                                               module_name: str,
-                                               cron_schedule: Schedule.cron,
-                                               environment_variables: dict = {"STAGE": "TEST"}):
+    def create_lambda_event_bridge_integration(
+        self,
+        module_name: str,
+        cron_schedule: Schedule.cron,
+        environment_variables: dict = {"STAGE": "TEST"}
+    ):
+        
         function = lambda_.Function(
             self,
-            module_name.title(),
+            id=module_name.title(),
+            function_name=f"{module_name}-{self.stack_name}-{self.stage}"[:63],
             code=lambda_.Code.from_asset(f"../src/modules/{module_name}"),
             handler=f"app.{module_name}_presenter.lambda_handler",
             runtime=lambda_.Runtime("python3.13"),
@@ -48,7 +66,9 @@ class LambdaStack(Construct):
         )
 
         rule = Rule(
-            self, f"{module_name.title()}EventRuleForWeeklyUpload",
+            self, 
+            id=f"{module_name.title()}EventRuleForWeeklyUpload",
+            rule_name=f"{module_name.title()}EventRuleForWeeklyUpload",
             schedule=cron_schedule
         )
 
@@ -61,26 +81,35 @@ class LambdaStack(Construct):
 
         return function
 
-    def __init__(self, scope: Construct, api_gateway_resource: Resource, environment_variables: dict) -> None:
-        self.github_ref = os.environ.get('GITHUB_REF_NAME')
-        self.stack_name = os.environ.get("STACK_NAME")
-        stage = ''
-        if 'prod' in self.github_ref:
-            stage = 'PROD'
-        elif 'homolog' in self.github_ref:
-            stage = 'HOMOLOG'
-        else:
-            stage = 'DEV'
+    def __init__(
+        self, 
+        scope: Construct,
+        construct_id: str,
+        stage: str,
+        stack_name: str,
+        api_gateway_resource: Resource,
+        environment_variables: dict,
+        **kargs
+    ) -> None:
+    
+        self.stage = stage
+        self.stack_name = stack_name
 
-        super().__init__(scope, f"{self.stack_name}_LambdaStack_{stage}")
+        super().__init__(scope, construct_id, **kargs)
 
-        self.lambda_layer = lambda_.LayerVersion(self, f"{self.stack_name}_Lambda_Layer_{stage}",
-                                                 code=lambda_.Code.from_asset("./build"),
-                                                 compatible_runtimes=[lambda_.Runtime("python3.13")]
-                                                 )
+        self.lambda_layer = lambda_.LayerVersion(
+            self, 
+            id=f"{stack_name}_LambdaLayer_{stage}",
+            layer_version_name=f"{stack_name}-LambdaLayer-{self.stage}",
+            # a pasta .build foi obtida do adjust layer directory, certifique-se de que a configuração da pasta layer gerada la esta igual
+            code=lambda_.Code.from_asset("./build"),
+            compatible_runtimes=[lambda_.Runtime("python3.13")]
+        )
         
         authorizer_lambda = lambda_.Function(
-            self, "AuthorizerUserMssReservationApiLambda",
+            self, 
+            id=f"LambdaUserMssAuthorizer-{self.stack_name}-{self.stage}",
+            function_name=f"lambda_user_mss_authorizer-{self.stack_name}-{self.stage}",
             code=lambda_.Code.from_asset("../src/shared/authorizer"),
             handler="user_mss_authorizer.lambda_handler",
             runtime=lambda_.Runtime("python3.13"),
@@ -90,14 +119,14 @@ class LambdaStack(Construct):
         )
 
         token_authorizer_lambda = apigw.TokenAuthorizer(
-            self, "TokenAuthorizerReservationApi",
+            self, 
+            id=f"TokenUserMssAuthorizer-{self.stack_name}-{self.stage}",
+            authorizer_name=f"user_mss_authorizer-{self.stack_name}-{self.stage}",
             handler=authorizer_lambda,
             identity_source=apigw.IdentitySource.header("Authorization"),
-            authorizer_name="AuthorizerUserMssReservationMssAlertLambda",
             results_cache_ttl=Duration.seconds(0)
         )
 
-        #ready for auth
         self.create_booking = self.create_lambda_api_gateway_integration(
             module_name="create_booking",
             method="POST",
@@ -106,7 +135,6 @@ class LambdaStack(Construct):
             authorizer=token_authorizer_lambda
         )
 
-        #ready for auth
         self.update_booking = self.create_lambda_api_gateway_integration(
             module_name="update_booking",
             method="PUT",
@@ -115,7 +143,6 @@ class LambdaStack(Construct):
             authorizer=token_authorizer_lambda
         )
 
-        #not ready for auth AND not used?
         self.get_booking = self.create_lambda_api_gateway_integration(
             module_name="get_booking",
             method="GET",
@@ -130,7 +157,6 @@ class LambdaStack(Construct):
             environment_variables=environment_variables,
         )
 
-        #not ready for auth??TODO
         self.delete_booking = self.create_lambda_api_gateway_integration(
             module_name="delete_booking",
             method="DELETE",
@@ -139,7 +165,6 @@ class LambdaStack(Construct):
             authorizer=token_authorizer_lambda
         )
 
-        #not auth and unused
         self.get_all_bookings = self.create_lambda_api_gateway_integration(
             module_name="get_all_bookings",
             method="GET",
@@ -147,7 +172,6 @@ class LambdaStack(Construct):
             environment_variables=environment_variables
         )
 
-        #ready for auth
         self.create_court = self.create_lambda_api_gateway_integration(
             module_name="create_court",
             method="POST",
@@ -156,7 +180,6 @@ class LambdaStack(Construct):
             authorizer=token_authorizer_lambda
         )
 
-        #not ready TODO
         self.get_court = self.create_lambda_api_gateway_integration(
             module_name="get_court",
             method="GET",
@@ -164,7 +187,6 @@ class LambdaStack(Construct):
             environment_variables=environment_variables
         )
 
-        #ready
         self.update_court = self.create_lambda_api_gateway_integration(
             module_name="update_court",
             method="PUT",
@@ -173,7 +195,8 @@ class LambdaStack(Construct):
             authorizer=token_authorizer_lambda
         )
 
-        #ready
+        #TODO implementar lógica de deletar foto do bucket ao excluir a quadra pelo s3_client
+        # @43 ;)
         self.delete_court = self.create_lambda_api_gateway_integration(
             module_name="delete_court",
             method="DELETE",
@@ -182,7 +205,6 @@ class LambdaStack(Construct):
             authorizer=token_authorizer_lambda
         )
 
-        #not ready? needed?
         self.get_all_courts = self.create_lambda_api_gateway_integration(
             module_name="get_all_courts",
             method="GET",
@@ -190,7 +212,6 @@ class LambdaStack(Construct):
             environment_variables=environment_variables
         )
 
-        #yes
         self.health_check = self.create_lambda_api_gateway_integration(
             module_name="health_check",
             method="GET",
@@ -239,5 +260,6 @@ class LambdaStack(Construct):
         self.functions_that_need_s3_permissions = [
             self.create_court,
             self.update_court,
+            self.delete_court,
             self.generate_report
         ]
