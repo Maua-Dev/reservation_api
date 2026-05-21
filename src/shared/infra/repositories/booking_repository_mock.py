@@ -92,7 +92,7 @@ class BookingRepositoryMock(IBookingRepository):
                 start_date=1634590800000,
                 end_date=1634592600000,
                 court_number=5,
-                sport=SPORT.PING_PONG,
+                sport=SPORT.TENIS_MESA,
                 user_id='c8435c66-13a4-4641-9d54-773b4b8ccc98',
                 booking_id='b8d3bebf-dc0d-4fc1-861c-506a40cc2925',
                 materials=['Raquete', 'Bola'], 
