@@ -94,7 +94,7 @@ class Test_GetAllBookingsViewmodel:
                         'start_date': 1634590800000,
                         'end_date': 1634592600000,
                         'court_number': 5,
-                        'sport': 'Tenis Mesa',
+                        'sport': 'Tenis de Mesa',
                         'booking_id': 'b8d3bebf-dc0d-4fc1-861c-506a40cc2925',
                         'materials': ['Raquete', 'Bola'],
                         'type': 'Training'
