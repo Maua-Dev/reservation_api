@@ -124,8 +124,13 @@ class BookingRepositoryDynamo(IBookingRepository):
 
         if "Item" not in dynamo_object:
             return None
+        
+        item_data = dynamo_object['Item']
+        
+        if item_data.get('sport') == 'Ping Pong':
+            item_data['sport'] = 'Tenis de Mesa'
 
-        return BookingDynamoDTO.from_dynamo(dynamo_object['Item']).to_entity()
+        return BookingDynamoDTO.from_dynamo(item_data).to_entity()
 
     def delete_booking(self, booking_id: str, user) -> Optional[Booking]:
 
