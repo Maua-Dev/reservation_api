@@ -165,6 +165,8 @@ class BookingRepositoryDynamo(IBookingRepository):
 
         for item in all_items:
             if item.get('entity') == 'booking':
+                if item.get('sport') == 'Ping Pong':
+                    item['sport'] = 'Tenis de Mesa'
                 all_bookings.append(BookingDynamoDTO.from_dynamo(item).to_entity())
         
         return all_bookings
