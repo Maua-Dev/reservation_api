@@ -33,5 +33,55 @@ class TestUserAPIClient:
         user_client = UserAPIClient()
         
         user_info = user_client.authenticate_user(token=user_token)
-        
+
         print(user_info)
+
+    def test_get_user_network_id_student(self, monkeypatch):
+        monkeypatch.setattr(
+            UserAPIClient, "retrieve_users",
+            staticmethod(lambda: [
+                {"user_id": "u-student", "name": "Aluno Teste", "email": "23.00847-4@maua.br", "role": "STUDENT"},
+            ]),
+        )
+        user_client = UserAPIClient()
+        assert user_client.get_user_network_id("u-student") == "23.00847-4"
+
+    def test_get_user_network_id_admin(self, monkeypatch):
+        monkeypatch.setattr(
+            UserAPIClient, "retrieve_users",
+            staticmethod(lambda: [
+                {"user_id": "u-admin", "name": "Nome Sobrenome", "email": "nome.sobrenome@maua.br", "role": "ADMIN"},
+            ]),
+        )
+        user_client = UserAPIClient()
+        assert user_client.get_user_network_id("u-admin") == "nome.sobrenome"
+
+    def test_get_user_network_id_user_not_found(self, monkeypatch):
+        monkeypatch.setattr(
+            UserAPIClient, "retrieve_users",
+            staticmethod(lambda: [
+                {"user_id": "u-admin", "name": "Nome Sobrenome", "email": "nome.sobrenome@maua.br", "role": "ADMIN"},
+            ]),
+        )
+        user_client = UserAPIClient()
+        assert user_client.get_user_network_id("does-not-exist") is None
+
+    def test_get_user_network_id_no_email(self, monkeypatch):
+        monkeypatch.setattr(
+            UserAPIClient, "retrieve_users",
+            staticmethod(lambda: [
+                {"user_id": "u-no-email", "name": "Sem Email", "role": "STUDENT"},
+            ]),
+        )
+        user_client = UserAPIClient()
+        assert user_client.get_user_network_id("u-no-email") is None
+
+    def test_get_user_network_id_malformed_email(self, monkeypatch):
+        monkeypatch.setattr(
+            UserAPIClient, "retrieve_users",
+            staticmethod(lambda: [
+                {"user_id": "u-bad", "name": "Email Ruim", "email": "sem-arroba", "role": "STUDENT"},
+            ]),
+        )
+        user_client = UserAPIClient()
+        assert user_client.get_user_network_id("u-bad") is None
