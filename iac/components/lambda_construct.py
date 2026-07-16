@@ -147,7 +147,8 @@ class LambdaConstruct(Construct):
             module_name="get_booking",
             method="GET",
             api_resource=api_gateway_resource,
-            environment_variables=environment_variables
+            environment_variables=environment_variables,
+            authorizer=token_authorizer_lambda
         )
 
         self.get_bookings = self.create_lambda_api_gateway_integration(
