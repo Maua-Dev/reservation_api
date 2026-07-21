@@ -31,7 +31,14 @@ class UserAPIClient:
         api_url= os.environ.get("USER_API_URL")
         try:
             response = requests.get(api_url + '/reservation-mss-user/get-all-users')
+            
+            response.raise_for_status()
+            
             users = response.json().get("users")
+            
+            if users == None:
+                users = []
+                
             return users
         except:
             raise Exception('Couldn\'t retrieve users')
