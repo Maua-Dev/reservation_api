@@ -30,7 +30,7 @@ class UserAPIClient:
 
         api_url= os.environ.get("USER_API_URL")
         try:
-            response = requests.get(api_url + '/reservation-mss-user/get-all-users')
+            response = requests.get(api_url)
             
             response.raise_for_status()
             
