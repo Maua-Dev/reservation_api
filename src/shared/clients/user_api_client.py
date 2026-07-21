@@ -40,8 +40,10 @@ class UserAPIClient:
                 users = []
                 
             return users
-        except:
-            raise Exception('Couldn\'t retrieve users')
+        except Exception as e:
+            corpo_erro = response.text if 'response' in locals() else 'Sem resposta do servidor'
+            
+            raise Exception(f"Erro: {str(e)} | Body: {corpo_erro}")
         
     #TODO adciionar os parametros nas request, testar se funciona mesmo
         
