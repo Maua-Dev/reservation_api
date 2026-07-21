@@ -29,7 +29,7 @@ class GetBookingUseCase:
                     'network_id': client.get_user_network_id(booking.user_id),
                 }
             except Exception as e:
-                # Faça um print ou log do erro real aqui!
+        
                 print(f"ERRO NA API DE USER: {e}")
                 owner = {
                     'name': 'Erro de integração',
