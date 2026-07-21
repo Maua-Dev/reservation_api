@@ -23,9 +23,17 @@ class GetBookingUseCase:
         owner = None
         if requester_role == 'ADMIN':
             client = self.user_client or UserAPIClient()
-            owner = {
-                'name': client.get_user_name(booking.user_id),
-                'network_id': client.get_user_network_id(booking.user_id),
-            }
+            try:
+                owner = {
+                    'name': client.get_user_name(booking.user_id),
+                    'network_id': client.get_user_network_id(booking.user_id),
+                }
+            except Exception as e:
+                # Faça um print ou log do erro real aqui!
+                print(f"ERRO NA API DE USER: {e}")
+                owner = {
+                    'name': 'Erro de integração',
+                    'network_id': 'Erro de integração',
+                }
 
         return {'booking': booking, 'owner': owner}
