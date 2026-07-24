@@ -12,8 +12,10 @@ from src.shared.helpers.errors.usecase_errors import NoItemsFound, DependantFilt
 class GetBookingsUseCase:
     repo: IBookingRepository
 
-    def __init__(self, repo: IBookingRepository):
+    def __init__(self, repo: IBookingRepository, user_client=None):
         self.repo = repo
+        self.user_client = user_client
+
     
     def __call__(self,
                  booking_id: Optional[str] = None,
@@ -60,28 +62,22 @@ class GetBookingsUseCase:
             raise NoItemsFound('booking filters passed')
         
         owner_list = []
-
+        
         for booking in bookings:
+            owner = None
             if requester_role == 'ADMIN':
-                client = getattr(self, 'user_client', None)
-                if client is None and os.environ.get('USER_API_URL'):
-                    client = UserAPIClient()
-
+                client = self.user_client or UserAPIClient()
                 try:
-                    if client:
-                        owner = {
-                            'name': client.get_user_name(booking.user_id),
-                            'network_id': client.get_user_network_id(booking.user_id),
-                        }
-                    else:
-                        owner = {'name': None, 'network_id': None}
+                    owner = {
+                        'name': client.get_user_name(booking.user_id),
+                        'network_id': client.get_user_network_id(booking.user_id),
+                    }
                 except Exception as e:
                     print(f"ERRO NA API DE USER: {e}")
                     owner = {
                         'name': 'Erro de integração',
                         'network_id': 'Erro de integração',
                     }
-
-                owner_list.append(owner)
+            owner_list.append(owner)
 
         return {'bookings': bookings, 'owner': owner_list}
