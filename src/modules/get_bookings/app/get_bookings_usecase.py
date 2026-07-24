@@ -62,6 +62,7 @@ class GetBookingsUseCase:
             raise NoItemsFound('booking filters passed')
         
         owner_list = []
+        print(f"[DEBUG] requester_role recebido: {requester_role}")
         
         for booking in bookings:
             if requester_role == 'ADMIN':
