@@ -156,6 +156,7 @@ class LambdaConstruct(Construct):
             method="GET",
             api_resource=api_gateway_resource,
             environment_variables=environment_variables,
+            authorizer=token_authorizer_lambda
         )
 
         self.delete_booking = self.create_lambda_api_gateway_integration(
