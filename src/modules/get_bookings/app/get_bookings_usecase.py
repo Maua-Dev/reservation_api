@@ -64,7 +64,6 @@ class GetBookingsUseCase:
         owner_list = []
         
         for booking in bookings:
-            owner = None
             if requester_role == 'ADMIN':
                 client = self.user_client or UserAPIClient()
                 try:
@@ -78,6 +77,6 @@ class GetBookingsUseCase:
                         'name': 'Erro de integração',
                         'network_id': 'Erro de integração',
                     }
-            owner_list.append(owner)
+                owner_list.append(owner)
 
         return {'bookings': bookings, 'owner': owner_list}
