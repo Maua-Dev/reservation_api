@@ -22,11 +22,10 @@ class GetBookingsViewmodel:
                 k: v for k, v in booking.to_dict().items() if k != 'user_id'
             }
 
-            if index < len(self.owner_list):
+            if index < len(self.owner_list) and self.owner_list[index] is not None:
                 owner = self.owner_list[index]
                 booking_dict['owner_name'] = owner.get('name')
                 booking_dict['owner_network_id'] = owner.get('network_id')
-
             bookings_response.append(booking_dict)
 
         return {
