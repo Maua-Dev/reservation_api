@@ -4,6 +4,7 @@ from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
 from src.shared.domain.enums.type import BOOKING_TYPE
 from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
+from src.shared.clients.user_api_client import UserAPIClient
 from src.shared.helpers.errors.domain_errors import EntityError
 from src.shared.helpers.errors.usecase_errors import NoItemsFound, DependantFilter
 
@@ -20,7 +21,8 @@ class GetBookingsUseCase:
                  court_number: Optional[int] = None,
                  end_date: Optional[int] = None,
                  start_date: Optional[int] = None,
-                 booking_type: Optional[str] = None):
+                 booking_type: Optional[str] = None,
+                 requester_role: str = None):
 
         if booking_id:
             if not Booking.validate_booking_id(booking_id):
@@ -56,4 +58,23 @@ class GetBookingsUseCase:
         if bookings is None or bookings == []:
             raise NoItemsFound('booking filters passed')
         
-        return bookings
+        owner_list = []
+        
+        for booking in bookings:
+            if requester_role == 'ADMIN':
+                client = self.user_client or UserAPIClient()
+                try:
+                    owner = {
+                        'name': client.get_user_name(booking.user_id),
+                        'network_id': client.get_user_network_id(booking.user_id),
+                    }
+                    owner_list.append(owner)
+                except Exception as e:
+                    
+                    print(f"ERRO NA API DE USER: {e}")
+                    owner = {
+                        'name': 'Erro de integração',
+                        'network_id': 'Erro de integração',
+                    }
+        
+        return {'bookings': bookings, 'owner': owner_list}
