@@ -71,6 +71,85 @@ class TestGetBookingsPresenter:
         assert json.loads(response['body'])['bookings'][0]['sport'] == 'Tennis'
         assert json.loads(response['body'])['bookings'][0]['materials'] == ['Raquete', 'Bola', 'Rede', 'Tenis']
 
+    def test_get_bookings_presenter_admin_owner_fields(self, monkeypatch):
+        from src.modules.get_bookings.app.get_bookings_usecase import UserAPIClient
+
+        class FakeUserClient:
+            def __init__(self):
+                pass
+
+            def get_user_name(self, user_id):
+                return 'CEAF MAUA'
+
+            def get_user_network_id(self, user_id):
+                return 'ceaf'
+
+        monkeypatch.setattr('src.modules.get_bookings.app.get_bookings_usecase.UserAPIClient', FakeUserClient)
+        monkeypatch.setenv('USER_API_URL', 'http://fake-url/')
+
+        event = {
+            "version": "2.0",
+            "routeKey": "$default",
+            "rawPath": "/my/path",
+            "rawQueryString": "parameter1=value1&parameter1=value2&parameter2=value",
+            "cookies": [
+                "cookie1",
+                "cookie2"
+            ],
+            "headers": {
+                "header1": "value1",
+                "header2": "value1,value2"
+            },
+            "queryStringParameters": {
+                "booking_id": "b1d3bebf-dc0d-4fc1-861c-506a40cc2925",
+                "user_id": "",
+                "sport": "",
+                "court_number": "",
+                "end_date": "",
+                "start_date": ""
+            },
+            "requestContext": {
+                "accountId": "123456789012",
+                "apiId": "<urlid>",
+                "authentication": None,
+                "authorizer": {
+                    "user": json.dumps({
+                        "user": {
+                            "id": "1f25448b-3429-4c19-8287-d9e64f17bc3a",
+                            "displayName": "User",
+                            "mail": "lbj@maua.br",
+                            "role": "ADMIN"
+                        }
+                    })
+                },
+                "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
+                "domainPrefix": "<url-id>",
+                "external_interfaces": {
+                    "method": "POST",
+                    "path": "/my/path",
+                    "protocol": "HTTP/1.1",
+                    "sourceIp": "123.123.123.123",
+                    "userAgent": "agent"
+                },
+                "requestId": "id",
+                "routeKey": "$default",
+                "stage": "$default",
+                "time": "12/Mar/2020:19:03:58 +0000",
+                "timeEpoch": 1583348638390
+            },
+            "body": {},
+            "pathParameters": None,
+            "isBase64Encoded": None,
+            "stageVariables": None
+        }
+
+        response = lambda_handler(event, None)
+        body = json.loads(response['body'])
+
+        assert response['statusCode'] == 200
+        assert body['bookings'][0]['owner_name'] == 'CEAF MAUA'
+        assert body['bookings'][0]['owner_network_id'] == 'ceaf'
+
 
     def test_get_bookings_presenter_missing_parameters(self):
         event = {

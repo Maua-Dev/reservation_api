@@ -15,13 +15,16 @@ def _build_controller():
 def lambda_handler(event, context):
     httpRequest = LambdaHttpRequest(data=event)
 
-    user_info = event.get('requestContext', {}).get('authorizer', {}).get('user')
-    if isinstance(user_info, str):
+    user_info_value = event.get('requestContext', {}).get('authorizer', {}).get('user')
+    if isinstance(user_info_value, str):
         try:
-            user_info = json.loads(user_info)
+            parsed_user = json.loads(user_info_value)
+            user_info = parsed_user.get('user') if isinstance(parsed_user, dict) else None
         except json.JSONDecodeError:
             user_info = None
-    elif not isinstance(user_info, dict):
+    elif isinstance(user_info_value, dict):
+        user_info = user_info_value
+    else:
         user_info = None
 
     httpRequest.data['user_from_authorizer'] = user_info

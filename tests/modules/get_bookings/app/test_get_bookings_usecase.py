@@ -5,6 +5,14 @@ from src.shared.infra.repositories.booking_repository_mock import BookingReposit
 from src.shared.helpers.errors.domain_errors import EntityError
 from src.shared.helpers.errors.usecase_errors import NoItemsFound
 
+class FakeUserClient:
+    def get_user_name(self, user_id):
+        return 'CEAF MAUA'
+
+    def get_user_network_id(self, user_id):
+        return 'ceaf'
+
+
 class TestGetBookingsUseCase:
     def test_get_bookings_usecase(self):
         repo = BookingRepositoryMock()
@@ -14,6 +22,17 @@ class TestGetBookingsUseCase:
 
         assert response['bookings'][0] == repo.bookings[0]
         assert response['owner'] == []
+
+    def test_get_bookings_usecase_admin_returns_owner_metadata(self):
+        repo = BookingRepositoryMock()
+        usecase = GetBookingsUseCase(repo=repo)
+        usecase.user_client = FakeUserClient()
+        booking_id = repo.bookings[0].booking_id
+
+        response = usecase(booking_id=booking_id, requester_role='ADMIN')
+
+        assert response['bookings'][0] == repo.bookings[0]
+        assert response['owner'] == [{'name': 'CEAF MAUA', 'network_id': 'ceaf'}]
     
     def test_get_bookings_usecase_invalid_id(self):
         with pytest.raises(EntityError):

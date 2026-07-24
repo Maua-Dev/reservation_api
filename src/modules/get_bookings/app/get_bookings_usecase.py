@@ -63,10 +63,9 @@ class GetBookingsUseCase:
 
         for booking in bookings:
             if requester_role == 'ADMIN':
-                if os.environ.get('USER_API_URL'):
-                    client = getattr(self, 'user_client', None) or UserAPIClient()
-                else:
-                    client = None
+                client = getattr(self, 'user_client', None)
+                if client is None and os.environ.get('USER_API_URL'):
+                    client = UserAPIClient()
 
                 try:
                     if client:
