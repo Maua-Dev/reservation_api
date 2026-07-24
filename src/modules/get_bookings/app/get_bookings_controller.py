@@ -61,6 +61,9 @@ class GetBookingsController:
                                              fieldTypeExpected='int',
                                              fieldTypeReceived=start_date)
 
+            user = request.data.get('user_from_authorizer')
+            requester_role = user.get('role') if isinstance(user, dict) else None
+
             booking = self.usecase(
                 booking_id=booking_id,
                 user_id=user_id,
@@ -68,7 +71,8 @@ class GetBookingsController:
                 court_number=court_number,
                 end_date=end_date,
                 start_date=start_date,
-                booking_type=booking_type
+                booking_type=booking_type,
+                requester_role=requester_role
             )
             booking_viewmodel = GetBookingsViewmodel(booking)
             return OK(booking_viewmodel.to_dict())
