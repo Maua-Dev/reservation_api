@@ -1,4 +1,6 @@
 import json
+import os
+os.environ['STAGE'] = 'TEST'
 from src.modules.get_bookings.app.get_bookings_presenter import lambda_handler
 from src.shared.infra.repositories.booking_repository_mock import BookingRepositoryMock
 
