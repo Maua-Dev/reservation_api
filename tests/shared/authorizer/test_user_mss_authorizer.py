@@ -1,5 +1,7 @@
 import json
 
+import pytest
+
 from src.shared.authorizer import user_mss_authorizer
 from src.shared.authorizer.user_mss_authorizer import generate_policy, lambda_handler
 
@@ -98,3 +100,41 @@ class TestLambdaHandler:
         policy = lambda_handler(event, None)
 
         assert policy['policyDocument']['Statement'][0]['Effect'] == 'Deny'
+
+
+class TestGetAuthorizationHeader:
+    def test_get_authorization_header_exact_case(self):
+        headers = {'Authorization': 'Bearer abc', 'Content-Type': 'application/json'}
+        assert user_mss_authorizer._get_authorization_header(headers) == 'Bearer abc'
+
+    def test_get_authorization_header_lowercase(self):
+        headers = {'authorization': 'Bearer abc'}
+        assert user_mss_authorizer._get_authorization_header(headers) == 'Bearer abc'
+
+    def test_get_authorization_header_absent(self):
+        assert user_mss_authorizer._get_authorization_header({'Content-Type': 'application/json'}) is None
+
+    def test_get_authorization_header_none_headers(self):
+        assert user_mss_authorizer._get_authorization_header(None) is None
+
+
+class TestFetchUserData:
+    def test_fetch_user_data_returns_parsed_json(self, monkeypatch):
+        monkeypatch.setenv('USER_API_URL', 'http://fake-user-api/')
+        install_pool_manager(monkeypatch, payload={'id': 'u-1', 'role': 'STUDENT'})
+
+        assert user_mss_authorizer._fetch_user_data('valid-token') == {'id': 'u-1', 'role': 'STUDENT'}
+
+    def test_fetch_user_data_raises_without_env_var(self, monkeypatch):
+        monkeypatch.delenv('USER_API_URL', raising=False)
+        install_pool_manager(monkeypatch)
+
+        with pytest.raises(Exception):
+            user_mss_authorizer._fetch_user_data('valid-token')
+
+    def test_fetch_user_data_raises_on_non_200(self, monkeypatch):
+        monkeypatch.setenv('USER_API_URL', 'http://fake-user-api/')
+        install_pool_manager(monkeypatch, status=500)
+
+        with pytest.raises(Exception):
+            user_mss_authorizer._fetch_user_data('valid-token')
