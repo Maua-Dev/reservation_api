@@ -88,6 +88,48 @@ def lambda_handler(event, context):
         return generate_policy("user", "Deny", method_arn)
 
 
+def optional_lambda_handler(event, context):
+    """
+    REQUEST authorizer with optional authentication.
+
+    Wired to routes that must stay reachable by unauthenticated clients. Because it is a
+    REQUEST authorizer registered with no identity sources, API Gateway always invokes it,
+    even when the Authorization header is absent.
+
+    - No token  -> Allow with no user context (the route behaves as if the caller were a STUDENT)
+    - Valid token -> Allow with the user context, same shape as lambda_handler
+    - Invalid token -> Deny
+
+    Args:
+        event (dict): The event data passed to the Lambda function.
+        context (object): The context object representing the current invocation.
+
+    Returns:
+        dict: The response object containing the policy document.
+    """
+
+    method_arn = event["methodArn"]
+
+    authorization_header = _get_authorization_header(event.get("headers"))
+    token = authorization_header.replace("Bearer ", "").strip() if authorization_header else ""
+
+    # No token at all: the caller is anonymous, let it through without user context
+    if not token:
+        return generate_policy("anonymous", "Allow", method_arn)
+
+    try:
+        user_data = _fetch_user_data(token)
+
+        return generate_policy(
+            user_data.get("id", "user"), "Allow", method_arn, {"user": json.dumps(user_data)}
+        )
+
+    # A token was sent but it is not valid: this is a real authentication failure
+    except Exception as e:
+        print(f"Error: {e}")
+        return generate_policy("user", "Deny", method_arn)
+
+
 def generate_policy(principal_id, effect, method_arn, context=None):
     '''
     This function generates the policy document based on the principal ID, effect, method ARN, and context.

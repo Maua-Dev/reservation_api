@@ -138,3 +138,85 @@ class TestFetchUserData:
 
         with pytest.raises(Exception):
             user_mss_authorizer._fetch_user_data('valid-token')
+
+
+class TestOptionalLambdaHandler:
+    def test_optional_handler_without_authorization_header_allows_anonymous(self, monkeypatch):
+        monkeypatch.setenv('USER_API_URL', 'http://fake-user-api/')
+        install_pool_manager(monkeypatch)
+
+        event = {'type': 'REQUEST', 'methodArn': METHOD_ARN, 'headers': {'Accept': '*/*'}}
+        policy = user_mss_authorizer.optional_lambda_handler(event, None)
+
+        assert policy['principalId'] == 'anonymous'
+        assert policy['policyDocument']['Statement'][0]['Effect'] == 'Allow'
+        assert 'context' not in policy
+        assert FakePoolManager.calls == []
+
+    def test_optional_handler_without_headers_key_allows_anonymous(self, monkeypatch):
+        monkeypatch.setenv('USER_API_URL', 'http://fake-user-api/')
+        install_pool_manager(monkeypatch)
+
+        event = {'type': 'REQUEST', 'methodArn': METHOD_ARN}
+        policy = user_mss_authorizer.optional_lambda_handler(event, None)
+
+        assert policy['principalId'] == 'anonymous'
+        assert policy['policyDocument']['Statement'][0]['Effect'] == 'Allow'
+        assert 'context' not in policy
+
+    def test_optional_handler_with_empty_bearer_allows_anonymous(self, monkeypatch):
+        monkeypatch.setenv('USER_API_URL', 'http://fake-user-api/')
+        install_pool_manager(monkeypatch)
+
+        event = {'type': 'REQUEST', 'methodArn': METHOD_ARN, 'headers': {'Authorization': 'Bearer '}}
+        policy = user_mss_authorizer.optional_lambda_handler(event, None)
+
+        assert policy['principalId'] == 'anonymous'
+        assert policy['policyDocument']['Statement'][0]['Effect'] == 'Allow'
+        assert 'context' not in policy
+        assert FakePoolManager.calls == []
+
+    def test_optional_handler_with_valid_token_allows_with_user_context(self, monkeypatch):
+        monkeypatch.setenv('USER_API_URL', 'http://fake-user-api/')
+        install_pool_manager(monkeypatch)
+
+        event = {
+            'type': 'REQUEST',
+            'methodArn': METHOD_ARN,
+            'headers': {'Authorization': 'Bearer valid-token'},
+        }
+        policy = user_mss_authorizer.optional_lambda_handler(event, None)
+
+        assert policy['principalId'] == '1f25448b-3429-4c19-8287-d9e64f17bc3a'
+        assert policy['policyDocument']['Statement'][0]['Effect'] == 'Allow'
+        assert json.loads(policy['context']['user'])['role'] == 'ADMIN'
+        assert FakePoolManager.calls[0]['headers'] == {'Authorization': 'Bearer valid-token'}
+
+    def test_optional_handler_with_lowercase_header_allows_with_user_context(self, monkeypatch):
+        monkeypatch.setenv('USER_API_URL', 'http://fake-user-api/')
+        install_pool_manager(monkeypatch)
+
+        event = {
+            'type': 'REQUEST',
+            'methodArn': METHOD_ARN,
+            'headers': {'authorization': 'Bearer valid-token'},
+        }
+        policy = user_mss_authorizer.optional_lambda_handler(event, None)
+
+        assert policy['policyDocument']['Statement'][0]['Effect'] == 'Allow'
+        assert 'context' in policy
+
+    def test_optional_handler_with_invalid_token_denies(self, monkeypatch):
+        monkeypatch.setenv('USER_API_URL', 'http://fake-user-api/')
+        install_pool_manager(monkeypatch, status=401)
+
+        event = {
+            'type': 'REQUEST',
+            'methodArn': METHOD_ARN,
+            'headers': {'Authorization': 'Bearer expired-token'},
+        }
+        policy = user_mss_authorizer.optional_lambda_handler(event, None)
+
+        assert policy['principalId'] == 'user'
+        assert policy['policyDocument']['Statement'][0]['Effect'] == 'Deny'
+        assert 'context' not in policy
