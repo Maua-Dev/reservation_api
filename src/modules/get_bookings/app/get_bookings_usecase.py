@@ -4,7 +4,6 @@ from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
 from src.shared.domain.enums.type import BOOKING_TYPE
 from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
-import os
 from src.shared.clients.user_api_client import UserAPIClient
 from src.shared.helpers.errors.domain_errors import EntityError
 from src.shared.helpers.errors.usecase_errors import NoItemsFound, DependantFilter
@@ -62,12 +61,17 @@ class GetBookingsUseCase:
             raise NoItemsFound('booking filters passed')
         
         owner_list = []
-        print(f"[DEBUG] requester_role recebido: {requester_role}")
-        
-        for booking in bookings:
-            if requester_role == 'ADMIN':
-                client = self.user_client or UserAPIClient()
+
+        if requester_role == 'ADMIN':
+            client = self.user_client
+
+            for booking in bookings:
                 try:
+                    # Construído sob demanda e reaproveitado: cada UserAPIClient() baixa
+                    # a lista inteira de usuários do user mss.
+                    if client is None:
+                        client = UserAPIClient()
+
                     owner = {
                         'name': client.get_user_name(booking.user_id),
                         'network_id': client.get_user_network_id(booking.user_id),
@@ -78,6 +82,7 @@ class GetBookingsUseCase:
                         'name': 'Erro de integração',
                         'network_id': 'Erro de integração',
                     }
+
                 owner_list.append(owner)
 
         return {'bookings': bookings, 'owner': owner_list}
