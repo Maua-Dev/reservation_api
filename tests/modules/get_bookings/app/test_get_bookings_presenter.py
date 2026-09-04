@@ -1,4 +1,6 @@
 import json
+import os
+os.environ['STAGE'] = 'TEST'
 from src.modules.get_bookings.app.get_bookings_presenter import lambda_handler
 from src.shared.infra.repositories.booking_repository_mock import BookingRepositoryMock
 
@@ -68,6 +70,85 @@ class TestGetBookingsPresenter:
         assert json.loads(response['body'])['bookings'][0]['court_number'] == 1
         assert json.loads(response['body'])['bookings'][0]['sport'] == 'Tennis'
         assert json.loads(response['body'])['bookings'][0]['materials'] == ['Raquete', 'Bola', 'Rede', 'Tenis']
+
+    def test_get_bookings_presenter_admin_owner_fields(self, monkeypatch):
+        from src.modules.get_bookings.app.get_bookings_usecase import UserAPIClient
+
+        class FakeUserClient:
+            def __init__(self):
+                pass
+
+            def get_user_name(self, user_id):
+                return 'CEAF MAUA'
+
+            def get_user_network_id(self, user_id):
+                return 'ceaf'
+
+        monkeypatch.setattr('src.modules.get_bookings.app.get_bookings_usecase.UserAPIClient', FakeUserClient)
+        monkeypatch.setenv('USER_API_URL', 'http://fake-url/')
+
+        event = {
+            "version": "2.0",
+            "routeKey": "$default",
+            "rawPath": "/my/path",
+            "rawQueryString": "parameter1=value1&parameter1=value2&parameter2=value",
+            "cookies": [
+                "cookie1",
+                "cookie2"
+            ],
+            "headers": {
+                "header1": "value1",
+                "header2": "value1,value2"
+            },
+            "queryStringParameters": {
+                "booking_id": "b1d3bebf-dc0d-4fc1-861c-506a40cc2925",
+                "user_id": "",
+                "sport": "",
+                "court_number": "",
+                "end_date": "",
+                "start_date": ""
+            },
+            "requestContext": {
+                "accountId": "123456789012",
+                "apiId": "<urlid>",
+                "authentication": None,
+                "authorizer": {
+                    "user": json.dumps({
+                        "user": {
+                            "id": "1f25448b-3429-4c19-8287-d9e64f17bc3a",
+                            "displayName": "User",
+                            "mail": "lbj@maua.br",
+                            "role": "ADMIN"
+                        }
+                    })
+                },
+                "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
+                "domainPrefix": "<url-id>",
+                "external_interfaces": {
+                    "method": "POST",
+                    "path": "/my/path",
+                    "protocol": "HTTP/1.1",
+                    "sourceIp": "123.123.123.123",
+                    "userAgent": "agent"
+                },
+                "requestId": "id",
+                "routeKey": "$default",
+                "stage": "$default",
+                "time": "12/Mar/2020:19:03:58 +0000",
+                "timeEpoch": 1583348638390
+            },
+            "body": {},
+            "pathParameters": None,
+            "isBase64Encoded": None,
+            "stageVariables": None
+        }
+
+        response = lambda_handler(event, None)
+        body = json.loads(response['body'])
+
+        assert response['statusCode'] == 200
+        assert body['bookings'][0]['owner_name'] == 'CEAF MAUA'
+        assert body['bookings'][0]['owner_network_id'] == 'ceaf'
 
 
     def test_get_bookings_presenter_missing_parameters(self):
@@ -286,3 +367,125 @@ class TestGetBookingsPresenter:
 
         assert response['statusCode'] == 404
         assert json.loads(response['body']) == 'No items found for booking filters passed'
+
+    def test_get_bookings_presenter_anonymous_authorizer_context(self):
+        # Cenário do authorizer opcional devolvendo Allow anônimo: existe `authorizer`,
+        # mas sem a chave `user`.
+        event = {
+            "version": "2.0",
+            "routeKey": "$default",
+            "rawPath": "/my/path",
+            "rawQueryString": "booking_id=b1d3bebf-dc0d-4fc1-861c-506a40cc2925",
+            "headers": {
+                "header1": "value1"
+            },
+            "queryStringParameters": {
+                "booking_id": "b1d3bebf-dc0d-4fc1-861c-506a40cc2925"
+            },
+            "requestContext": {
+                "accountId": "123456789012",
+                "apiId": "<urlid>",
+                "authentication": None,
+                "authorizer": {
+                    "principalId": "anonymous"
+                },
+                "requestId": "id",
+                "stage": "$default",
+                "timeEpoch": 1583348638390
+            },
+            "body": {},
+            "pathParameters": None,
+            "isBase64Encoded": None,
+            "stageVariables": None
+        }
+
+        response = lambda_handler(event, None)
+        body = json.loads(response['body'])
+
+        assert response['statusCode'] == 200
+        assert body['message'] == 'the bookings were retrieved'
+        assert body['bookings'][0]['booking_id'] == 'b1d3bebf-dc0d-4fc1-861c-506a40cc2925'
+        assert 'owner_name' not in body['bookings'][0]
+        assert 'owner_network_id' not in body['bookings'][0]
+        assert 'user_id' not in body['bookings'][0]
+
+    def test_get_bookings_presenter_without_authorizer_at_all(self):
+        # Cenário mais defensivo: requestContext sem nenhuma chave `authorizer`.
+        event = {
+            "version": "2.0",
+            "routeKey": "$default",
+            "rawPath": "/my/path",
+            "rawQueryString": "booking_id=b1d3bebf-dc0d-4fc1-861c-506a40cc2925",
+            "headers": {
+                "header1": "value1"
+            },
+            "queryStringParameters": {
+                "booking_id": "b1d3bebf-dc0d-4fc1-861c-506a40cc2925"
+            },
+            "requestContext": {
+                "accountId": "123456789012",
+                "apiId": "<urlid>",
+                "requestId": "id",
+                "stage": "$default",
+                "timeEpoch": 1583348638390
+            },
+            "body": {},
+            "pathParameters": None,
+            "isBase64Encoded": None,
+            "stageVariables": None
+        }
+
+        response = lambda_handler(event, None)
+        body = json.loads(response['body'])
+
+        assert response['statusCode'] == 200
+        assert 'owner_name' not in body['bookings'][0]
+        assert 'owner_network_id' not in body['bookings'][0]
+
+    def test_get_bookings_presenter_student_matches_anonymous_response(self):
+        # O requisito central: sem token a resposta é byte a byte igual à de um STUDENT.
+        base_event = {
+            "version": "2.0",
+            "routeKey": "$default",
+            "rawPath": "/my/path",
+            "rawQueryString": "sport=Tennis",
+            "headers": {
+                "header1": "value1"
+            },
+            "queryStringParameters": {
+                "sport": "Tennis"
+            },
+            "requestContext": {
+                "accountId": "123456789012",
+                "apiId": "<urlid>",
+                "requestId": "id",
+                "stage": "$default",
+                "timeEpoch": 1583348638390
+            },
+            "body": {},
+            "pathParameters": None,
+            "isBase64Encoded": None,
+            "stageVariables": None
+        }
+
+        anonymous_event = json.loads(json.dumps(base_event))
+        anonymous_event['requestContext']['authorizer'] = {"principalId": "anonymous"}
+
+        student_event = json.loads(json.dumps(base_event))
+        student_event['requestContext']['authorizer'] = {
+            "user": json.dumps({
+                "user": {
+                    "id": "c8435c66-13a4-4641-9d54-773b4b8ccc98",
+                    "displayName": "User",
+                    "mail": "lbj@maua.br",
+                    "role": "STUDENT"
+                }
+            })
+        }
+
+        anonymous_response = lambda_handler(anonymous_event, None)
+        student_response = lambda_handler(student_event, None)
+
+        assert anonymous_response['statusCode'] == 200
+        assert student_response['statusCode'] == 200
+        assert json.loads(anonymous_response['body']) == json.loads(student_response['body'])

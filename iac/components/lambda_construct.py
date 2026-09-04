@@ -127,6 +127,32 @@ class LambdaConstruct(Construct):
             results_cache_ttl=Duration.seconds(0)
         )
 
+        # Segundo authorizer, para rotas em que o token é opcional.
+        # Reaproveita o mesmo asset do authorizer obrigatório, mudando só o handler.
+        optional_authorizer_lambda = lambda_.Function(
+            self,
+            id=f"LambdaOptionalUserMssAuthorizer-{self.stack_name}-{self.stage}",
+            function_name=f"lambda_optional_user_mss_authorizer-{self.stack_name}-{self.stage}"[:63],
+            code=lambda_.Code.from_asset("../src/shared/authorizer"),
+            handler="user_mss_authorizer.optional_lambda_handler",
+            runtime=lambda_.Runtime("python3.13"),
+            layers=[self.lambda_layer],
+            environment=environment_variables,
+            timeout=Duration.seconds(15)
+        )
+
+        # identity_sources=[] só é aceito com results_cache_ttl=0, e é justamente essa
+        # combinação que faz o API Gateway invocar o authorizer mesmo sem header Authorization.
+        # Com um TokenAuthorizer, a requisição sem header morre em 401 antes de chegar aqui.
+        optional_request_authorizer = apigw.RequestAuthorizer(
+            self,
+            id=f"RequestOptionalUserMssAuthorizer-{self.stack_name}-{self.stage}",
+            authorizer_name=f"optional_user_mss_authorizer-{self.stack_name}-{self.stage}",
+            handler=optional_authorizer_lambda,
+            identity_sources=[],
+            results_cache_ttl=Duration.seconds(0)
+        )
+
         self.create_booking = self.create_lambda_api_gateway_integration(
             module_name="create_booking",
             method="POST",
@@ -156,6 +182,7 @@ class LambdaConstruct(Construct):
             method="GET",
             api_resource=api_gateway_resource,
             environment_variables=environment_variables,
+            authorizer=optional_request_authorizer
         )
 
         self.delete_booking = self.create_lambda_api_gateway_integration(

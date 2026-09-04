@@ -6,9 +6,9 @@ class Test_GetBookingsViewModel:
     def test_get_bookings_viewmodel(self):
         repo = BookingRepositoryMock()
         usecase = GetBookingsUseCase(repo)
-        booking = usecase(booking_id=repo.bookings[0].booking_id)
+        response = usecase(booking_id=repo.bookings[0].booking_id)
 
-        viewmodel = GetBookingsViewmodel(bookings=booking).to_dict()
+        viewmodel = GetBookingsViewmodel(bookings=response['bookings'], owner_list=response['owner']).to_dict()
 
         expected = {
             'bookings': [{
