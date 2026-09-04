@@ -12,7 +12,16 @@ class UserAPIClient:
     def get_user_name(self, user_id):
         user = next((user for user in self.all_users if user["user_id"] == user_id), None)
         return user["name"] if user is not None else None
-    
+
+    def get_user_network_id(self, user_id):
+        user = next((user for user in self.all_users if user["user_id"] == user_id), None)
+        if user is None:
+            return None
+        email = user.get("email")
+        if not email or "@" not in email:
+            return None
+        return email.split("@")[0]
+
     def authenticate_user(self, token):
         return self._auth_user(token=token)
 
@@ -21,11 +30,20 @@ class UserAPIClient:
 
         api_url= os.environ.get("USER_API_URL")
         try:
-            response = requests.get(api_url + '/reservation-mss-user/get-all-users')
+            response = requests.get(api_url + 'get-all-users')
+            
+            response.raise_for_status()
+            
             users = response.json().get("users")
+            
+            if users == None:
+                users = []
+                
             return users
-        except:
-            raise Exception('Couldn\'t retrieve users')
+        except Exception as e:
+            corpo_erro = response.text if 'response' in locals() else 'Sem resposta do servidor'
+            
+            raise Exception(f"Erro: {str(e)} | Body: {corpo_erro}")
         
     #TODO adciionar os parametros nas request, testar se funciona mesmo
         

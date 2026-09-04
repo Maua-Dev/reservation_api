@@ -9,7 +9,7 @@ class BookingViewmodel:
     booking_id: str
     materials: list
 
-    def __init__(self, booking: Booking):
+    def __init__(self, booking: Booking, owner: dict = None):
         self.start_date = booking.start_date
         self.end_date = booking.end_date
         self.court_number = booking.court_number
@@ -17,9 +17,10 @@ class BookingViewmodel:
         self.booking_id = booking.booking_id
         self.materials = booking.materials
         self.booking_type = booking.booking_type
+        self.owner = owner
 
     def to_dict(self):
-        return {
+        booking_dict = {
             'start_date': self.start_date,
             'end_date': self.end_date,
             'court_number': self.court_number,
@@ -28,12 +29,18 @@ class BookingViewmodel:
             'materials': self.materials,
             "type": self.booking_type.value
         }
-        
+
+        if self.owner is not None:
+            booking_dict['owner_name'] = self.owner.get('name')
+            booking_dict['owner_network_id'] = self.owner.get('network_id')
+
+        return booking_dict
+
 class GetBookingViewmodel:
     booking_viewmodel: BookingViewmodel
 
-    def __init__(self, booking: Booking):
-        self.booking = BookingViewmodel(booking)
+    def __init__(self, booking: Booking, owner: dict = None):
+        self.booking = BookingViewmodel(booking, owner)
 
     def to_dict(self):
         return{

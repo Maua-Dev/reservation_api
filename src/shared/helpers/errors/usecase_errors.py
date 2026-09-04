@@ -26,7 +26,7 @@ class DynamoDBBaseError(BaseError):
 
 class InvalidSchedule(BaseError):
     def __init__(self):
-        super().__init__('Court is already booked for the selected time slot or has to have 15 min tolerance')
+        super().__init__('Court is already booked for the selected time slot')
 
 class NoAdminFound(BaseError):
     

@@ -2,6 +2,18 @@ import json
 from src.modules.get_booking.app.get_booking_presenter import lambda_handler
 from src.shared.infra.repositories.booking_repository_mock import BookingRepositoryMock
 
+AUTHORIZER_CONTEXT = {
+    "user": json.dumps({
+        "user": {
+            'user_id': '1f25448b-3429-4c19-8287-d9e64f17bc3a',
+            'name': 'Nome',
+            'email': 'user@email.com',
+            'role': 'STUDENT'
+        },
+        "message": "the user was retrieved"
+    })
+}
+
 class Test_GetBookingPresenter:
 
     def test_get_booking_presenter(self):
@@ -25,8 +37,7 @@ class Test_GetBookingPresenter:
                 "accountId": "123456789012",
                 "apiId": "<urlid>",
                 "authentication": None,
-                "authorizer": {
-                },
+                "authorizer": AUTHORIZER_CONTEXT,
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
                 "external_interfaces": {
@@ -47,7 +58,7 @@ class Test_GetBookingPresenter:
             "isBase64Encoded": None,
             "stageVariables": None
         }
-        
+
 
         response = lambda_handler(event, None)
         assert response['statusCode'] == 200
@@ -58,6 +69,8 @@ class Test_GetBookingPresenter:
         assert json.loads(response['body'])['booking']['court_number'] == 1
         assert json.loads(response['body'])['booking']['sport'] == 'Tennis'
         assert json.loads(response['body'])['booking']['materials'] == ['Raquete', 'Bola', 'Rede', 'Tenis']
+        assert 'owner_name' not in json.loads(response['body'])['booking']
+        assert 'owner_network_id' not in json.loads(response['body'])['booking']
 
 
     def test_get_booking_presenter_missing_parameters(self):
@@ -75,14 +88,13 @@ class Test_GetBookingPresenter:
                 "header2": "value1,value2"
             },
             "queryStringParameters": {
-                
+
             },
             "requestContext": {
                 "accountId": "123456789012",
                 "apiId": "<urlid>",
                 "authentication": None,
-                "authorizer": {
-                },
+                "authorizer": AUTHORIZER_CONTEXT,
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
                 "external_interfaces": {
@@ -103,7 +115,7 @@ class Test_GetBookingPresenter:
             "isBase64Encoded": None,
             "stageVariables": None
         }
-        
+
         response = lambda_handler(event, None)
         assert response['statusCode'] == 400
         assert json.loads(response['body']) == 'Field booking_id is missing'
@@ -129,8 +141,7 @@ class Test_GetBookingPresenter:
                 "accountId": "123456789012",
                 "apiId": "<urlid>",
                 "authentication": None,
-                "authorizer": {
-                },
+                "authorizer": AUTHORIZER_CONTEXT,
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
                 "external_interfaces": {
@@ -179,8 +190,7 @@ class Test_GetBookingPresenter:
                 "accountId": "123456789012",
                 "apiId": "<urlid>",
                 "authentication": None,
-                "authorizer": {
-                },
+                "authorizer": AUTHORIZER_CONTEXT,
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
                 "external_interfaces": {
@@ -229,8 +239,7 @@ class Test_GetBookingPresenter:
                 "accountId": "123456789012",
                 "apiId": "<urlid>",
                 "authentication": None,
-                "authorizer": {
-                },
+                "authorizer": AUTHORIZER_CONTEXT,
                 "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
                 "domainPrefix": "<url-id>",
                 "external_interfaces": {
@@ -256,4 +265,51 @@ class Test_GetBookingPresenter:
 
         assert response['statusCode'] == 404
         assert json.loads(response['body']) == 'No items found for booking_id'
-        
+
+    def test_get_booking_presenter_missing_authorizer(self):
+        event = {
+            "version": "2.0",
+            "routeKey": "$default",
+            "rawPath": "/my/path",
+            "rawQueryString": "parameter1=value1&parameter1=value2&parameter2=value",
+            "cookies": [
+                "cookie1",
+                "cookie2"
+            ],
+            "headers": {
+                "header1": "value1",
+                "header2": "value1,value2"
+            },
+            "queryStringParameters": {
+                "booking_id": "b1d3bebf-dc0d-4fc1-861c-506a40cc2925"
+            },
+            "requestContext": {
+                "accountId": "123456789012",
+                "apiId": "<urlid>",
+                "authentication": None,
+                "authorizer": {},
+                "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
+                "domainPrefix": "<url-id>",
+                "external_interfaces": {
+                    "method": "POST",
+                    "path": "/my/path",
+                    "protocol": "HTTP/1.1",
+                    "sourceIp": "123.123.123.123",
+                    "userAgent": "agent"
+                },
+                "requestId": "id",
+                "routeKey": "$default",
+                "stage": "$default",
+                "time": "12/Mar/2020:19:03:58 +0000",
+                "timeEpoch": 1583348638390
+            },
+            "body": {},
+            "pathParameters": None,
+            "isBase64Encoded": None,
+            "stageVariables": None
+        }
+
+        response = lambda_handler(event, None)
+
+        assert response['statusCode'] == 400
+        assert json.loads(response['body']) == 'User was not returned from authorizer'

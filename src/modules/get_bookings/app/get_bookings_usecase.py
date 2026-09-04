@@ -4,14 +4,17 @@ from src.shared.domain.entities.booking import Booking
 from src.shared.domain.enums.sport import SPORT
 from src.shared.domain.enums.type import BOOKING_TYPE
 from src.shared.domain.repositories.booking_repository_interface import IBookingRepository
+from src.shared.clients.user_api_client import UserAPIClient
 from src.shared.helpers.errors.domain_errors import EntityError
 from src.shared.helpers.errors.usecase_errors import NoItemsFound, DependantFilter
 
 class GetBookingsUseCase:
     repo: IBookingRepository
 
-    def __init__(self, repo: IBookingRepository):
+    def __init__(self, repo: IBookingRepository, user_client=None):
         self.repo = repo
+        self.user_client = user_client
+
     
     def __call__(self,
                  booking_id: Optional[str] = None,
@@ -20,7 +23,8 @@ class GetBookingsUseCase:
                  court_number: Optional[int] = None,
                  end_date: Optional[int] = None,
                  start_date: Optional[int] = None,
-                 booking_type: Optional[str] = None):
+                 booking_type: Optional[str] = None,
+                 requester_role: str = None):
 
         if booking_id:
             if not Booking.validate_booking_id(booking_id):
@@ -56,4 +60,29 @@ class GetBookingsUseCase:
         if bookings is None or bookings == []:
             raise NoItemsFound('booking filters passed')
         
-        return bookings
+        owner_list = []
+
+        if requester_role == 'ADMIN':
+            client = self.user_client
+
+            for booking in bookings:
+                try:
+                    # Construído sob demanda e reaproveitado: cada UserAPIClient() baixa
+                    # a lista inteira de usuários do user mss.
+                    if client is None:
+                        client = UserAPIClient()
+
+                    owner = {
+                        'name': client.get_user_name(booking.user_id),
+                        'network_id': client.get_user_network_id(booking.user_id),
+                    }
+                except Exception as e:
+                    print(f"ERRO NA API DE USER: {e}")
+                    owner = {
+                        'name': 'Erro de integração',
+                        'network_id': 'Erro de integração',
+                    }
+
+                owner_list.append(owner)
+
+        return {'bookings': bookings, 'owner': owner_list}
